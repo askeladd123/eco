@@ -3,17 +3,24 @@
  * Ansvar for flyt i programmet
  */
 
+#include <iostream>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include "SFML/Window/VideoMode.hpp"
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 800)), "ImGui + SFML = <3");
   window.setFramerateLimit(60);
-  ImGui::SFML::Init(window);
+  if (ImGui::SFML::Init(window))
+  {
+    std::cout << "vinduet funka visst ikke\n";
+    return -1;
+  }
   
   sf::Clock deltaClock;
   while (window.isOpen()) {

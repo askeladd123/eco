@@ -1,7 +1,17 @@
 cmake_minimum_required(VERSION 3.21)
 project(eco)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
+
+include_directories(
+        deps/SFML/include
+        deps/imgui
+        deps/imgui/backends
+        deps/imgui-sfml
+        deps/glew/include
+        deps/glfw/include
+        include
+)
 
 add_subdirectory(deps)
 
@@ -12,19 +22,17 @@ add_executable(eco
         src/blob/graphics.h
         src/world.cpp
         src/globals.cpp
-        include/globals.h
         src/blob/blob.h
         src/collision.h
+        include/globals.h
         )
 
-target_include_directories(eco PUBLIC
-        deps/SFML/include
-        deps/imgui
-        deps/imgui-sfml
-        include
-        )
-target_link_libraries(eco
+link_libraries(
         sfml-system
         sfml-window
         sfml-graphics
+        libglew_static
+        glfw
+        imgui-sfml
+        dear_imgui
         )
