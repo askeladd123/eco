@@ -3,4 +3,26 @@ project(eco)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(eco main.cpp blob/logic.h blob/brain.h blob/graphics.h world.cpp globals.cpp globals.h blob/blob.h collision.h)
+add_subdirectory(deps)
+
+add_executable(eco
+        src/main.cpp
+        src/blob/logic.h
+        src/blob/brain.h
+        src/blob/graphics.h
+        src/world.cpp
+        src/globals.cpp
+        include/globals.h
+        src/blob/blob.h
+        src/collision.h
+        )
+
+target_include_directories(eco PUBLIC
+        deps/SFML/include
+        include
+        )
+target_link_libraries(eco
+        sfml-system
+        sfml-window
+        sfml-graphics
+        )
