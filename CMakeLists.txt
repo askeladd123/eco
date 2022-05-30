@@ -19,6 +19,8 @@ add_executable(eco
 
 target_include_directories(eco PUBLIC
         deps/SFML/include
+        deps/imgui
+        deps/imgui-sfml
         include
         )
 target_link_libraries(eco

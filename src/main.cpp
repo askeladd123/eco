@@ -3,39 +3,39 @@
  * Ansvar for flyt i programmet
  */
 
-#include <iostream>
-#include "globals.h"
-#include <string>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Window/Event.hpp>
 
-int main()
-{
-  // create the window
-  sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 800)), "My window");
+#include <imgui-SFML.h>
+#include <imgui.h>
+
+int main() {
+  sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 800)), "ImGui + SFML = <3");
+  window.setFramerateLimit(60);
+  ImGui::SFML::Init(window);
   
-  // run the program as long as the window is open
-  while (window.isOpen())
-  {
-    // check all the window's events that were triggered since the last iteration of the loop
+  sf::Clock deltaClock;
+  while (window.isOpen()) {
     sf::Event event;
-    while (window.pollEvent(event))
-    {
-      // "close requested" event: we close the window
-      if (event.type == sf::Event::Closed)
+    while (window.pollEvent(event)) {
+      ImGui::SFML::ProcessEvent(event);
+      
+      if (event.type == sf::Event::Closed) {
         window.close();
+      }
     }
     
-    // clear the window with black color
-    window.clear(sf::Color::Black);
+    ImGui::SFML::Update(window, deltaClock.restart());
     
-    // draw everything here...
-    // window.draw(...);
+    ImGui::ShowDemoWindow();
     
-    // end the current frame
+    window.clear();
+    ImGui::SFML::Render(window);
     window.display();
   }
+  
+  ImGui::SFML::Shutdown();
   
   return 0;
 }
