@@ -1,27 +1,5 @@
 message(STATUS "Building dependencies")
 
-## deps
-#set(glew-cmake_BUILD_SHARED OFF)
-#add_subdirectory(glew)
-#
-##
-#set(BUILD_SHARED_LIBS OFF)
-#set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-#add_subdirectory(glfw)
-
-## lager imgui targets
-#add_library(dear_imgui
-#        imgui/imgui.cpp
-#        imgui/imgui_draw.cpp
-#        imgui/imgui_tables.cpp
-#        imgui/imgui_widgets.cpp
-#        imgui/imgui_demo.cpp
-#        imgui/backends/imgui_impl_glfw.cpp
-#        imgui/backends/imgui_impl_opengl3.cpp
-#        )
-
 # lager sfml targets
 set(BUILD_SHARED_LIBS FALSE)# "TRUE to build SFML as shared libraries, FALSE to build it as static libraries")
 set(SFML_BUILD_EXAMPLES FALSE)# "TRUE to build the SFML examples, FALSE to ignore them")

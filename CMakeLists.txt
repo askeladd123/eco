@@ -19,11 +19,8 @@ add_executable(eco
 
 target_include_directories(eco PRIVATE
         deps/SFML/include
-        deps/imgui
-#        deps/imgui/backends
         deps/imgui-sfml
-#        deps/glew/include
-#        deps/glfw/include
+        deps/imgui
         include
         )
 
@@ -31,7 +28,5 @@ target_link_libraries(eco PRIVATE
         sfml-system
         sfml-window
         sfml-graphics
-#        libglew_static
-#        glfw
-        ImGui-SFML::ImGui-SFML
+        ImGui-SFML
         )
