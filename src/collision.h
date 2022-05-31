@@ -12,12 +12,13 @@ struct box    {int x, y, w, h;};
 struct circle {int x, y, r;};
 struct line   {int x1, y1, x2, y2;};
 
-struct intersection_r {bool intersects;};
-struct points_R {int points; point a, b;};
+struct response {bool intersects;};
+struct points_response {int points; point a, b;};
 
-bool collision(point a, point b)
+
+response collision(point a, point b)
 {
-  return a.x == b.x && a.y == b.y;
+  return {a.x == b.x && a.y == b.y};
 }
 
 bool collision(box a, box b)

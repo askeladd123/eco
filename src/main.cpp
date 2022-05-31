@@ -35,7 +35,11 @@ int main() {
     
     ImGui::SFML::Update(window, deltaClock.restart());
     
-    ImGui::ShowDemoWindow();
+    ImGui::Begin("Toolbars ;)");
+    
+    ImGui::Text("gun på vettu");
+    
+    ImGui::End();
     
     window.clear();
     ImGui::SFML::Render(window);

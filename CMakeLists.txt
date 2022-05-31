@@ -3,6 +3,7 @@ project(eco)
 
 set(CMAKE_CXX_STANDARD 20)
 
+message(STATUS "Building project dependencies")
 add_subdirectory(deps)
 
 add_executable(eco
