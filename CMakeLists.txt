@@ -11,11 +11,10 @@ add_executable(eco
         src/blob/logic.h
         src/blob/brain.h
         src/blob/graphics.h
-        src/world.cpp
-        src/globals.cpp
+        src/world.h
         src/blob/blob.h
         src/collision.h
-        include/globals.h
+        src/globals.h
         )
 
 target_include_directories(eco PRIVATE

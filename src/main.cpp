@@ -3,15 +3,20 @@
  * Ansvar for flyt i programmet
  */
 
+// standard lib
 #include <iostream>
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/Window/Event.hpp>
-
+// extern lib
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 #include <imgui-SFML.h>
 #include <imgui.h>
-#include "SFML/Window/VideoMode.hpp"
+
+// mine includes
+#include "globals.h"
+#include "mess.h"
+#include "world.h"
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 800)), "ImGui + SFML = <3");
@@ -21,6 +26,10 @@ int main() {
     std::cout << "vinduet funka visst ikke\n";
     return -1;
   }
+  
+  fps fps;
+  bool play = true;
+  world world;
   
   sf::Clock deltaClock;
   while (window.isOpen()) {
@@ -39,9 +48,25 @@ int main() {
     
     ImGui::Text("gun på vettu");
     
+    if (ImGui::Button("play/pause"))
+      0;
+    
+    if (ImGui::Button("slower"))
+      window.setFramerateLimit(fps.decreased());
+    
+    if (ImGui::Button("normal speed"))
+      window.setFramerateLimit(fps.normal());
+    
+    if (ImGui::Button("faster"))
+      window.setFramerateLimit(fps.increased());
+    
     ImGui::End();
     
+    if (play)
+      world.tick();
+    
     window.clear();
+    world.render(window);
     ImGui::SFML::Render(window);
     window.display();
   }

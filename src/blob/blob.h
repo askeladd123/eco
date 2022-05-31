@@ -8,9 +8,18 @@
 #include "brain.h"
 #include "graphics.h"
 
-class blob
+class Blob
 {
+public:
+  Logic logic;
+  Brain brain;
+  Graphics graphics;
 
+public:
+  Blob(Logic logic, Brain brain, Graphics graphics):
+      logic(logic),
+      brain(brain),
+      graphics(graphics){}
 };
 
 #endif //ECO_BLOB_H
