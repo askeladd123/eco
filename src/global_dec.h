@@ -2,8 +2,12 @@
 // Created by askso on 31/05/2022.
 //
 
-#ifndef ECO_MESS_H
-#define ECO_MESS_H
+#ifndef ECO_GLOBAL_DEC_H
+#define ECO_GLOBAL_DEC_H
+
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#include "global_def.h"
 
 class fps
 {
@@ -43,4 +47,4 @@ private:
   int max_fps = 120;
 };
 
-#endif //ECO_MESS_H
+#endif //ECO_GLOBAL_DEC_H

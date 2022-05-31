@@ -14,7 +14,7 @@ add_executable(eco
         src/world.h
         src/blob/blob.h
         src/collision.h
-        src/globals.h
+        src/global_def.h
         )
 
 target_include_directories(eco PRIVATE

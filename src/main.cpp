@@ -6,7 +6,7 @@
 /*
  * TODO
  * views
- *
+ * smooth bevegelse på View
  */
 
 // standard lib
@@ -20,12 +20,13 @@
 #include <imgui.h>
 
 // mine includes
-#include "globals.h"
-#include "mess.h"
+#include "global_def.h"
+#include "global_dec.h"
 #include "world.h"
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 800)), "ImGui + SFML = <3");
+  window.create(sf::VideoMode(sf::Vector2u(view_height, view_height)), "ImGui + SFML = <3");
+  view_resize();
   window.setFramerateLimit(60);
   if (!ImGui::SFML::Init(window))
   {
@@ -44,18 +45,25 @@ int main() {
     while (window.pollEvent(event)) {
       ImGui::SFML::ProcessEvent(event);
       
-      if (event.type == sf::Event::Closed) {
-        window.close();
-      }
-      
-      if (event.type == sf::Event::MouseButtonPressed)
+      switch(event.type)
       {
-        if (blob_brush)
-        {
-          blob_brush = false;
-          world.add(world::BLOB).and_move(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-        }
-
+        case sf::Event::Closed:
+          window.close();
+          break;
+          
+        case sf::Event::Resized:
+          view_resize();
+          break;
+          
+        case sf::Event::MouseButtonPressed:
+          if (blob_brush)
+          {
+            blob_brush = false;
+            auto mouse_window = sf::Mouse::getPosition(window);
+            auto mouse_view = window.mapPixelToCoords(mouse_window);
+            world.add(world::BLOB).and_move(mouse_view.x, mouse_view.y);
+          }
+          break;
       }
     }
     
@@ -84,9 +92,27 @@ int main() {
     
     ImGui::End();
     
+    // logikk
     if (play)
       world.tick();
     
+    // flytte på View
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+      view_offset_y += view_movement_speed;
+    
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+      view_offset_y -= view_movement_speed;
+  
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+      view_offset_x -= view_movement_speed;
+  
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+      view_offset_x += view_movement_speed;
+    
+    view.setCenter(sf::Vector2f(view_offset_x, view_offset_y));
+    window.setView(view);
+    
+    // grafikk
     window.clear();
     
     world.render(window);
