@@ -16,7 +16,7 @@
 int main() {
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 800)), "ImGui + SFML = <3");
   window.setFramerateLimit(60);
-  if (ImGui::SFML::Init(window))
+  if (!ImGui::SFML::Init(window))
   {
     std::cout << "vinduet funka visst ikke\n";
     return -1;
