@@ -1,6 +1,6 @@
-//
-// Created by askso on 30/05/2022.
-//
+/*
+ * brain, graphics og logic møtes her
+ */
 #ifndef ECO_BLOB_H
 #define ECO_BLOB_H
 
@@ -28,8 +28,6 @@ public:
     auto instructions = brain.think(senses);
     
     logic.push(instructions);
-    
-    std::cout << logic.x << ", " << logic.y << "\n";
   }
   
   void render(sf::RenderWindow &window)

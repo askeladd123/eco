@@ -7,7 +7,7 @@
 
 struct instructions
 {
-  float rotation, velocity;
+  float rotation = 0, velocity = 0;
 };
 
 struct senses

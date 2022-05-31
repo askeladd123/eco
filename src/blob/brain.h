@@ -13,8 +13,8 @@ public:
   instructions think(senses senses)
   {
     instructions a;
-    a.rotation = 0.8;
-    a.velocity = 0.6;
+    a.rotation = 3;
+    a.velocity = 8;
     return a;
   }
 };

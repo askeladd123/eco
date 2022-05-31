@@ -1,12 +1,6 @@
 //
-// Ansvar for møte mellom skapninger og verden rundt
+// Ansvar for møte mellom skapninger og verden rundt, fysikk
 //
-
-/*
- * TODO
- * views
- *
- */
 
 #include <vector>
 
@@ -22,6 +16,25 @@ class world
   // TODO quad trees for collision
   
 public:
+  // flow
+  void tick()
+  {
+    for (Blob &blob : blobs)
+    {
+      blob.think();
+      
+      // physics og tick osv.
+      blob.logic.x += blob.logic.vx();
+      blob.logic.y += blob.logic.vy();
+    }
+  }
+  
+  void render(sf::RenderWindow& window)
+  {
+    for (Blob &blob : blobs)
+      blob.render(window);
+  }
+  
   // setup
   enum item_id {BLOB};
   class response
@@ -40,25 +53,6 @@ public:
         blobs.emplace_back();
         return {blobs.back().logic.x, blobs.back().logic.y};
     }
-  }
-  
-  // flow
-  void tick()
-  {
-    for (Blob &blob : blobs)
-    {
-      blob.think();
-      
-      // physics og tick osv.
-      blob.logic.x += blob.logic.vx();
-      blob.logic.y += blob.logic.vy();
-    }
-  }
-  
-  void render(sf::RenderWindow& window)
-  {
-    for (Blob &blob : blobs)
-      blob.render(window);
   }
   
 private:

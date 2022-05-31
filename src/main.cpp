@@ -3,6 +3,12 @@
  * Ansvar for flyt i programmet
  */
 
+/*
+ * TODO
+ * views
+ *
+ */
+
 // standard lib
 #include <iostream>
 
