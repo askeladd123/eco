@@ -30,3 +30,5 @@ target_link_libraries(eco PRIVATE
         sfml-graphics
         ImGui-SFML
         )
+
+file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
