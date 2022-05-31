@@ -10,10 +10,16 @@
 class Graphics
 {
 public:
-  void render(sf::RenderWindow &window)
+  Graphics():circle(10, 30){}
+  
+  void render(sf::RenderWindow &window, Logic &blob_data)
   {
-    window.draw(sf::CircleShape());
+    circle.setPosition(sf::Vector2f(blob_data.x, blob_data.y));
+    window.draw(circle);
   }
+  
+private:
+  sf::CircleShape circle;
 };
 
 #endif //ECO_GRAPHICS_H

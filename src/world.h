@@ -2,6 +2,12 @@
 // Ansvar for møte mellom skapninger og verden rundt
 //
 
+/*
+ * TODO
+ * views
+ *
+ */
+
 #include <vector>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -31,7 +37,7 @@ public:
     switch(item_type)
     {
       case BLOB:
-        blobs.emplace_back(Logic(), Brain(), Graphics());
+        blobs.emplace_back();
         return {blobs.back().logic.x, blobs.back().logic.y};
     }
   }
@@ -40,13 +46,19 @@ public:
   void tick()
   {
     for (Blob &blob : blobs)
-      blob.logic.tick();
+    {
+      blob.think();
+      
+      // physics og tick osv.
+      blob.logic.x += blob.logic.vx();
+      blob.logic.y += blob.logic.vy();
+    }
   }
   
   void render(sf::RenderWindow& window)
   {
     for (Blob &blob : blobs)
-      blob.graphics.render(window);
+      blob.render(window);
   }
   
 private:

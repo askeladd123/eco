@@ -29,6 +29,7 @@ int main() {
   
   fps fps;
   bool play = true;
+  bool blob_brush = false;
   world world;
   
   sf::Clock deltaClock;
@@ -40,6 +41,16 @@ int main() {
       if (event.type == sf::Event::Closed) {
         window.close();
       }
+      
+      if (event.type == sf::Event::MouseButtonPressed)
+      {
+        if (blob_brush)
+        {
+          blob_brush = false;
+          world.add(world::BLOB).and_move(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+        }
+
+      }
     }
     
     ImGui::SFML::Update(window, deltaClock.restart());
@@ -48,8 +59,10 @@ int main() {
     
     ImGui::Text("gun på vettu");
     
-    if (ImGui::Button("play/pause"))
-      0;
+    if (play)
+      play = !ImGui::Button("pause");
+    
+    else play = ImGui::Button("play");
     
     if (ImGui::Button("slower"))
       window.setFramerateLimit(fps.decreased());
@@ -60,14 +73,19 @@ int main() {
     if (ImGui::Button("faster"))
       window.setFramerateLimit(fps.increased());
     
+    if (ImGui::Button("blob"))
+      blob_brush = !blob_brush;
+    
     ImGui::End();
     
     if (play)
       world.tick();
     
     window.clear();
+    
     world.render(window);
     ImGui::SFML::Render(window);
+    
     window.display();
   }
   
