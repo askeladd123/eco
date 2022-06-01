@@ -89,6 +89,8 @@ int main() {
     if (ImGui::Button("blob"))
       blob_brush = !blob_brush;
     
+    ImGui::Text(("fps: " + std::to_string((int)ImGui::GetIO().Framerate)).c_str());
+    
     ImGui::End();
     
     // logikk
