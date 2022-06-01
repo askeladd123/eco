@@ -10,6 +10,8 @@
  * brain
  * reseptors
  * lære imgui
+ * Har lyst å lage brain polymorphic så jeg kan bytte den ut lett, men crasher
+ * quadtree
  */
 
 // standard lib
