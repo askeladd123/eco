@@ -5,17 +5,20 @@
 #ifndef ECO_LOGIC_H
 #define ECO_LOGIC_H
 
+#include "global_var.h"
 #include "common.h"
 
 class Logic
 {
 public:
-  int x, y, v_angle, v;
+  float x, y, v_angle, v;
   
 public:
   senses pull()
   {
-    return {};
+    senses s;
+    s.pulse = cos(ticks_since_startup * genes.pulse_speed);
+    return s;
   }
   
   void push(instructions instructions)
@@ -24,18 +27,19 @@ public:
     v = instructions.velocity;
   }
   
-  int vx()
+  float vx()
   {
     return v * cos(v_angle);
   }
   
-  int vy()
+  float vy()
   {
     return v * sin(v_angle);
   }
 
 private:
   std::vector<float> reseptors;
+  genes_logic genes;
 };
 
 #endif //ECO_LOGIC_H

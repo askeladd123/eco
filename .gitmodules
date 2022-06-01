@@ -7,3 +7,6 @@
 [submodule "deps/imgui-sfml"]
 	path = deps/imgui-sfml
 	url = https://github.com/eliasdaler/imgui-sfml.git
+[submodule "deps/ask_libs"]
+	path = deps/ask_libs
+	url = https://github.com/askeladd123/ask_libs.git

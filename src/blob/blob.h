@@ -4,8 +4,7 @@
 #ifndef ECO_BLOB_H
 #define ECO_BLOB_H
 
-#include <SFML/Graphics/RenderWindow.hpp>
-
+#include "global_var.h"
 #include "common.h"
 #include "logic.h"
 #include "brain.h"
@@ -15,7 +14,7 @@ class Blob
 {
 public:
   Logic logic;
-  Brain brain;
+  Stupid_brain brain;
   Graphics graphics;
       
   /**
@@ -30,9 +29,9 @@ public:
     logic.push(instructions);
   }
   
-  void render(sf::RenderWindow &window)
+  void render()
   {
-    graphics.render(window, logic);
+    graphics.render(logic);
   }
 };
 

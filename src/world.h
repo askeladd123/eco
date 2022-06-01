@@ -4,8 +4,7 @@
 
 #include <vector>
 
-#include <SFML/Graphics/RenderWindow.hpp>
-
+#include "global_var.h"
 #include "blob/blob.h"
 
 class world
@@ -29,10 +28,10 @@ public:
     }
   }
   
-  void render(sf::RenderWindow& window)
+  void render()
   {
     for (Blob &blob : blobs)
-      blob.render(window);
+      blob.render();
   }
   
   // setup
@@ -40,10 +39,10 @@ public:
   class response
   {
   public:
-    response(int &x, int &y):x(&x), y(&y){}
+    response(float &x, float &y):x(&x), y(&y){}
     void and_move(int x, int y){*this->x = x; *this->y = y;}
   private:
-    int *x, *y;
+    float *x, *y;
   };
   response add(item_id item_type)
   {

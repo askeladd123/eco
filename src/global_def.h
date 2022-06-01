@@ -1,19 +1,51 @@
 //
-// Created by askso on 30/05/2022.
+// Created by askso on 31/05/2022.
 //
 
 #ifndef ECO_GLOBAL_DEF_H
 #define ECO_GLOBAL_DEF_H
 
-#include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-sf::View view;
-sf::RenderWindow window;
-int view_offset_x = 0, view_offset_y = 0;
-int view_height = 800;
-int view_movement_speed = 6;
-float view_zoom_amount = 0.01;
+#include "global_var.h"
+
+class fps
+{
+public:
+  int get()
+  {
+    return value;
+  }
+  
+  int normal()
+  {
+    return value = normal_fps;
+  }
+  
+  int increased()
+  {
+    if (value == min_fps)
+      return value = normal_fps;
+    
+    else
+      return value = max_fps;
+  }
+  
+  int decreased()
+  {
+    if (value == max_fps)
+      return value = normal_fps;
+    
+    else
+      return value = min_fps;
+  }
+
+private:
+  int value = normal_fps;
+  int min_fps = 15;
+  int normal_fps = 60;
+  int max_fps = 120;
+};
 
 void view_resize()
 {

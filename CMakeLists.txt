@@ -13,15 +13,16 @@ add_executable(eco
         src/blob/graphics.h
         src/world.h
         src/blob/blob.h
-        src/collision.h
-        src/global_def.h
+        deps/ask_libs/include/ask/collision.h
+        src/global_var.h
         )
 
 target_include_directories(eco PRIVATE
         deps/SFML/include
         deps/imgui-sfml
         deps/imgui
-        include
+        deps/ask_libs/include
+        src
         )
 
 target_link_libraries(eco PRIVATE

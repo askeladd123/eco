@@ -6,6 +6,10 @@
 /*
  * TODO
  * smooth bevegelse på View
+ * collision
+ * brain
+ * reseptors
+ * lære imgui
  */
 
 // standard lib
@@ -19,8 +23,8 @@
 #include <imgui.h>
 
 // mine includes
+#include "global_var.h"
 #include "global_def.h"
-#include "global_dec.h"
 #include "world.h"
 
 int main() {
@@ -89,13 +93,16 @@ int main() {
     if (ImGui::Button("blob"))
       blob_brush = !blob_brush;
     
-    ImGui::Text(("fps: " + std::to_string((int)ImGui::GetIO().Framerate)).c_str());
+    ImGui::Text("fps: %1.0f", ImGui::GetIO().Framerate);
     
     ImGui::End();
     
     // logikk
     if (play)
+    {
+      ticks_since_startup++;
       world.tick();
+    }
     
     // flytte på View
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
@@ -126,7 +133,7 @@ int main() {
     // grafikk
     window.clear();
     
-    world.render(window);
+    world.render();
     ImGui::SFML::Render(window);
     
     window.display();
