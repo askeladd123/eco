@@ -5,7 +5,6 @@
 
 /*
  * TODO
- * views
  * smooth bevegelse på View
  */
 
@@ -98,16 +97,26 @@ int main() {
     
     // flytte på View
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-      view_offset_y += view_movement_speed;
-    
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        view.zoom(1.0f - view_zoom_amount);
+        
+      else view_offset_y -= view_movement_speed;
+    }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-      view_offset_y -= view_movement_speed;
-  
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        view.zoom(1.0f + view_zoom_amount);
+      
+      else view_offset_y += view_movement_speed;
+    }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-      view_offset_x -= view_movement_speed;
-  
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
       view_offset_x += view_movement_speed;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+      view_offset_x -= view_movement_speed;
     
     view.setCenter(sf::Vector2f(view_offset_x, view_offset_y));
     window.setView(view);
