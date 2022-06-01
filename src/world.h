@@ -6,15 +6,20 @@
 
 #include "global_var.h"
 #include "blob/blob.h"
+#include "ask/collision.h"
 
-class world
+class World
 {
   // list static objects;
   // list moving objects;
   
   // TODO quad trees for collision
+public:
+  Ask::Physics::Box bounds;
   
 public:
+  
+  
   // flow
   void tick()
   {

@@ -42,7 +42,7 @@ int main() {
   fps fps;
   bool play = true;
   bool blob_brush = false;
-  world world;
+  World world;
   
   sf::Clock deltaClock;
   while (window.isOpen()) {
@@ -66,7 +66,7 @@ int main() {
             blob_brush = false;
             auto mouse_window = sf::Mouse::getPosition(window);
             auto mouse_view = window.mapPixelToCoords(mouse_window);
-            world.add(world::BLOB).and_move(mouse_view.x, mouse_view.y);
+            world.add(World::BLOB).and_move(mouse_view.x, mouse_view.y);
           }
           break;
       }
