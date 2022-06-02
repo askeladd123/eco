@@ -11,8 +11,8 @@
 class Logic
 {
 public:
-  float x, y, vx = 0, vy = 0, a_len;
-  float a_angle;  ///< i radianer
+  float x, y, v_len = 5.f, a_len;
+  float v_angle = 0.4, a_angle;  ///< i radianer
   
 public:
   /// Gir hjernen informasjon: husk at verdiene skal være 1, 0, eller mellom
@@ -26,7 +26,7 @@ public:
   /// Tar imot kommandoer fra hjernen: husk at instruksjons-verdiene er 1, 0, eller mellom
   void push(instructions instructions)
   {
-    a_angle = instructions.force_angle * M_PI;
+    a_angle = instructions.force_angle * 2.f * M_PI;
     a_len = instructions.force_len * genes.max_accel;
   }
 

@@ -13,7 +13,7 @@ add_executable(eco
         src/blob/graphics.h
         src/world.h
         src/blob/blob.h
-        deps/ask_libs/include/ask/collision.h
+        deps/ask_libs/include/ask/physics.h
         src/global_var.h
         )
 

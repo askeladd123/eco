@@ -44,6 +44,10 @@ int main() {
   bool blob_brush = false;
   World world;
   
+  sf::CircleShape c1, c2;
+  c1.setRadius(60);
+  c2.setRadius(60);
+  
   sf::Clock deltaClock;
   while (window.isOpen()) {
     sf::Event event;
@@ -64,9 +68,8 @@ int main() {
           if (blob_brush)
           {
             blob_brush = false;
-            auto mouse_window = sf::Mouse::getPosition(window);
-            auto mouse_view = window.mapPixelToCoords(mouse_window);
-            world.add(World::BLOB).and_move(mouse_view.x, mouse_view.y);
+            auto m = mouse();
+            world.add(World::BLOB).and_move(m.x, m.y);
           }
           break;
       }
@@ -97,6 +100,10 @@ int main() {
     
     ImGui::Text("fps: %1.0f", ImGui::GetIO().Framerate);
     
+    ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 1.f);
+    ImGui::SliderFloat("friction", &world.friction_c, 0.f, 1.f);
+    ImGui::SliderFloat("drag", &world.drag_c, 0.f, 0.2f);
+  
     ImGui::End();
     
     // logikk
@@ -135,6 +142,28 @@ int main() {
     // grafikk
     window.clear();
     
+    if (0)
+    {
+      c1.setPosition({mouse().x - c1.getRadius(), mouse().y - c1.getRadius()});
+  
+      if (
+          Ask::Physics::intersects(
+              Ask::Physics::Circle(c1.getPosition().x, c1.getPosition().y, 69),
+              Ask::Physics::Circle(c2.getPosition().x, c2.getPosition().y, 69))
+          )
+      {
+        c1.setFillColor(sf::Color::Red);
+        c2.setFillColor(sf::Color::Red);
+      } else
+      {
+        c1.setFillColor(sf::Color::White);
+        c2.setFillColor(sf::Color::White);
+      }
+    }
+    
+    window.draw(c1);
+    window.draw(c2);
+  
     world.render();
     ImGui::SFML::Render(window);
     

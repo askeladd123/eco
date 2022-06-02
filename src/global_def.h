@@ -5,7 +5,7 @@
 #ifndef ECO_GLOBAL_DEF_H
 #define ECO_GLOBAL_DEF_H
 
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "global_var.h"
 
@@ -51,6 +51,12 @@ void view_resize()
 {
   float ratio = (float)window.getSize().x / window.getSize().y;
   view.setSize(sf::Vector2f(view_height * ratio, view_height));
+}
+
+sf::Vector2f mouse()
+{
+  auto mouse_window = sf::Mouse::getPosition(window);
+  return window.mapPixelToCoords(mouse_window);
 }
 
 #endif //ECO_GLOBAL_DEF_H

@@ -16,7 +16,7 @@ class Blob
 public:
   Logic logic;
   Stupid_brain brain;
-  Graphics graphics;
+  Graphics_circle graphics;
   
   /// justerer akselerasjon: må fortsatt legge til på fart og posisjon
   void think()

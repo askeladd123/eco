@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "ask/collision.h"
+#include "ask/physics.h"
 #include "global_var.h"
 #include "blob/blob.h"
 
@@ -19,8 +19,8 @@ public:
   
 public:
   Ask::Physics::Box bounds;
-  float basically_zero = 0.001f;
-  float friction_a = 0.02f;
+  float basically_zero = 0.005f;
+  float friction_c = 0.2f, drag_c = 0.05f;
   
 public:
   // flow
@@ -35,48 +35,38 @@ public:
       // alias for variabler
       float &x = blob.logic.x;
       float &y = blob.logic.y;
-      float &x_vel = blob.logic.vx;
-      float &y_vel = blob.logic.vy;
-      float &len_acc = blob.logic.a_len;
-      float &angle_acc = blob.logic.a_angle;
+      float &vel_len = blob.logic.v_len;
+      float &vel_angle = blob.logic.v_angle;
+      float &acc_len = blob.logic.a_len;
+      float &acc_angle = blob.logic.a_angle;
       
       // interne krefter ================================
-      x_vel += len_acc * cos(angle_acc);
-      y_vel += len_acc * sin(angle_acc);
+      vel_len += acc_len;
+      vel_angle += acc_angle;
       
       // eksterne krefter ================================
       // TODO: collision
       
       // friksjon
-      if (0 < x_vel)
-        x_vel -= x_vel * friction_a;
+      if (vel_len < basically_zero)
+        vel_len = 0;
 
-      if (x_vel < 0)
-        x_vel += x_vel * friction_a;
-
-      if (0 < y_vel)
-        y_vel -= y_vel * friction_a;
-
-      if (y_vel < 0)
-        y_vel += y_vel * friction_a;
-
-      // stopp helt
-      if (-basically_zero < x_vel && x_vel < basically_zero)
-        x_vel = 0;
-
-      if (-basically_zero < y_vel && y_vel < basically_zero)
-        y_vel = 0;
+      // TODO: vurdere om drag er unødvendig
+      vel_len -= vel_len * friction_c;
       
       // collision
-      if (intersects(Point(x, y), Box(400, 400, 400, 400)))
-        blob.graphics.set_color(blob.graphics.RED);
-
-      else
-        blob.graphics.set_color(blob.graphics.WHITE);
+      for (auto &bro: blobs)
+        if (&bro != &blob && intersects(blob.graphics.bounds, bro.graphics.bounds))
+        {
+          blob.graphics.set_color(blob.graphics.RED);
+          break;
+        }
+        else
+          blob.graphics.set_color(blob.graphics.WHITE);
       
       // posisjon ================================
-      blob.logic.x += blob.logic.vx;
-      blob.logic.y += blob.logic.vy;
+      x += vel_len * cos(vel_angle);
+      y += vel_len * sin(vel_angle);
     }
   }
   
