@@ -19,9 +19,8 @@ public:
   
 public:
   Ask::Physics::Box bounds;
-  float max_vel = 1;
-  float basically_zero = 0.1f;
-  float friction_a = 0.002f;
+  float basically_zero = 0.001f;
+  float friction_a = 0.02f;
   
 public:
   // flow
@@ -29,9 +28,11 @@ public:
   {
     for (Blob &blob : blobs)
     {
+      using namespace Ask::Physics;
+  
       blob.think();
       
-      // physics og tick osv.
+      // alias for variabler
       float &x = blob.logic.x;
       float &y = blob.logic.y;
       float &x_vel = blob.logic.vx;
@@ -39,37 +40,41 @@ public:
       float &len_acc = blob.logic.a_len;
       float &angle_acc = blob.logic.a_angle;
       
-      // interne krefter
-      if (x_vel < max_vel)
-        x_vel += len_acc * cos(angle_acc);
+      // interne krefter ================================
+      x_vel += len_acc * cos(angle_acc);
+      y_vel += len_acc * sin(angle_acc);
       
-      if (y_vel < max_vel)
-        y_vel += len_acc * sin(angle_acc);
-      
-      // eksterne krefter
+      // eksterne krefter ================================
       // TODO: collision
+      
+      // friksjon
       if (0 < x_vel)
-        x_vel *= -friction_a;
-      
+        x_vel -= x_vel * friction_a;
+
       if (x_vel < 0)
-        x_vel *= friction_a;
-      
+        x_vel += x_vel * friction_a;
+
+      if (0 < y_vel)
+        y_vel -= y_vel * friction_a;
+
+      if (y_vel < 0)
+        y_vel += y_vel * friction_a;
+
+      // stopp helt
       if (-basically_zero < x_vel && x_vel < basically_zero)
         x_vel = 0;
-  
+
       if (-basically_zero < y_vel && y_vel < basically_zero)
         y_vel = 0;
-  
-  
-      using namespace Ask::Physics;
       
+      // collision
       if (intersects(Point(x, y), Box(400, 400, 400, 400)))
         blob.graphics.set_color(blob.graphics.RED);
 
       else
         blob.graphics.set_color(blob.graphics.WHITE);
       
-      // posisjon
+      // posisjon ================================
       blob.logic.x += blob.logic.vx;
       blob.logic.y += blob.logic.vy;
     }

@@ -10,16 +10,15 @@
 #include "brain.h"
 #include "graphics.h"
 
+/// binder alle komponentene i en blob sammen
 class Blob
 {
 public:
   Logic logic;
   Stupid_brain brain;
   Graphics graphics;
-      
-  /**
-   * @brief Endrer hovedsaklig på fart og rotasjon til en blob
-   */
+  
+  /// justerer akselerasjon: må fortsatt legge til på fart og posisjon
   void think()
   {
     auto senses = logic.pull();
