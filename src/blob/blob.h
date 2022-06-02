@@ -18,7 +18,7 @@ public:
   Graphics graphics;
       
   /**
-   * @brief Enderer hovedsaklig på fart og rotasjon til en blob
+   * @brief Endrer hovedsaklig på fart og rotasjon til en blob
    */
   void think()
   {

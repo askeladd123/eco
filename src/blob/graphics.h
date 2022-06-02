@@ -16,6 +16,21 @@ public:
     window.draw(circle);
   }
   
+  enum color {WHITE, RED};
+  void set_color(color color)
+  {
+    switch(color)
+    {
+      case WHITE:
+        circle.setFillColor(sf::Color::White);
+        return;
+        
+      case RED:
+        circle.setFillColor(sf::Color::Red);
+        return;
+    }
+  }
+  
 private:
   sf::CircleShape circle;
 };

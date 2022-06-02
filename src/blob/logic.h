@@ -11,7 +11,7 @@
 class Logic
 {
 public:
-  float x, y, v_angle, v;
+  float x, y, vx, vy, a_len, a_angle;
   
 public:
   senses pull()
@@ -23,18 +23,8 @@ public:
   
   void push(instructions instructions)
   {
-    v_angle += instructions.rotation;
-    v = instructions.velocity;
-  }
-  
-  float vx()
-  {
-    return v * cos(v_angle);
-  }
-  
-  float vy()
-  {
-    return v * sin(v_angle);
+    a_angle += instructions.rotation;
+    a_len = instructions.velocity;
   }
 
 private:

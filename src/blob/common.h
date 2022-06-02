@@ -14,7 +14,9 @@ struct instructions
 
 struct senses
 {
-  std::vector<float>* reseptors; float pulse;
+  std::vector<float>* reseptors;
+  float pulse;
+  float angle;
 };
 
 struct genes_logic
