@@ -33,6 +33,7 @@ int main() {
   window.create(sf::VideoMode(sf::Vector2u(view_height, view_height)), "ImGui + SFML = <3");
   view_resize();
   window.setFramerateLimit(60);
+  Graphics_image::init();
   if (!ImGui::SFML::Init(window))
   {
     std::cout << "vinduet funka visst ikke\n";

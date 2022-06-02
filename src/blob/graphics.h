@@ -52,4 +52,42 @@ private:
   sf::CircleShape circle;
 };
 
+/// husk å kjør static init en gang
+class Graphics_image : public Graphics
+{
+public:
+  Ask::Physics::Circle bounds;
+
+public:
+  Graphics_image():bounds(0, 0, 10){}
+  
+  void render(Logic &blob_data) override
+  {
+    sprite.setPosition({blob_data.x, blob_data.y});
+    sprite.setRotation(sf::radians(blob_data.v_angle + M_PI / 2));
+    
+    bounds.x = blob_data.x;
+    bounds.y = blob_data.y;
+    
+    window.draw(sprite);
+  }
+  
+  static void init()
+  {
+    if (!texture.loadFromFile("res/blob.png"))
+      throw std::runtime_error("Graphics: couldn't load blob.png");
+    
+    sprite.setTexture(texture);
+    sprite.setScale({0.4f, 0.4f});
+    sprite.setOrigin({64, 64});
+  }
+
+private:
+  static sf::Texture texture;
+  static sf::Sprite sprite;
+};
+
+sf::Texture Graphics_image::texture;
+sf::Sprite Graphics_image::sprite;
+
 #endif //ECO_GRAPHICS_H
