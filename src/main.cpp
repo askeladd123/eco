@@ -159,10 +159,9 @@ int main() {
         c1.setFillColor(sf::Color::White);
         c2.setFillColor(sf::Color::White);
       }
+      window.draw(c1);
+      window.draw(c2);
     }
-    
-    window.draw(c1);
-    window.draw(c2);
   
     world.render();
     ImGui::SFML::Render(window);

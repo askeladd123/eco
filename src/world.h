@@ -55,23 +55,54 @@ public:
       vel_len -= vel_len * friction_c;
       
       // collision
-      for (auto &bro: blobs)
-        if (&bro != &blob && intersects(blob.graphics.bounds, bro.graphics.bounds))
+      for (auto &blob2: blobs)
+        if (&blob2 != &blob && intersects(blob.graphics.bounds, blob2.graphics.bounds))
         {
-          blob.graphics.set_color(blob.graphics.RED);
-          break;
+          float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
+          vel_angle += normal_angle;
+          blob2.logic.v_angle -= normal_angle;
         }
-        else
-          blob.graphics.set_color(blob.graphics.WHITE);
+  
+      float vel_x = vel_len * cos(vel_angle);
+      float vel_y = vel_len * sin(vel_angle);
+      
+      // collision world bounds
+      if (x < bounds.x)
+      {
+        x = bounds.x;
+        vel_x += vel_len;
+      }
+  
+      if (bounds.x + bounds.w < x)
+      {
+        x = bounds.x + bounds.w;
+        vel_x -= vel_len;
+      }
+      
+      if (y < bounds.y)
+      {
+        y = bounds.y;
+        vel_y += vel_len;
+      }
+  
+      if (bounds.y + bounds.h < y)
+      {
+        y = bounds.y + bounds.h;
+        vel_y -= vel_len;
+      }
       
       // posisjon ================================
-      x += vel_len * cos(vel_angle);
-      y += vel_len * sin(vel_angle);
+      x += vel_x;
+      y += vel_y;
     }
   }
   
   void render()
   {
+    sf::RectangleShape rect({(float)bounds.w, (float)bounds.h});
+    rect.setPosition({(float)bounds.x, (float)bounds.y});
+    rect.setFillColor(sf::Color(30, 30, 30));
+    window.draw(rect);
     for (Blob &blob : blobs)
       blob.render();
   }

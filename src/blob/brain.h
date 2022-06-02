@@ -20,7 +20,7 @@ public:
   instructions think(senses senses) override
   {
     instructions a;
-    if (0.9 < senses.pulse && senses.pulse < 1.f)
+    if (0.97 < senses.pulse && senses.pulse < 1.f)
     {
       a.force_angle = Ask::random(0.f, 1.f);
       a.force_len = Ask::random(0.f, 1.f);
