@@ -6,3 +6,6 @@ Målet med projektet er å bruke Genetic Algorithm og Neural Networks til å lag
 bevegelse: `opp`, `ned`, `høyre`, `ventre`
 
 zoom: `ctrl` + `opp` eller `ctrl` + `ned`
+
+## Build
+SFML funker ikke nødvendigvis.
