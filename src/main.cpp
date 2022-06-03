@@ -16,6 +16,9 @@
  * imgui graf, tabs, drag drop
  * insekter kan interacte med spiller
  * polar eller cartesisk: trenger man polar i det hele tatt?
+ * projektet er stort: CMake sånn at man kan bruke find_package istedetfor submodule
+ * navigasjon: mulighet for mus også: dra og scroll
+ * README
  */
 
 // standard lib

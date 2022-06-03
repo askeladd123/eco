@@ -2,6 +2,7 @@
 // Ansvar for møte mellom skapninger og verden rundt, fysikk
 //
 
+#include <cmath>
 #include <vector>
 
 #include "ask/physics.h"
@@ -101,11 +102,24 @@ public:
 //          blob2.logic.y -= new_y;
 //
 //
-          float between_x = (blob2.logic.x - x) / 2;
-          float between_y = (blob2.logic.y - y) / 2;
-          
-          
-          
+
+            // dette er noe matte jeg må teste bedre
+
+            // a og b er blobs
+            int ab_x = (blob2.logic.x - x);
+            int ab_y = (blob2.logic.y - y);
+            int a_r = blob.graphics.bounds.r;
+            int b_r = blob2.graphics.bounds.r;
+            float k = (-1 - (a_r + b_r) / std::sqrt(ab_x * ab_x + ab_y * ab_y)) / 2;
+
+            int correcting_x = ab_x * k;
+            int correcting_y = ab_y * k;
+
+            x += correcting_x;
+            y += correcting_y;
+            blob2.logic.x -= correcting_x;
+            blob2.logic.y -= correcting_y;
+
           // reflekt
           float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
           vel_angle += normal_angle;
