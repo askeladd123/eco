@@ -17,4 +17,13 @@ int view_height = 800;
 int view_movement_speed = 6;
 float view_zoom_amount = 0.01;
 
+// imgui
+enum states {MAIN, PHYSICS, ONE, ALL};
+states ImGui_state = MAIN;
+int ImGui_blob_brush_amount = 1;
+bool hitbox_blob = false;
+bool hitbox_mouse = false;
+sf::Color hitbox_hit(100, 200, 100, 100);
+sf::Color hitbox_unhit(200, 100, 100, 100);
+
 #endif //ECO_GLOBAL_VAR_H

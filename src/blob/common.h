@@ -27,8 +27,8 @@ struct genes_logic
 {
   genes_logic()
   {
-    pulse_speed = Ask::random(0.f, 2.f);
-    max_accel = Ask::random(1.f, 10.f);
+    pulse_speed = Ask::random(0.1f, 10.f);
+    max_accel = Ask::random(0.1f, 20.f);
   }
   float pulse_speed = 1.f;
   float max_accel = 6.f;

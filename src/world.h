@@ -18,6 +18,7 @@ public:
   World():bounds(0, 0, 800, 800){}
   
 public:
+  std::vector<Blob> blobs;
   Ask::Physics::Box bounds;
   float basically_zero = 0.005f;
   float friction_c = 0.2f, drag_c = 0.05f;
@@ -54,15 +55,25 @@ public:
       // TODO: vurdere om drag er unødvendig
       vel_len -= vel_len * friction_c;
       
+      bool crash = false;
       // collision
       for (auto &blob2: blobs)
         if (&blob2 != &blob && intersects(blob.graphics.bounds, blob2.graphics.bounds))
         {
+          crash = true;
+          
+          // reflekt
           float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
           vel_angle += normal_angle;
           blob2.logic.v_angle -= normal_angle;
         }
   
+      if (hitbox_blob)
+        if (crash)
+          blob.graphics.bounds_gfx.setFillColor(hitbox_hit);
+        else
+          blob.graphics.bounds_gfx.setFillColor(hitbox_unhit);
+      
       float vel_x = vel_len * cos(vel_angle);
       float vel_y = vel_len * sin(vel_angle);
       
@@ -128,7 +139,4 @@ public:
         }
     }
   }
-  
-private:
-  std::vector<Blob> blobs;
 };

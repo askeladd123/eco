@@ -57,6 +57,7 @@ class Graphics_image : public Graphics
 {
 public:
   Ask::Physics::Circle bounds;
+  sf::CircleShape bounds_gfx;
 
 public:
   Graphics_image():bounds(0, 0, 10){}
@@ -65,11 +66,14 @@ public:
   {
     sprite.setPosition({blob_data.x, blob_data.y});
     sprite.setRotation(sf::radians(blob_data.v_angle + M_PI / 2));
-    
+
     bounds.x = blob_data.x;
     bounds.y = blob_data.y;
-    
+
     window.draw(sprite);
+    
+    if (hitbox_blob)
+      window.draw(fit_to_bounds(bounds_gfx, bounds));
   }
   
   static void init()
@@ -78,7 +82,7 @@ public:
       throw std::runtime_error("Graphics: couldn't load blob.png");
     
     sprite.setTexture(texture);
-    sprite.setScale({0.4f, 0.4f});
+    sprite.setScale({0.2f, 0.2f});
     sprite.setOrigin({64, 64});
   }
 

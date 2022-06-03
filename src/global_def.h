@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "ask/physics.h"
 #include "global_var.h"
 
 class fps
@@ -57,6 +58,17 @@ sf::Vector2f mouse()
 {
   auto mouse_window = sf::Mouse::getPosition(window);
   return window.mapPixelToCoords(mouse_window);
+}
+
+sf::RectangleShape &fit_to_bounds(sf::RectangleShape &fit_this, const Ask::Physics::Box &to_this);
+
+/// sørger for at sirkelen du tegner er hitboxen
+sf::CircleShape &fit_to_bounds(sf::CircleShape &fit_this, const Ask::Physics::Circle &to_this)
+{
+  fit_this.setRadius(to_this.r);
+  fit_this.setOrigin({fit_this.getRadius(), fit_this.getRadius()});
+  fit_this.setPosition({(float)to_this.x, (float)to_this.y});
+  return fit_this;
 }
 
 #endif //ECO_GLOBAL_DEF_H
