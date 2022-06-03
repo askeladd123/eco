@@ -15,6 +15,7 @@
  * select blob
  * imgui graf, tabs, drag drop
  * insekter kan interacte med spiller
+ * polar eller cartesisk: trenger man polar i det hele tatt?
  */
 
 // standard lib

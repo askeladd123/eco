@@ -69,6 +69,7 @@ public:
         if (&blob2 == &blob)
           continue;
         
+        // kollisjon sirkel sirkel
         auto a = blob.graphics.bounds;
         auto b = blob2.graphics.bounds;
         int x1 = b.x - a.x;
@@ -90,14 +91,20 @@ public:
 //          point.setPosition({x + between_x, y + between_y});
 
           // ikke lov å være inni hverandre: polar løsning. TODO: finn en cartesisk løsning bro
-          float angle_between = atan2(blob2.logic.x - x, blob2.logic.y - y);
-          float h = distance_between / 2;
-          float new_x = h * cos(angle_between);
-          float new_y = h * sin(angle_between);
-          x += new_x;
-          y += new_y;
-          blob2.logic.x -= new_x;
-          blob2.logic.y -= new_y;
+//          float angle_between = atan2(blob2.logic.x - x, blob2.logic.y - y);
+//          float h = distance_between / 2;
+//          float new_x = h * cos(angle_between) + 1;
+//          float new_y = h * sin(angle_between) + 1;
+//          x += new_x;
+//          y += new_y;
+//          blob2.logic.x -= new_x;
+//          blob2.logic.y -= new_y;
+//
+//
+          float between_x = (blob2.logic.x - x) / 2;
+          float between_y = (blob2.logic.y - y) / 2;
+          
+          
           
           // reflekt
           float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
@@ -107,10 +114,12 @@ public:
       }
   
       if (hitbox_blob)
+      {
         if (crash)
           blob.graphics.bounds_gfx.setFillColor(hitbox_hit);
         else
           blob.graphics.bounds_gfx.setFillColor(hitbox_unhit);
+      }
       
       float vel_x = vel_len * cos(vel_angle);
       float vel_y = vel_len * sin(vel_angle);
@@ -151,7 +160,7 @@ public:
     window.draw(fit_to_bounds(background, bounds));
     for (Blob &blob : blobs)
       blob.render();
-    window.draw(point);
+//    window.draw(point);
   }
   
   // setup
