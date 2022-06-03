@@ -15,13 +15,20 @@ class World
   
   // TODO quad trees for collision
 public:
-  World():bounds(0, 0, 800, 800){}
+  World():bounds(0, 0, 800, 800)
+  {
+    point.setRadius(2);
+    point.setOrigin({point.getRadius(), point.getRadius()});
+    background.setFillColor(sf::Color(30, 30, 30));
+  }
   
 public:
   std::vector<Blob> blobs;
   Ask::Physics::Box bounds;
   float basically_zero = 0.005f;
   float friction_c = 0.2f, drag_c = 0.05f;
+  sf::CircleShape point;
+  sf::RectangleShape background;
   
 public:
   // flow
@@ -58,15 +65,46 @@ public:
       bool crash = false;
       // collision
       for (auto &blob2: blobs)
-        if (&blob2 != &blob && intersects(blob.graphics.bounds, blob2.graphics.bounds))
+      {
+        if (&blob2 == &blob)
+          continue;
+        
+        auto a = blob.graphics.bounds;
+        auto b = blob2.graphics.bounds;
+        int x1 = b.x - a.x;
+        int y1 = b.y - a.y;
+        float distance_between = sqrt(x1 * x1 + y1 * y1) - (b.r + a.r);
+        if (distance_between < 0)
         {
           crash = true;
+  
+          // ikke lov å være inni hverandre
+//          float between_x = (blob2.logic.x - x) / 2;
+//          float between_y = (blob2.logic.y - y) / 2;
+
+//          x -= between_x;
+//          y -= between_y;
+//          blob2.logic.x += between_x;
+//          blob2.logic.y += between_y;
+
+//          point.setPosition({x + between_x, y + between_y});
+
+          // ikke lov å være inni hverandre: polar løsning. TODO: finn en cartesisk løsning bro
+          float angle_between = atan2(blob2.logic.x - x, blob2.logic.y - y);
+          float h = distance_between / 2;
+          float new_x = h * cos(angle_between);
+          float new_y = h * sin(angle_between);
+          x += new_x;
+          y += new_y;
+          blob2.logic.x -= new_x;
+          blob2.logic.y -= new_y;
           
           // reflekt
           float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
           vel_angle += normal_angle;
           blob2.logic.v_angle -= normal_angle;
         }
+      }
   
       if (hitbox_blob)
         if (crash)
@@ -110,12 +148,10 @@ public:
   
   void render()
   {
-    sf::RectangleShape rect({(float)bounds.w, (float)bounds.h});
-    rect.setPosition({(float)bounds.x, (float)bounds.y});
-    rect.setFillColor(sf::Color(30, 30, 30));
-    window.draw(rect);
+    window.draw(fit_to_bounds(background, bounds));
     for (Blob &blob : blobs)
       blob.render();
+    window.draw(point);
   }
   
   // setup

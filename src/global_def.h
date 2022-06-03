@@ -60,7 +60,14 @@ sf::Vector2f mouse()
   return window.mapPixelToCoords(mouse_window);
 }
 
-sf::RectangleShape &fit_to_bounds(sf::RectangleShape &fit_this, const Ask::Physics::Box &to_this);
+/// sørger for at firkanten du tegner er hitboxen
+sf::RectangleShape &fit_to_bounds(sf::RectangleShape &fit_this, const Ask::Physics::Box &to_this)
+{
+  fit_this.setSize({(float)to_this.w, (float)to_this.h});
+  fit_this.setOrigin({0, 0});
+  fit_this.setPosition({(float)to_this.x, (float)to_this.y});
+  return fit_this;
+}
 
 /// sørger for at sirkelen du tegner er hitboxen
 sf::CircleShape &fit_to_bounds(sf::CircleShape &fit_this, const Ask::Physics::Circle &to_this)
