@@ -109,22 +109,23 @@ public:
   
   // setup
   enum item_id {BLOB};
-  class response
-  {
-  public:
-    response(float &x, float &y):x(&x), y(&y){}
-    void and_move(int x, int y){*this->x = x; *this->y = y;}
-  private:
-    float *x, *y;
-  };
-  
-  response add(item_id item_type)
+  void add(item_id item_type, int x, int y, int count = 1)
   {
     switch(item_type)
     {
       case BLOB:
         blobs.emplace_back();
-        return {blobs.back().logic.x, blobs.back().logic.y};
+        auto &a = blobs.back();
+        a.logic.x = x;
+        a.logic.y = y;
+        for (int i = 1; i < count; i++)
+        {
+          blobs.emplace_back();
+          auto &b = blobs.back();
+          int spread = count * 6;
+          b.logic.x = Ask::random(x - spread, x + spread);
+          b.logic.y = Ask::random(y - spread, y + spread);
+        }
     }
   }
   
