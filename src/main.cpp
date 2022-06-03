@@ -5,13 +5,13 @@
 
 /*
  * TODO
- * smooth bevegelse på View
- * collision
+ * teste collision
  * brain
  * reseptors
- * lære imgui
  * Har lyst å lage brain polymorphic så jeg kan bytte den ut lett, men crasher
  * quadtree
+ * visualisere bounds
+ * blob animasjon
  */
 
 // standard lib
@@ -147,7 +147,7 @@ int main() {
       }
   
       ImGui::Text("fps: %1.0f", ImGui::GetIO().Framerate);
-  
+      
       ImGui::EndMenuBar();
     }
   
@@ -173,24 +173,24 @@ int main() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-        view.zoom(1.0f - view_zoom_amount);
+        view.zoom(1.0f - view_zoom_amount * ImGui::GetIO().DeltaTime * 40);
         
-      else view_offset_y -= view_movement_speed;
+      else view_offset_y -= view_movement_speed * ImGui::GetIO().DeltaTime * 40;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-        view.zoom(1.0f + view_zoom_amount);
+        view.zoom(1.0f + view_zoom_amount * ImGui::GetIO().DeltaTime * 40);
       
-      else view_offset_y += view_movement_speed;
+      else view_offset_y += view_movement_speed * ImGui::GetIO().DeltaTime * 40;
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-      view_offset_x += view_movement_speed;
+      view_offset_x += view_movement_speed * ImGui::GetIO().DeltaTime * 40;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-      view_offset_x -= view_movement_speed;
+      view_offset_x -= view_movement_speed * ImGui::GetIO().DeltaTime * 40;
     
     view.setCenter(sf::Vector2f(view_offset_x, view_offset_y));
     window.setView(view);
