@@ -7,7 +7,7 @@
 #endif()
 
 option(SEARCH_DEPS "Search system for dependencies before pulling from Git." ON)
-set(SEARCH_DEPS ON)
+set(SEARCH_DEPS OFF)
 
 find_package(Git QUIET)
 if(NOT GIT_FOUND)
@@ -85,6 +85,10 @@ message(STATUS "pulled imgui-sfml from github")
 
 message(STATUS "Building imgui-sfml")
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/deps/imgui)
-set(IMGUI_SFML_FIND_SFML OFF)
+if (SFML_FOUND)
+    set(IMGUI_SFML_FIND_SFML ON)
+else()
+    set(IMGUI_SFML_FIND_SFML OFF)
+endif()
 set(IMGUI_SFML_IMGUI_DEMO ON)
 add_subdirectory(imgui-sfml)

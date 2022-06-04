@@ -22,14 +22,17 @@ target_include_directories(eco PRIVATE
         deps/imgui-sfml
         deps/imgui
         deps/ask_libs/include
+#        ${SFML_INCLUDE_DIR}
         src
         )
 
-target_link_libraries(eco PRIVATE
+target_link_libraries(eco PUBLIC
         sfml-system
         sfml-window
         sfml-graphics
         ImGui-SFML
+#        ${SFML_LIBRARIES}
+#        ${SFML_DEPENDENCIES}
         )
 
 file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
