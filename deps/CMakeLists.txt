@@ -11,11 +11,11 @@ set(SEARCH_DEPS OFF)
 
 find_package(Git QUIET)
 if(NOT GIT_FOUND)
-    message(FATAL_ERROR "Couldn't find Git on your system.")
+    message(FATAL_ERROR "couldn't find Git on your system")
 endif()
 
 if (NOT EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    message(FATAL_ERROR "The project has to be built as a Git repository.")
+    message(FATAL_ERROR "the project has to be built as a Git repository")
 endif()
 
 ## SFML SFML SFML SFML
@@ -32,11 +32,11 @@ endif()
 
 if (NOT SEARCH_DEPS OR NOT SFML_FOUND)
     message(STATUS "pulling SFML from Github")
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive SFML
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init deps/SFML
+            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
             RESULT_VARIABLE GIT_SFML_RESULT)
     if (NOT GIT_SFML_RESULT EQUAL "0")
-        message(FATAL_ERROR "failed to pull SFML from Github.")
+        message(FATAL_ERROR "failed to pull SFML from Github")
     endif()
     message(STATUS "pulled SFML from Github")
     set(BUILD_SHARED_LIBS FALSE)# "TRUE to build SFML as shared libraries, FALSE to build it as static libraries")
