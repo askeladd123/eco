@@ -1,12 +1,5 @@
 
 option(DEPS_FIND "Search system for dependencies before pulling from Git." ON)
-if (DEPS_FIND)
-    message(WARNING
-            "if option DEPS_FIND is turned ON,
-            the program will look for dependencies on the system first,
-            which can be outdated. "
-            )
-endif()
 
 find_package(Git QUIET)
 if(NOT GIT_FOUND)
@@ -19,8 +12,8 @@ endif()
 
 ## SFML SFML SFML SFML
 if (DEPS_FIND)
-    message(STATUS "looking for SFML on your system")
-    find_package(SFML 2.5.1 QUIET COMPONENTS system window graphics)
+    message(STATUS "looking for SFML 2.5 on your system")
+    find_package(SFML 2.5 QUIET COMPONENTS system window graphics)
     if(SFML_FOUND)
         message(STATUS "found SFML on your system")
     endif()
