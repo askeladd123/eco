@@ -25,6 +25,6 @@ add_executable(eco
 
 target_include_directories(eco PRIVATE ${dep_includes} src)
 
-target_link_libraries(eco PUBLIC ${dep_targets})
+target_link_libraries(eco PRIVATE ${dep_targets})
 
 file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

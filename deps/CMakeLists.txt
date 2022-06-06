@@ -20,7 +20,7 @@ endif()
 ## SFML SFML SFML SFML
 if (DEPS_FIND)
     message(STATUS "looking for SFML on your system")
-    find_package(SFML QUIET COMPONENTS system window graphics)
+    find_package(SFML 2.5.1 QUIET COMPONENTS system window graphics)
     if(SFML_FOUND)
         message(STATUS "found SFML on your system")
     endif()
@@ -101,7 +101,7 @@ if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ask_libs/.git" )
     message(STATUS "pulled ask_libs from github")
 endif()
 
-set(dep_targets sfml-system sfml-window sfml-graphics ImGui-SFML PARENT_SCOPE)
+set(dep_targets ImGui-SFML PARENT_SCOPE)
 set(dep_includes deps/imgui-sfml deps/imgui deps/ask_libs/include PARENT_SCOPE)#dette funker ikke hvis du flytter på mappen
 if (NOT SFML_FOUND)
     list(APPEND dep_includes deps/SFML/include)

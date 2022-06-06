@@ -7,3 +7,7 @@
 [submodule "deps/ask_libs"]
 	path = deps/ask_libs
 	url = https://github.com/askeladd123/ask_libs.git
+[submodule "deps/SFML"]
+	path = deps/SFML
+	url = https://github.com/SFML/SFML.git
+	branch = 2.5.x

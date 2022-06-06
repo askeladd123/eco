@@ -66,7 +66,7 @@ public:
   void render(Logic &blob_data) override
   {
     sprite.setPosition({blob_data.x, blob_data.y});
-    sprite.setRotation(sf::radians(blob_data.v_angle + M_PI / 2));
+    sprite.setRotation(blob_data.v_angle + M_PI / 2);
 
     bounds.x = blob_data.x;
     bounds.y = blob_data.y;
