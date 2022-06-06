@@ -5,6 +5,7 @@
 #ifndef ECO_GRAPHICS_H
 #define ECO_GRAPHICS_H
 
+#include <SFML/System.hpp>
 #include "ask/physics.h"
 
 class Graphics

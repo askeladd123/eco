@@ -1,5 +1,5 @@
 
-option(SEARCH_DEPS "Search system for dependencies before pulling from Git." ON)
+option(DEPS_FIND "Search system for dependencies before pulling from Git." ON)
 
 find_package(Git QUIET)
 if(NOT GIT_FOUND)
@@ -11,7 +11,7 @@ if (NOT EXISTS "${PROJECT_SOURCE_DIR}/.git")
 endif()
 
 ## SFML SFML SFML SFML
-if (SEARCH_DEPS)
+if (DEPS_FIND)
     message(STATUS "looking for SFML on your system")
     find_package(SFML QUIET COMPONENTS system window graphics)
     if(SFML_FOUND)
@@ -22,7 +22,7 @@ if (SEARCH_DEPS)
     endif()
 endif()
 
-if (NOT SEARCH_DEPS OR NOT SFML_FOUND)
+if (NOT DEPS_FIND OR NOT SFML_FOUND)
     if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SFML/.git" )
         message(STATUS "pulling SFML from Github")
         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init SFML
@@ -93,3 +93,10 @@ if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ask_libs/.git" )
     endif()
     message(STATUS "pulled ask_libs from github")
 endif()
+
+set(dep_targets sfml-system sfml-window sfml-graphics ImGui-SFML PARENT_SCOPE)
+set(dep_includes deps/imgui-sfml deps/imgui deps/ask_libs/include PARENT_SCOPE)#dette funker ikke hvis du flytter på mappen
+if (NOT SFML_FOUND)
+    list(APPEND dep_includes deps/SFML/include)
+endif()
+
