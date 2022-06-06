@@ -7,8 +7,10 @@ if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     MESSAGE(WARNING "project not tested with your compiler, only MinGW")
 endif()
 
+set(SEARCH_DEPS OFF)
 message(STATUS "building project dependencies")
 add_subdirectory(deps)
+message(STATUS "built project dependencies")
 
 add_executable(eco
         src/main.cpp
@@ -22,21 +24,17 @@ add_executable(eco
         )
 
 target_include_directories(eco PRIVATE
-        deps/SFML/include
+        ${SFML_INCLUDE_DIR}
         deps/imgui-sfml
         deps/imgui
         deps/ask_libs/include
-#        ${SFML_INCLUDE_DIR}
         src
         )
 
 target_link_libraries(eco PUBLIC
-        sfml-system
-        sfml-window
-        sfml-graphics
+        ${SFML_DEPENDENCIES}
+        ${SFML_LIBRARIES}
         ImGui-SFML
-#        ${SFML_LIBRARIES}
-#        ${SFML_DEPENDENCIES}
         )
 
 file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

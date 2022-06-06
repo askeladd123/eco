@@ -1,13 +1,5 @@
-## lager sfml targets
-#message(STATUS "Building SFML")
-#if( NOT EXISTS "${CMAKE_SOURCE_DIR}/deps/SFML/.git" )
-#    message( SEND_ERROR "SFML submodule is empty. Please run
-#git submodule update --init --recursive"
-#            )
-#endif()
 
 option(SEARCH_DEPS "Search system for dependencies before pulling from Git." ON)
-set(SEARCH_DEPS OFF)
 
 find_package(Git QUIET)
 if(NOT GIT_FOUND)
@@ -31,14 +23,16 @@ if (SEARCH_DEPS)
 endif()
 
 if (NOT SEARCH_DEPS OR NOT SFML_FOUND)
-    message(STATUS "pulling SFML from Github")
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init deps/SFML
-            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-            RESULT_VARIABLE GIT_SFML_RESULT)
-    if (NOT GIT_SFML_RESULT EQUAL "0")
-        message(FATAL_ERROR "failed to pull SFML from Github")
+    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SFML/.git" )
+        message(STATUS "pulling SFML from Github")
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init SFML
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                RESULT_VARIABLE GIT_SFML_RESULT)
+        if (NOT GIT_SFML_RESULT EQUAL "0")
+            message(FATAL_ERROR "failed to pull SFML from Github")
+        endif()
     endif()
-    message(STATUS "pulled SFML from Github")
+    message(STATUS "building SFML")
     set(BUILD_SHARED_LIBS FALSE)# "TRUE to build SFML as shared libraries, FALSE to build it as static libraries")
     set(SFML_BUILD_EXAMPLES FALSE)# "TRUE to build the SFML examples, FALSE to ignore them")
     set(SFML_BUILD_WINDOW TRUE)# "TRUE to build SFML's Window module. This setting is ignored, if the graphics module is built.")
@@ -51,39 +45,33 @@ if (NOT SEARCH_DEPS OR NOT SFML_FOUND)
     set(SFML_USE_SYSTEM_DEPS FALSE)# "TRUE to use system dependencies, FALSE to use the bundled ones.")
     set(SFML_USE_STATIC_STD_LIBS FALSE)# "TRUE to statically link to the standard libraries, FALSE to use them as DLLs")
     add_subdirectory(SFML)
+    message(STATUS "built SFML")
 endif()
 
 # imgui og imgui_sfml
-message(STATUS "pulling imgui from github")
-execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive imgui
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        RESULT_VARIABLE GIT_imgui_RESULT)
-if (NOT GIT_imgui_RESULT EQUAL "0")
-    message(FATAL_ERROR "Failed to pull imgui from Github.")
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/imgui/.git" )
+    message(STATUS "pulling imgui from github")
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive imgui
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            RESULT_VARIABLE GIT_imgui_RESULT)
+    if (NOT GIT_imgui_RESULT EQUAL "0")
+        message(FATAL_ERROR "Failed to pull imgui from Github.")
+    endif()
+    message(STATUS "pulled imgui from github")
 endif()
-message(STATUS "pulled imgui from github")
 
-#if( NOT EXISTS "${CMAKE_SOURCE_DIR}/deps/imgui/.git" )
-#    message( SEND_ERROR "imgui submodule is empty. Please run
-#git submodule update --init --recursive"
-#            )
-#endif()
-#if( NOT EXISTS "${CMAKE_SOURCE_DIR}/deps/imgui/.git" )
-#        message( SEND_ERROR "imgui-sfml submodule is empty. Please run
-#git submodule update --init --recursive"
-#                )
-#endif()
-
-message(STATUS "pulling imgui-sfml from github")
-execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive imgui-sfml
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        RESULT_VARIABLE GIT_imgui-sfml_RESULT)
-if (NOT GIT_imgui-sfml_RESULT EQUAL "0")
-    message(FATAL_ERROR "Failed to pull imgui-sfml from Github.")
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/imgui-sfml/.git" )
+    message(STATUS "pulling imgui-sfml from github")
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive imgui-sfml
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            RESULT_VARIABLE GIT_imgui-sfml_RESULT)
+    if (NOT GIT_imgui-sfml_RESULT EQUAL "0")
+        message(FATAL_ERROR "failed to pull imgui-sfml from Github.")
+    endif()
+    message(STATUS "pulled imgui-sfml from github")
 endif()
-message(STATUS "pulled imgui-sfml from github")
 
-message(STATUS "Building imgui-sfml")
+message(STATUS "building imgui-sfml")
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/deps/imgui)
 if (SFML_FOUND)
     set(IMGUI_SFML_FIND_SFML ON)
@@ -92,3 +80,16 @@ else()
 endif()
 set(IMGUI_SFML_IMGUI_DEMO ON)
 add_subdirectory(imgui-sfml)
+message(STATUS "built imgui-sfml")
+
+# ask libs
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ask_libs/.git" )
+    message(STATUS "pulling ask_libs from github")
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive ask_libs
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            RESULT_VARIABLE GIT_ask_libs_RESULT)
+    if (NOT GIT_ask_libs_RESULT EQUAL "0")
+        message(FATAL_ERROR "failed to pull ask_libs from Github.")
+    endif()
+    message(STATUS "pulled ask_libs from github")
+endif()
