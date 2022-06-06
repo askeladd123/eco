@@ -3,6 +3,10 @@ project(eco)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    MESSAGE(WARNING "project not tested with your compiler, only MinGW")
+endif()
+
 message(STATUS "building project dependencies")
 add_subdirectory(deps)
 
