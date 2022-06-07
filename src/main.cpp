@@ -71,16 +71,15 @@ int main() {
           break;
       
         case sf::Event::MouseButtonPressed:
-          if (blob_brush)
-          {
-            blob_brush = false;
-            auto m = mouse();
-            world.add(World::BLOB, m.x, m.y, ImGui_blob_brush_amount);
-          }
           break;
+          
+        case sf::Event::MouseButtonReleased:
+          if (blob_brush_amount)
+            pls_add = true;
       }
     }
   
+    // ====================== V === imgui === V ====================== \\
     
     ImGui::SFML::Update(window, deltaClock.restart());
   
@@ -138,37 +137,70 @@ int main() {
       case PHYSICS:
         ImGui::Text("blobs: %i", world.blobs.size());
         
-        
-        if (ImGui::Button(((!blob_brush)? " add" : " adding")))
-          blob_brush = !blob_brush;
-    
-        ImGui::SameLine();
-        if (ImGui::BeginMenu(
-            (
-                std::to_string(ImGui_blob_brush_amount) +
-                ((ImGui_blob_brush_amount == 1) ? " blob" : " blobs")
-                ).c_str()))
+        ImGui::Button(" 1 blob ");
+        if (ImGui::BeginDragDropSource())
         {
-          if (ImGui::MenuItem("1 blob"))
-          {
-            ImGui_blob_brush_amount = 1;
-            blob_brush = true;
-          }
-      
-          if (ImGui::MenuItem("10 blobs"))
-          {
-            ImGui_blob_brush_amount = 10;
-            blob_brush = true;
-          }
-      
-          if (ImGui::MenuItem("50 blobs"))
-          {
-            ImGui_blob_brush_amount = 50;
-            blob_brush = true;
-          }
-      
-          ImGui::EndMenu();
+          blob_brush_amount = 1;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("1");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
         }
+        ImGui::SameLine();
+    
+        ImGui::Button(" 10 blobs ");
+        if (ImGui::BeginDragDropSource())
+        {
+          blob_brush_amount = 10;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("10");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
+        ImGui::SameLine();
+        
+        ImGui::Button(" 50 blobs ");
+        if (ImGui::BeginDragDropSource())
+        {
+          blob_brush_amount = 50;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("50");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
+        
+        ImGui::Spacing();
+        
+//        if (ImGui::Button(((!blob_brush)? " add" : " adding")))
+//          blob_brush = !blob_brush;
+//
+//        ImGui::SameLine();
+//        if (ImGui::BeginMenu(
+//            (
+//                std::to_string(ImGui_blob_brush_amount) +
+//                ((ImGui_blob_brush_amount == 1) ? " blob" : " blobs")
+//                ).c_str()))
+//        {
+//          if (ImGui::MenuItem("1 blob"))
+//          {
+//            ImGui_blob_brush_amount = 1;
+//            blob_brush = true;
+//          }
+//
+//          if (ImGui::MenuItem("10 blobs"))
+//          {
+//            ImGui_blob_brush_amount = 10;
+//            blob_brush = true;
+//          }
+//
+//          if (ImGui::MenuItem("50 blobs"))
+//          {
+//            ImGui_blob_brush_amount = 50;
+//            blob_brush = true;
+//          }
+//
+//          ImGui::EndMenu();
+//        }
         
         ImGui::Separator();
         
@@ -202,33 +234,36 @@ int main() {
           ImGui::EndTooltip();
         }
         
-        if (ImGui::BeginTable("select blob", 3))
+        if (ImGui::CollapsingHeader("list"))
         {
-          static int selected_blob = -1;
-          static bool selected = {false};
-          
-          ImGui::TableNextColumn();
-          ImGui::Text("name");
-          ImGui::TableNextColumn();
-          ImGui::Text("x");
-          ImGui::TableNextColumn();
-          ImGui::Text("y");
-          
-          for (int i = 0; i < world.blobs.size(); i++)
+          if (ImGui::BeginTable("select blob", 3))
           {
-            char label[32];
-            sprintf(label, "%s", world.blobs[i].name.c_str());
-            ImGui::TableNextRow();
+            static int selected_blob = -1;
+            static bool selected = {false};
+    
             ImGui::TableNextColumn();
-            if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
-              selected_blob = i;
-              
+            ImGui::Text("name");
             ImGui::TableNextColumn();
-            ImGui::Text("%i", (int)world.blobs[i].logic.x);
+            ImGui::Text("x");
             ImGui::TableNextColumn();
-            ImGui::Text("%i", (int)world.blobs[i].logic.y);
+            ImGui::Text("y");
+    
+            for (int i = 0; i < world.blobs.size(); i++)
+            {
+              char label[32];
+              sprintf(label, "%s", world.blobs[i].name.c_str());
+              ImGui::TableNextRow();
+              ImGui::TableNextColumn();
+              if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
+                selected_blob = i;
+      
+              ImGui::TableNextColumn();
+              ImGui::Text("%i", (int) world.blobs[i].logic.x);
+              ImGui::TableNextColumn();
+              ImGui::Text("%i", (int) world.blobs[i].logic.y);
+            }
+            ImGui::EndTable();
           }
-          ImGui::EndTable();
         }
         
         break;
@@ -236,11 +271,23 @@ int main() {
     
     ImGui::End();
     
-    // logikk
+    // ====================== A === imgui === A ====================== \\
+    
+    
+    
     if (play)
     {
       ticks_since_startup++;
       world.tick();
+    }
+  
+    // logikk
+    if (pls_add)
+    {
+      pls_add = false;
+      auto m = mouse();
+      world.add(World::BLOB, m.x, m.y, blob_brush_amount);
+      blob_brush_amount = 0;
     }
     
     // flytte på View

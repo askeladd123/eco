@@ -21,8 +21,10 @@ float view_zoom_amount = 0.01;
 enum states {MAIN, PHYSICS, ONE, ALL};
 states ImGui_state = MAIN;
 int ImGui_blob_brush_amount = 1;
+int blob_brush_amount = 0;
 bool hitbox_blob = false;
 bool hitbox_mouse = false;
+bool pls_add = false;
 sf::Color hitbox_hit(100, 200, 100, 100);
 sf::Color hitbox_unhit(200, 100, 100, 100);
 
