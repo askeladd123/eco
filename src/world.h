@@ -35,10 +35,10 @@ public:
   // flow
   void tick()
   {
+    using namespace Ask::Physics;
+    
     for (Blob &blob : blobs)
     {
-      using namespace Ask::Physics;
-  
       blob.think();
       
       // alias for variabler
@@ -53,18 +53,13 @@ public:
       vel_len += acc_len;
       vel_angle += acc_angle;
       
-      // eksterne krefter ================================
-      // TODO: collision
-      
       // friksjon
       if (vel_len < basically_zero)
         vel_len = 0;
-
-      // TODO: vurdere om drag er unødvendig
       vel_len -= vel_len * friction_c;
       
+      // collision ================================
       bool crash = false;
-      // collision
       for (auto &blob2: blobs)
       {
         if (&blob2 == &blob)
@@ -75,55 +70,23 @@ public:
         auto b = blob2.graphics.bounds;
         int x1 = b.center.x - a.center.x;
         int y1 = b.center.y - a.center.y;
-        float distance_between = sqrt(x1 * x1 + y1 * y1) - (b.r + a.r);
-        if (distance_between < 0)
+  
+        auto collision = intersection(blob.graphics.bounds, blob2.graphics.bounds);
+        if (collision.intersects)
         {
           crash = true;
-  
-          // ikke lov å være inni hverandre
-//          float between_x = (blob2.logic.x - x) / 2;
-//          float between_y = (blob2.logic.y - y) / 2;
 
-//          x -= between_x;
-//          y -= between_y;
-//          blob2.logic.x += between_x;
-//          blob2.logic.y += between_y;
-
-//          point.setPosition({x + between_x, y + between_y});
-
-          // ikke lov å være inni hverandre: polar løsning. TODO: finn en cartesisk løsning bro
-//          float angle_between = atan2(blob2.logic.x - x, blob2.logic.y - y);
-//          float h = distance_between / 2;
-//          float new_x = h * cos(angle_between) + 1;
-//          float new_y = h * sin(angle_between) + 1;
-//          x += new_x;
-//          y += new_y;
-//          blob2.logic.x -= new_x;
-//          blob2.logic.y -= new_y;
+//          // correct
+//          float a_len = collision.distance_inside / 2;
+//          x -= a_len * collision.ab_unit.x;
+//          y -= a_len * collision.ab_unit.y;
+//          blob2.logic.x += a_len * collision.ab_unit.x;
+//          blob2.logic.y += a_len * collision.ab_unit.y;
 //
-//
-
-            // dette er noe matte jeg må teste bedre
-
-            // a og b er blobs
-            int ab_x = (blob2.logic.x - x);
-            int ab_y = (blob2.logic.y - y);
-            int a_r = blob.graphics.bounds.r;
-            int b_r = blob2.graphics.bounds.r;
-            float k = (-1 - (a_r + b_r) / std::sqrt(ab_x * ab_x + ab_y * ab_y)) / 2;
-
-            int correcting_x = ab_x * k;
-            int correcting_y = ab_y * k;
-
-            x += correcting_x;
-            y += correcting_y;
-            blob2.logic.x -= correcting_x;
-            blob2.logic.y -= correcting_y;
-
-          // reflekt
-          float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
-          vel_angle += normal_angle;
-          blob2.logic.v_angle -= normal_angle;
+//          // reflekt
+//          float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
+//          vel_angle += normal_angle;
+//          blob2.logic.v_angle -= normal_angle;
         }
       }
   
@@ -150,13 +113,13 @@ public:
         x = bounds.center.x + bounds.r_x;
         vel_x -= vel_len;
       }
-      
+
       if (y < bounds.center.y - bounds.r_y)
       {
         y = bounds.center.y - bounds.r_y;
         vel_y += vel_len;
       }
-  
+
       if (bounds.center.y + bounds.r_y < y)
       {
         y = bounds.center.y + bounds.r_y;
@@ -188,13 +151,21 @@ public:
         auto &a = blobs.back();
         a.logic.x = x;
         a.logic.y = y;
+        
         for (int i = 1; i < count; i++)
         {
           blobs.emplace_back();
           auto &b = blobs.back();
-          int spread = count * 6;
-          b.logic.x = Ask::random(x - spread, x + spread);
-          b.logic.y = Ask::random(y - spread, y + spread);
+          b.name = std::to_string(blobs.size());
+//          int spread = count * 20;
+//          b.logic.x = Ask::random(x - spread, x + spread);
+//          b.logic.y = Ask::random(y - spread, y + spread);
+  
+          b.logic.x = i * 40 - 200;
+          b.logic.y = i * 40 - 200;
+
+//          for (Ask::Physics::intersection())
+//          a = b;
         }
     }
   }

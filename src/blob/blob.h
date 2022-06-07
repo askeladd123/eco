@@ -17,6 +17,10 @@ public:
   Logic logic;
   Stupid_brain brain;
   Graphics_image graphics;
+  std::string name;
+  
+public:
+  Blob() : name(Names::random()){}
   
   /// justerer akselerasjon: må fortsatt legge til på fart og posisjon
   void think()

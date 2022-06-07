@@ -19,6 +19,7 @@
  * projektet er stort: CMake sånn at man kan bruke find_package istedetfor submodule
  * navigasjon: mulighet for mus også: dra og scroll
  * README
+ * autogenererte navn
  */
 
 // standard lib
@@ -41,6 +42,7 @@ int main() {
   view_resize();
   window.setFramerateLimit(60);
   Graphics_image::init();
+  Names::load();
   if (!ImGui::SFML::Init(window))
   {
     std::cout << "vinduet funka visst ikke\n";
@@ -83,8 +85,11 @@ int main() {
       }
     }
   
+    
     ImGui::SFML::Update(window, deltaClock.restart());
   
+    ImGui::ShowDemoWindow();
+    
     ImGui::Begin("Control Panel bitches", NULL, ImGuiWindowFlags_MenuBar);
     
     if (ImGui::BeginMenuBar())
@@ -134,6 +139,8 @@ int main() {
         break;
       
       case PHYSICS:
+        ImGui::Text("blobs: %i", world.blobs.size());
+        
         if (ImGui::Button(((!blob_brush)? " add" : " adding")))
           blob_brush = !blob_brush;
     
@@ -165,6 +172,8 @@ int main() {
           ImGui::EndMenu();
         }
         
+        ImGui::Separator();
+        
         ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 1.f);
         ImGui::SliderFloat("friction", &world.friction_c, 0.f, 1.f);
         ImGui::SliderFloat("drag", &world.drag_c, 0.f, 0.2f);
@@ -184,6 +193,46 @@ int main() {
 //          ImGui::MenuItem("square");
 //          ImGui::EndMenu();
         }
+        break;
+        
+      case ALL:
+        ImGui::Text("%i", world.blobs.size());
+        if (ImGui::IsItemHovered())
+        {
+          ImGui::BeginTooltip();
+          ImGui::Text("help");
+          ImGui::EndTooltip();
+        }
+        
+        if (ImGui::BeginTable("select blob", 3))
+        {
+          static int selected_blob = -1;
+          static bool selected = {false};
+          
+          ImGui::TableNextColumn();
+          ImGui::Text("name");
+          ImGui::TableNextColumn();
+          ImGui::Text("x");
+          ImGui::TableNextColumn();
+          ImGui::Text("y");
+          
+          for (int i = 0; i < world.blobs.size(); i++)
+          {
+            char label[32];
+            sprintf(label, "%s", world.blobs[i].name.c_str());
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
+              selected_blob = i;
+              
+            ImGui::TableNextColumn();
+            ImGui::Text("%i", (int)world.blobs[i].logic.x);
+            ImGui::TableNextColumn();
+            ImGui::Text("%i", (int)world.blobs[i].logic.y);
+          }
+          ImGui::EndTable();
+        }
+        
         break;
     }
     
