@@ -16,7 +16,7 @@ class World
   
   // TODO quad trees for collision
 public:
-  World():bounds(0, 0, 800, 800)
+  World():bounds(0, 0, 400, 400)
   {
     point.setRadius(2);
     point.setOrigin({point.getRadius(), point.getRadius()});
@@ -25,7 +25,7 @@ public:
   
 public:
   std::vector<Blob> blobs;
-  Ask::Physics::Box bounds;
+  Ask::Physics::Tile bounds;
   float basically_zero = 0.005f;
   float friction_c = 0.2f, drag_c = 0.05f;
   sf::CircleShape point;
@@ -73,8 +73,8 @@ public:
         // kollisjon sirkel sirkel
         auto a = blob.graphics.bounds;
         auto b = blob2.graphics.bounds;
-        int x1 = b.x - a.x;
-        int y1 = b.y - a.y;
+        int x1 = b.center.x - a.center.x;
+        int y1 = b.center.y - a.center.y;
         float distance_between = sqrt(x1 * x1 + y1 * y1) - (b.r + a.r);
         if (distance_between < 0)
         {
@@ -139,27 +139,27 @@ public:
       float vel_y = vel_len * sin(vel_angle);
       
       // collision world bounds
-      if (x < bounds.x)
+      if (x < bounds.center.x - bounds.r_x)
       {
-        x = bounds.x;
+        x = bounds.center.x - bounds.r_x;
         vel_x += vel_len;
       }
-  
-      if (bounds.x + bounds.w < x)
+
+      if (bounds.center.x + bounds.r_x < x)
       {
-        x = bounds.x + bounds.w;
+        x = bounds.center.x + bounds.r_x;
         vel_x -= vel_len;
       }
       
-      if (y < bounds.y)
+      if (y < bounds.center.y - bounds.r_y)
       {
-        y = bounds.y;
+        y = bounds.center.y - bounds.r_y;
         vel_y += vel_len;
       }
   
-      if (bounds.y + bounds.h < y)
+      if (bounds.center.y + bounds.r_y < y)
       {
-        y = bounds.y + bounds.h;
+        y = bounds.center.y + bounds.r_y;
         vel_y -= vel_len;
       }
       

@@ -28,8 +28,8 @@ public:
   {
     circle.setPosition(sf::Vector2f(blob_data.x, blob_data.y));
     
-    bounds.x = blob_data.x;
-    bounds.y = blob_data.y;
+    bounds.center.x = blob_data.x;
+    bounds.center.y = blob_data.y;
     
     window.draw(circle);
   }
@@ -68,8 +68,8 @@ public:
     sprite.setPosition({blob_data.x, blob_data.y});
     sprite.setRotation(Ask::degrees(blob_data.v_angle + M_PI / 2));
 
-    bounds.x = blob_data.x;
-    bounds.y = blob_data.y;
+    bounds.center.x = blob_data.x;
+    bounds.center.y = blob_data.y;
 
     window.draw(sprite);
     

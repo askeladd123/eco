@@ -61,11 +61,11 @@ sf::Vector2f mouse()
 }
 
 /// sørger for at firkanten du tegner er hitboxen
-sf::RectangleShape &fit_to_bounds(sf::RectangleShape &fit_this, const Ask::Physics::Box &to_this)
+sf::RectangleShape &fit_to_bounds(sf::RectangleShape &fit_this, const Ask::Physics::Tile &to_this)
 {
-  fit_this.setSize({(float)to_this.w, (float)to_this.h});
-  fit_this.setOrigin({0, 0});
-  fit_this.setPosition({(float)to_this.x, (float)to_this.y});
+  fit_this.setSize({(float)to_this.r_x * 2, (float)to_this.r_y * 2});
+  fit_this.setOrigin({(float)to_this.r_x, (float)to_this.r_y});
+  fit_this.setPosition({(float)to_this.center.x, (float)to_this.center.y});
   return fit_this;
 }
 
@@ -74,7 +74,7 @@ sf::CircleShape &fit_to_bounds(sf::CircleShape &fit_this, const Ask::Physics::Ci
 {
   fit_this.setRadius(to_this.r);
   fit_this.setOrigin({fit_this.getRadius(), fit_this.getRadius()});
-  fit_this.setPosition({(float)to_this.x, (float)to_this.y});
+  fit_this.setPosition({(float)to_this.center.x, (float)to_this.center.y});
   return fit_this;
 }
 
