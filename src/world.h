@@ -76,12 +76,12 @@ public:
         {
           crash = true;
 
-//          // correct
-//          float a_len = collision.distance_inside / 2;
-//          x -= a_len * collision.ab_unit.x;
-//          y -= a_len * collision.ab_unit.y;
-//          blob2.logic.x += a_len * collision.ab_unit.x;
-//          blob2.logic.y += a_len * collision.ab_unit.y;
+          // correct
+          float a_len = collision.distance_inside / 2;
+          x -= a_len * collision.ab_unit.x;
+          y -= a_len * collision.ab_unit.y;
+          blob2.logic.x += a_len * collision.ab_unit.x;
+          blob2.logic.y += a_len * collision.ab_unit.y;
 //
 //          // reflekt
 //          float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
@@ -101,30 +101,30 @@ public:
       float vel_x = vel_len * cos(vel_angle);
       float vel_y = vel_len * sin(vel_angle);
       
-      // collision world bounds
-      if (x < bounds.center.x - bounds.r_x)
-      {
-        x = bounds.center.x - bounds.r_x;
-        vel_x += vel_len;
-      }
-
-      if (bounds.center.x + bounds.r_x < x)
-      {
-        x = bounds.center.x + bounds.r_x;
-        vel_x -= vel_len;
-      }
-
-      if (y < bounds.center.y - bounds.r_y)
-      {
-        y = bounds.center.y - bounds.r_y;
-        vel_y += vel_len;
-      }
-
-      if (bounds.center.y + bounds.r_y < y)
-      {
-        y = bounds.center.y + bounds.r_y;
-        vel_y -= vel_len;
-      }
+//      // collision world bounds
+//      if (x < bounds.center.x - bounds.r_x)
+//      {
+//        x = bounds.center.x - bounds.r_x;
+//        vel_x += vel_len;
+//      }
+//
+//      if (bounds.center.x + bounds.r_x < x)
+//      {
+//        x = bounds.center.x + bounds.r_x;
+//        vel_x -= vel_len;
+//      }
+//
+//      if (y < bounds.center.y - bounds.r_y)
+//      {
+//        y = bounds.center.y - bounds.r_y;
+//        vel_y += vel_len;
+//      }
+//
+//      if (bounds.center.y + bounds.r_y < y)
+//      {
+//        y = bounds.center.y + bounds.r_y;
+//        vel_y -= vel_len;
+//      }
       
       // posisjon ================================
       x += vel_x;
@@ -156,7 +156,6 @@ public:
         {
           blobs.emplace_back();
           auto &b = blobs.back();
-          b.name = std::to_string(blobs.size());
 //          int spread = count * 20;
 //          b.logic.x = Ask::random(x - spread, x + spread);
 //          b.logic.y = Ask::random(y - spread, y + spread);

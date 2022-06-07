@@ -10,16 +10,12 @@
  * reseptors
  * Har lyst å lage brain polymorphic så jeg kan bytte den ut lett, men crasher
  * quadtree
- * visualisere bounds
  * blob animasjon
  * select blob
  * imgui graf, tabs, drag drop
  * insekter kan interacte med spiller
- * polar eller cartesisk: trenger man polar i det hele tatt?
- * projektet er stort: CMake sånn at man kan bruke find_package istedetfor submodule
  * navigasjon: mulighet for mus også: dra og scroll
  * README
- * autogenererte navn
  */
 
 // standard lib
@@ -135,11 +131,13 @@ int main() {
     switch (ImGui_state)
     {
       case MAIN:
+        ImGui::Spacing();
         ImGui::Text("If you love fake insects, this program is for you. \nUse arrowkeys to move, and Ctrl + Up or Ctrl + Down to zoom.");
         break;
       
       case PHYSICS:
         ImGui::Text("blobs: %i", world.blobs.size());
+        
         
         if (ImGui::Button(((!blob_brush)? " add" : " adding")))
           blob_brush = !blob_brush;
