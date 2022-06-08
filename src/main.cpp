@@ -10,12 +10,13 @@
  * reseptors
  * Har lyst å lage brain polymorphic så jeg kan bytte den ut lett, men crasher
  * quadtree
- * blob animasjon
+ * blob animasjon: tips, bruk ticks_since_startup og modulo
  * select blob
  * imgui graf, tabs, drag drop
  * insekter kan interacte med spiller
  * navigasjon: mulighet for mus også: dra og scroll
  * README
+ * rydde opp i unødvedige globals
  */
 
 // standard lib
@@ -81,7 +82,7 @@ int main() {
     
     ImGui::SFML::Update(window, deltaClock.restart());
   
-//    ImGui::ShowDemoWindow();
+    ImGui::ShowDemoWindow();
     
     ImGui::Begin("Control Panel bitches", NULL, ImGuiWindowFlags_MenuBar);
     
@@ -106,19 +107,47 @@ int main() {
       
       ImGui::Text("\t");
       
-      if (play)
-        play = !ImGui::Button("pause");
+      static int state = 3;
+      if (ImGui::RadioButton("pause", state == 1))
+      {
+        state = 1;
+        play = false;
+      }
+      
+      if (state != 1)
+        play = true;
   
-      else play = ImGui::Button("play");
-  
-      if (ImGui::Button("slower"))
+      if (ImGui::RadioButton("slower", state == 2))
+      {
+        state = 2;
         window.setFramerateLimit(fps.decreased());
+      }
   
-      if (ImGui::Button("normal speed"))
+      if (ImGui::RadioButton("normal", state == 3))
+      {
+        state = 3;
         window.setFramerateLimit(fps.normal());
+      }
   
-      if (ImGui::Button("faster"))
+      if (ImGui::RadioButton("faster", state == 4))
+      {
+        state = 4;
         window.setFramerateLimit(fps.increased());
+      }
+        
+//      if (play)
+//        play = !ImGui::Button("pause");
+//
+//      else play = ImGui::Button("play");
+  
+//      if (ImGui::Button("slower"))
+//        window.setFramerateLimit(fps.decreased());
+//
+//      if (ImGui::Button("normal speed"))
+//        window.setFramerateLimit(fps.normal());
+//
+//      if (ImGui::Button("faster"))
+//        window.setFramerateLimit(fps.increased());
   
       ImGui::Text("\tfps: %1.0f", ImGui::GetIO().Framerate);
   
@@ -207,9 +236,19 @@ int main() {
         ImGui::SliderFloat("drag", &world.drag_c, 0.f, 0.2f);
         
         ImGui::BeginTabBar("tabs");
-        ImGui::TabItemButton("kjor");
+//        ImGui::TabItemButton("kjor");
+        if (ImGui::BeginTabItem("ikke kjor"))
+        {
+          ImGui::Text("jarra jarra ");
+          ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("neivelnei"))
+        {
+          ImGui::Text("2 + 2 = 6");
+          ImGui::EndTabItem();
+        }
         ImGui::EndTabBar();
-        
+    
         if (ImGui::CollapsingHeader("hitboxes"))
         {
           ImGui::Checkbox("blobs", &hitbox_blob);

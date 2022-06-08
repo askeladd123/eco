@@ -28,11 +28,9 @@ public:
     using namespace std;
     
     // bilder - laster de først opp i RAM, det må man for å redigere de bra
-    sf::Image error_ram;
     error_ram.create(64, 64, sf::Color::Red);
     error.loadFromImage(error_ram);
-    
-    sf::Image blob_ram;
+
     if (!blob_ram.loadFromFile("res/blob.png"))
     {
       std::cout << "failed to load res/blob.png\n";
@@ -43,7 +41,6 @@ public:
     simple_blob.setScale({0.2f, 0.2f});
     simple_blob.setOrigin({64, 64});
     
-    sf::Image concrete_ram;
     if (!concrete_ram.loadFromFile("res/concrete.png"))
     {
       std::cout << "failed to load res/concrete.png\n";
@@ -51,7 +48,6 @@ public:
     }
     concrete.loadFromImage(concrete_ram);
     
-    sf::Image tiles_ram;
     if (!tiles_ram.loadFromFile("res/tiles.png"))
     {
       std::cout << "failed to load res/tiles.png\n";
@@ -92,9 +88,10 @@ public:
         " " +
         first_names[(int)Ask::random(-0.49, first_names.size() - 0.01)];
   }
-
+  
 private:
   std::vector<std::string> first_names, last_names;
+  sf::Image error_ram, blob_ram, concrete_ram, tiles_ram;
   sf::Texture error, blob, concrete, tiles;
 };
 
