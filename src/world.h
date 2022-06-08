@@ -46,6 +46,7 @@ public:
     {
       blob.think();
       
+      
       // alias for variabler
       float &x = blob.logic.x;
       float &y = blob.logic.y;

@@ -29,6 +29,7 @@
 #include <SFML/Window.hpp>
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include <numeric>
 
 // mine includes
 #include "global_var.h"
@@ -73,8 +74,9 @@ int main() {
         case sf::Event::MouseButtonPressed:
           static int mouse_down_x = 0;
           static int mouse_down_y = 0;
-          
-          if (!mouse_down)
+          static bool mouse_down = false;
+    
+          if (!mouse_down && !hovered)
           {
             mouse_down = true;
             mouse_down_x = mouse.x;
@@ -89,7 +91,7 @@ int main() {
           break;
           
         case sf::Event::MouseMoved:
-          if (mouse_down)
+          if (mouse_down && !hovered)
           {
             view_offset_x = view.getCenter().x + mouse_down_x - mouse.x;
             view_offset_y = view.getCenter().y + mouse_down_y - mouse.y;
@@ -98,7 +100,8 @@ int main() {
           
         case sf::Event::MouseWheelScrolled:
         {
-          view.zoom(1 + event.mouseWheelScroll.delta * - 0.03);
+          if (!hovered)
+            view.zoom(1 + event.mouseWheelScroll.delta * - 0.03);
         }
       }
     }
@@ -111,8 +114,7 @@ int main() {
     
     ImGui::Begin("Control Panel bitches", NULL, ImGuiWindowFlags_MenuBar);
     
-    if (ImGui::IsWindowHovered())
-      mouse_down = false;
+    hovered = ImGui::IsWindowHovered();
     
     if (ImGui::BeginMenuBar())
     {
@@ -258,6 +260,8 @@ int main() {
   
       if (ImGui::BeginTabItem("physics"))
       {
+        ImGui::Text("approximate collision checks per frame: %i", (int)pow(world.blobs.size(), 2));
+        
         if (ImGui::CollapsingHeader("hitboxes"))
         {
           ImGui::Checkbox("blobs", &hitbox_blob);

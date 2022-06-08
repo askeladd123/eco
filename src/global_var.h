@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <list>
 #include "files.h"
 
 sf::View view;
@@ -18,8 +19,8 @@ int view_offset_x = -350, view_offset_y = 0;
 int view_height = 800;
 int view_movement_speed = 6;
 float view_zoom_amount = 0.01;
-bool mouse_down = false;
 int last_pos_y;
+bool hovered = false;
 
 // imgui
 int blob_brush_amount = 0;
