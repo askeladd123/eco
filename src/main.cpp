@@ -92,19 +92,13 @@ int main() {
     
     if (ImGui::BeginMenuBar())
     {
-      if (ImGui::BeginMenu("menu"))
+      if (ImGui::BeginMenu("file ellerno"))
       {
-        if (ImGui::MenuItem("main"))
-          ImGui_state = MAIN;
+        if (ImGui::MenuItem("tull"))
+          0;
         
-        if (ImGui::MenuItem("physics"))
-          ImGui_state = PHYSICS;
-        
-        if (ImGui::MenuItem("one blob"))
-          ImGui_state = ONE;
-        
-        if (ImGui::MenuItem("all blobs"))
-          ImGui_state = ALL;
+        if (ImGui::MenuItem("et eller annet"))
+          0;
           
         ImGui::EndMenu();
       }
@@ -138,121 +132,108 @@ int main() {
         state = 4;
         window.setFramerateLimit(fps.increased());
       }
-        
-//      if (play)
-//        play = !ImGui::Button("pause");
-//
-//      else play = ImGui::Button("play");
-  
-//      if (ImGui::Button("slower"))
-//        window.setFramerateLimit(fps.decreased());
-//
-//      if (ImGui::Button("normal speed"))
-//        window.setFramerateLimit(fps.normal());
-//
-//      if (ImGui::Button("faster"))
-//        window.setFramerateLimit(fps.increased());
-  
+      
       ImGui::Text("\tfps: %1.0f", ImGui::GetIO().Framerate);
   
       ImGui::EndMenuBar();
     }
   
-    switch (ImGui_state)
+    ImGui::Text(
+        "If you love fake insects, this program is for you. \n"
+        "Use arrowkeys to move, and Ctrl + Up or Ctrl + Down to zoom.");
+  
+    ImGui::Spacing();
+    
+    ImGui::Text("Use the boxes below to drag in insects:");
+    
+    ImGui::Spacing();
+  
+    ImGui::Button(" 1 blob ");
+    if (ImGui::BeginDragDropSource())
     {
-      case MAIN:
-        ImGui::Spacing();
-        ImGui::Text("If you love fake insects, this program is for you. \nUse arrowkeys to move, and Ctrl + Up or Ctrl + Down to zoom.");
-        break;
+      blob_brush_amount = 1;
+      ImGui::BeginTooltip();
+      ImGui::SetTooltip("1");
+      ImGui::EndTooltip();
+      ImGui::EndDragDropSource();
+    }
+    ImGui::SameLine();
+  
+    ImGui::Button(" 10 blobs ");
+    if (ImGui::BeginDragDropSource())
+    {
+      blob_brush_amount = 10;
+      ImGui::BeginTooltip();
+      ImGui::SetTooltip("10");
+      ImGui::EndTooltip();
+      ImGui::EndDragDropSource();
+    }
+    ImGui::SameLine();
+  
+    ImGui::Button(" 50 blobs ");
+    if (ImGui::BeginDragDropSource())
+    {
+      blob_brush_amount = 50;
+      ImGui::BeginTooltip();
+      ImGui::SetTooltip("50");
+      ImGui::EndTooltip();
+      ImGui::EndDragDropSource();
+    }
+    
+    ImGui::Spacing();
+    
+    ImGui::Text("You can delete them in (insert text) tab below. ");
+    
+    ImGui::Separator();
+    
+    if (ImGui::BeginTabBar("select mode"))
+    {
+      if (ImGui::BeginTabItem("individuals"))
+      {
+        ImGui::Text("population: %i", world.blobs.size());
+        if (ImGui::IsItemHovered())
+        {
+          ImGui::BeginTooltip();
+          ImGui::Text("help");
+          ImGui::EndTooltip();
+        }
+  
+        if (ImGui::CollapsingHeader("list"))
+        {
+          if (ImGui::BeginTable("select blob", 3))
+          {
+            static int selected_blob = -1;
+            static bool selected = {false};
       
-      case PHYSICS:
-        ImGui::Text("blobs: %i", world.blobs.size());
+            ImGui::TableNextColumn();
+            ImGui::Text("name");
+            ImGui::TableNextColumn();
+            ImGui::Text("x");
+            ImGui::TableNextColumn();
+            ImGui::Text("y");
+      
+            for (int i = 0; i < world.blobs.size(); i++)
+            {
+              char label[32];
+              sprintf(label, "%s", world.blobs[i].name.c_str());
+              ImGui::TableNextRow();
+              ImGui::TableNextColumn();
+              if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
+                selected_blob = i;
         
-        ImGui::Button(" 1 blob ");
-        if (ImGui::BeginDragDropSource())
-        {
-          blob_brush_amount = 1;
-          ImGui::BeginTooltip();
-          ImGui::SetTooltip("1");
-          ImGui::EndTooltip();
-          ImGui::EndDragDropSource();
+              ImGui::TableNextColumn();
+              ImGui::Text("%i", (int) world.blobs[i].logic.x);
+              ImGui::TableNextColumn();
+              ImGui::Text("%i", (int) world.blobs[i].logic.y);
+            }
+            ImGui::EndTable();
+          }
         }
-        ImGui::SameLine();
-    
-        ImGui::Button(" 10 blobs ");
-        if (ImGui::BeginDragDropSource())
-        {
-          blob_brush_amount = 10;
-          ImGui::BeginTooltip();
-          ImGui::SetTooltip("10");
-          ImGui::EndTooltip();
-          ImGui::EndDragDropSource();
-        }
-        ImGui::SameLine();
-        
-        ImGui::Button(" 50 blobs ");
-        if (ImGui::BeginDragDropSource())
-        {
-          blob_brush_amount = 50;
-          ImGui::BeginTooltip();
-          ImGui::SetTooltip("50");
-          ImGui::EndTooltip();
-          ImGui::EndDragDropSource();
-        }
-        
-        ImGui::Spacing();
-        
-//        if (ImGui::Button(((!blob_brush)? " add" : " adding")))
-//          blob_brush = !blob_brush;
-//
-//        ImGui::SameLine();
-//        if (ImGui::BeginMenu(
-//            (
-//                std::to_string(ImGui_blob_brush_amount) +
-//                ((ImGui_blob_brush_amount == 1) ? " blob" : " blobs")
-//                ).c_str()))
-//        {
-//          if (ImGui::MenuItem("1 blob"))
-//          {
-//            ImGui_blob_brush_amount = 1;
-//            blob_brush = true;
-//          }
-//
-//          if (ImGui::MenuItem("10 blobs"))
-//          {
-//            ImGui_blob_brush_amount = 10;
-//            blob_brush = true;
-//          }
-//
-//          if (ImGui::MenuItem("50 blobs"))
-//          {
-//            ImGui_blob_brush_amount = 50;
-//            blob_brush = true;
-//          }
-//
-//          ImGui::EndMenu();
-//        }
-        
-        ImGui::Separator();
-        
-        ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 1.f);
-        ImGui::SliderFloat("friction", &world.friction_c, 0.f, 1.f);
-        ImGui::SliderFloat("drag", &world.drag_c, 0.f, 0.2f);
-        
-        ImGui::BeginTabBar("tabs");
-//        ImGui::TabItemButton("kjor");
-        if (ImGui::BeginTabItem("ikke kjor"))
-        {
-          ImGui::Text("jarra jarra ");
-          ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("neivelnei"))
-        {
-          ImGui::Text("2 + 2 = 6");
-          ImGui::EndTabItem();
-        }
-        ImGui::EndTabBar();
-    
+        ImGui::EndTabItem();
+      }
+  
+      if (ImGui::BeginTabItem("physics"))
+      {
         if (ImGui::CollapsingHeader("hitboxes"))
         {
           ImGui::Checkbox("blobs", &hitbox_blob);
@@ -264,50 +245,18 @@ int main() {
 //          ImGui::MenuItem("square");
 //          ImGui::EndMenu();
         }
-        break;
-        
-      case ALL:
-        ImGui::Text("%i", world.blobs.size());
-        if (ImGui::IsItemHovered())
-        {
-          ImGui::BeginTooltip();
-          ImGui::Text("help");
-          ImGui::EndTooltip();
-        }
-        
-        if (ImGui::CollapsingHeader("list"))
-        {
-          if (ImGui::BeginTable("select blob", 3))
-          {
-            static int selected_blob = -1;
-            static bool selected = {false};
+        ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 1.f);
+        ImGui::SliderFloat("friction", &world.friction_c, 0.f, 0.4f);
+  
+        ImGui::EndTabItem();
+      }
+  
+      if (ImGui::BeginTabItem("graphics"))
+      {
     
-            ImGui::TableNextColumn();
-            ImGui::Text("name");
-            ImGui::TableNextColumn();
-            ImGui::Text("x");
-            ImGui::TableNextColumn();
-            ImGui::Text("y");
-    
-            for (int i = 0; i < world.blobs.size(); i++)
-            {
-              char label[32];
-              sprintf(label, "%s", world.blobs[i].name.c_str());
-              ImGui::TableNextRow();
-              ImGui::TableNextColumn();
-              if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
-                selected_blob = i;
-      
-              ImGui::TableNextColumn();
-              ImGui::Text("%i", (int) world.blobs[i].logic.x);
-              ImGui::TableNextColumn();
-              ImGui::Text("%i", (int) world.blobs[i].logic.y);
-            }
-            ImGui::EndTable();
-          }
-        }
-        
-        break;
+        ImGui::EndTabItem();
+      }
+      ImGui::EndTabBar();
     }
     
     ImGui::End();
