@@ -37,8 +37,6 @@ int main() {
   window.create(sf::VideoMode(view_height, view_height), "ImGui + SFML = <3");
   view_resize();
   window.setFramerateLimit(60);
-  Graphics_image::init();
-  Names::load();
   if (!ImGui::SFML::Init(window))
   {
     std::cout << "vinduet funka visst ikke\n";
@@ -83,7 +81,7 @@ int main() {
     
     ImGui::SFML::Update(window, deltaClock.restart());
   
-    ImGui::ShowDemoWindow();
+//    ImGui::ShowDemoWindow();
     
     ImGui::Begin("Control Panel bitches", NULL, ImGuiWindowFlags_MenuBar);
     

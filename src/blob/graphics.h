@@ -65,34 +65,17 @@ public:
   
   void render(Logic &blob_data) override
   {
-    sprite.setPosition({blob_data.x, blob_data.y});
-    sprite.setRotation(Ask::degrees(blob_data.v_angle + M_PI / 2));
+    files.simple_blob.setPosition({blob_data.x, blob_data.y});
+    files.simple_blob.setRotation(Ask::degrees(blob_data.v_angle + M_PI / 2));
 
     bounds.center.x = blob_data.x;
     bounds.center.y = blob_data.y;
 
-    window.draw(sprite);
+    window.draw(files.simple_blob);
     
     if (hitbox_blob)
       window.draw(fit_to_bounds(bounds_gfx, bounds));
   }
-  
-  static void init()
-  {
-    if (!texture.loadFromFile("res/blob.png"))
-      throw std::runtime_error("Graphics: couldn't load blob.png");
-    
-    sprite.setTexture(texture);
-    sprite.setScale({0.2f, 0.2f});
-    sprite.setOrigin({64, 64});
-  }
-
-private:
-  static sf::Texture texture;
-  static sf::Sprite sprite;
 };
-
-sf::Texture Graphics_image::texture;
-sf::Sprite Graphics_image::sprite;
 
 #endif //ECO_GRAPHICS_H

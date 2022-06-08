@@ -20,7 +20,7 @@ public:
   std::string name;
   
 public:
-  Blob() : name(Names::random()){}
+  Blob() : name(files.random_name()){}
   
   /// justerer akselerasjon: må fortsatt legge til på fart og posisjon
   void think()

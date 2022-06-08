@@ -7,10 +7,12 @@
 
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "files.h"
 
 sf::View view;
 sf::RenderWindow window;
 sf::Clock time_since_startup;
+Files files;
 unsigned long long ticks_since_startup = 0;
 int view_offset_x = 0, view_offset_y = 0;
 int view_height = 800;

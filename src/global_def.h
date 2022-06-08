@@ -10,7 +10,6 @@
 
 #include "ask/physics.h"
 #include "ask/praktisk.h"
-#include "global_var.h"
 
 class fps
 {
@@ -79,53 +78,5 @@ sf::CircleShape &fit_to_bounds(sf::CircleShape &fit_this, const Ask::Physics::Ci
   fit_this.setPosition({(float)to_this.center.x, (float)to_this.center.y});
   return fit_this;
 }
-
-///kjør load først
-class Names
-{
-public:
-  static void load()
-  {
-    using namespace std;
-    
-    ifstream file("res/names.txt");
-    if (file.is_open())
-    {
-      string line;
-      while (getline(file, line))
-      {
-        int pos;
-        if ((pos = line.find(' ')) == string::npos)
-          throw logic_error("names.txt in wrong format: missing space character");
-        
-        first.push_back(line.substr(0, pos));
-        line.erase(0, pos + 1);
-        last.push_back(line);
-      }
-    }
-    else
-    {
-      std::cout << "couldn't load file names.txt\n";
-    }
-  }
-  
-public:
-  static std::string random()
-  {
-    if (first.empty())
-      return "names not loaded";
-    
-    return
-    first[(int)Ask::random(-0.49, first.size() - 0.01)] +
-    " " +
-    first[(int)Ask::random(-0.49, first.size() - 0.01)];
-  }
-
-private:
-  static std::vector<std::string> first, last;
-};
-
-std::vector<std::string> Names::first, Names::last;
-
 
 #endif //ECO_GLOBAL_DEF_H
