@@ -38,8 +38,9 @@
 #include "world.h"
 
 int main() {
-  window.create(sf::VideoMode(view_height, view_height), "ImGui + SFML = <3");
+  window.create(sf::VideoMode(view_height * 2, view_height), "ImGui + SFML = <3");
   view_resize();
+  view.zoom(1.1);
   window.setFramerateLimit(60);
   if (!ImGui::SFML::Init(window))
   {

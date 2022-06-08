@@ -14,7 +14,7 @@ sf::RenderWindow window;
 sf::Clock time_since_startup;
 Files files;
 unsigned long long ticks_since_startup = 0;
-int view_offset_x = 0, view_offset_y = 0;
+int view_offset_x = -350, view_offset_y = 0;
 int view_height = 800;
 int view_movement_speed = 6;
 float view_zoom_amount = 0.01;
