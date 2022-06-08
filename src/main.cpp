@@ -12,10 +12,8 @@
  * blob animasjon: tips, bruk ticks_since_startup og modulo
  * select blob
  * grafikk: rediger farger
- * bakgrunn
  * imgui graf, tabs, drag drop
  * insekter kan interacte med spiller
- * navigasjon: mulighet for mus også: dra og scroll
  * README
  * rydde opp i unødvedige globals
  * mus collision typer
@@ -50,7 +48,6 @@ int main() {
   
   fps fps;
   bool play = true;
-  bool blob_brush = false;
   World world;
   
   world.add(World::BLOB, 100, 100);
@@ -74,11 +71,35 @@ int main() {
           break;
       
         case sf::Event::MouseButtonPressed:
+          static int mouse_down_x = 0;
+          static int mouse_down_y = 0;
+          
+          if (!mouse_down)
+          {
+            mouse_down = true;
+            mouse_down_x = mouse.x;
+            mouse_down_y = mouse.y;
+          }
           break;
           
         case sf::Event::MouseButtonReleased:
+          mouse_down = false;
           if (blob_brush_amount)
             pls_add = true;
+          break;
+          
+        case sf::Event::MouseMoved:
+          if (mouse_down)
+          {
+            view_offset_x = view.getCenter().x + mouse_down_x - mouse.x;
+            view_offset_y = view.getCenter().y + mouse_down_y - mouse.y;
+          }
+          break;
+          
+        case sf::Event::MouseWheelScrolled:
+        {
+          view.zoom(1 + event.mouseWheelScroll.delta * - 0.03);
+        }
       }
     }
   
@@ -89,6 +110,9 @@ int main() {
     ImGui::ShowDemoWindow();
     
     ImGui::Begin("Control Panel bitches", NULL, ImGuiWindowFlags_MenuBar);
+    
+    if (ImGui::IsWindowHovered())
+      mouse_down = false;
     
     if (ImGui::BeginMenuBar())
     {
@@ -263,8 +287,6 @@ int main() {
     
     // ====================== A === imgui === A ====================== \\
     
-    
-    
     if (play)
     {
       ticks_since_startup++;
@@ -275,8 +297,7 @@ int main() {
     if (pls_add)
     {
       pls_add = false;
-      auto m = mouse();
-      world.add(World::BLOB, m.x, m.y, blob_brush_amount);
+      world.add(World::BLOB, mouse.x, mouse.y, blob_brush_amount);
       blob_brush_amount = 0;
     }
     
@@ -303,7 +324,7 @@ int main() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
       view_offset_x -= view_movement_speed * ImGui::GetIO().DeltaTime * 40;
     
-    view.setCenter(sf::Vector2f(view_offset_x, view_offset_y));
+    view.setCenter({(float)view_offset_x, (float)view_offset_y});
     window.setView(view);
     
     // grafikk
@@ -314,8 +335,7 @@ int main() {
   
     if (hitbox_mouse)
     {
-      auto m = mouse();
-      Ask::Physics::Circle bounds(m.x, m.y, 20);
+      Ask::Physics::Circle bounds(mouse.x, mouse.y, 20);
       sf::CircleShape mouse_gfx;
     
       if (!Ask::Physics::intersects({bounds.center.x, bounds.center.y}, world.bounds))

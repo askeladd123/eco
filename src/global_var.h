@@ -18,11 +18,10 @@ int view_offset_x = -350, view_offset_y = 0;
 int view_height = 800;
 int view_movement_speed = 6;
 float view_zoom_amount = 0.01;
+bool mouse_down = false;
+int last_pos_y;
 
 // imgui
-enum states {MAIN, PHYSICS, ONE, ALL};
-states ImGui_state = MAIN;
-int ImGui_blob_brush_amount = 1;
 int blob_brush_amount = 0;
 bool hitbox_blob = false;
 bool hitbox_mouse = false;

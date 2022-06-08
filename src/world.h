@@ -20,6 +20,8 @@ public:
   Ask::Physics::Tile bounds;
   float basically_zero = 0.005f;
   float friction_c = 0.2f, drag_c = 0.05f;
+  
+  //graphics
   sf::CircleShape point;
   sf::RectangleShape background, overlay;
 

@@ -55,11 +55,12 @@ void view_resize()
   view.setSize(sf::Vector2f(view_height * ratio, view_height));
 }
 
-sf::Vector2f mouse()
-{
-  auto mouse_window = sf::Mouse::getPosition(window);
-  return window.mapPixelToCoords(mouse_window);
-}
+//sf::Vector2f mouse()
+//{
+//  return window.mapPixelToCoords(sf::Mouse::getPosition(window));
+//}
+
+#define mouse window.mapPixelToCoords(sf::Mouse::getPosition(window))
 
 //sf::Sprite &fit_to_bounds(sf::Sprite &fit_this, const Ask::Physics::Tile &to_this)
 //{
