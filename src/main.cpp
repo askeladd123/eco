@@ -5,18 +5,21 @@
 
 /*
  * TODO
- * collisjon: flytte kuler fra hverandre
  * brain
  * reseptors
  * Har lyst å lage brain polymorphic så jeg kan bytte den ut lett, men crasher
  * quadtree
  * blob animasjon: tips, bruk ticks_since_startup og modulo
  * select blob
+ * grafikk: rediger farger
+ * bakgrunn
  * imgui graf, tabs, drag drop
  * insekter kan interacte med spiller
  * navigasjon: mulighet for mus også: dra og scroll
  * README
  * rydde opp i unødvedige globals
+ * mus collision typer
+ * adde statiske objekter
  */
 
 // standard lib
@@ -365,16 +368,24 @@ int main() {
       Ask::Physics::Circle bounds(m.x, m.y, 20);
       sf::CircleShape mouse_gfx;
     
-      for (auto& blob: world.blobs)
+      if (!Ask::Physics::intersects({bounds.center.x, bounds.center.y}, world.bounds))
       {
-        if (Ask::Physics::intersects(bounds, blob.graphics.bounds))
-        {
-          mouse_gfx.setFillColor(hitbox_hit);
-          break;
-        }
-        mouse_gfx.setFillColor(hitbox_unhit);
+        mouse_gfx.setFillColor(hitbox_hit);
+        window.draw(fit_to_bounds(mouse_gfx, bounds));
       }
-      window.draw(fit_to_bounds(mouse_gfx, bounds));
+      else
+      {
+        for (auto &blob: world.blobs)
+        {
+          if (Ask::Physics::intersects(bounds, blob.graphics.bounds))
+          {
+            mouse_gfx.setFillColor(hitbox_hit);
+            break;
+          }
+          mouse_gfx.setFillColor(hitbox_unhit);
+        }
+        window.draw(fit_to_bounds(mouse_gfx, bounds));
+      }
     }
     
     window.display();

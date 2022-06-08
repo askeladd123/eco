@@ -134,7 +134,8 @@ public:
   
   void render()
   {
-    window.draw(fit_to_bounds(background, bounds));
+    window.draw(fit_to_bounds(files.tiles_sprite, bounds));
+//    window.draw(fit_to_bounds(background, bounds));
     for (Blob &blob : blobs)
       blob.render();
 //    window.draw(point);

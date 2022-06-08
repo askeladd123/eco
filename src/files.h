@@ -15,7 +15,11 @@
 class Files
 {
 public:
-  sf::Sprite simple_blob;
+  sf::Sprite simple_blob, tiles_sprite;
+private:
+  std::vector<std::string> first_names, last_names;
+  sf::Image error_ram, blob_ram, concrete_ram, tiles_ram;
+  sf::Texture error, blob, concrete, tiles;
   
   /*
    * sf::Image: RAM - muligheter for å redigere
@@ -54,6 +58,9 @@ public:
       tiles = error;
     }
     tiles.loadFromImage(tiles_ram);
+    tiles.setRepeated(true);
+    tiles_sprite.setTexture(tiles);
+//    tiles_sprite.setTextureRect({-400, -400, 400, 400});
     
     // tekst
     ifstream file("res/names.txt");
@@ -88,11 +95,6 @@ public:
         " " +
         first_names[(int)Ask::random(-0.49, first_names.size() - 0.01)];
   }
-  
-private:
-  std::vector<std::string> first_names, last_names;
-  sf::Image error_ram, blob_ram, concrete_ram, tiles_ram;
-  sf::Texture error, blob, concrete, tiles;
 };
 
 #endif //ECO_FILES_H
