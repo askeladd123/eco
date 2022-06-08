@@ -217,6 +217,7 @@ int main() {
       if (ImGui::BeginTabItem("individuals"))
       {
         ImGui::Text("population: %i", world.blobs.size());
+        ImGui::Text("mouse x:\t%i\n\t  y:\t%i", (int)mouse.x, (int)mouse.y);
         if (ImGui::IsItemHovered())
         {
           ImGui::BeginTooltip();
