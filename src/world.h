@@ -16,20 +16,23 @@ class World
   
   // TODO quad trees for collision
 public:
-  World():bounds(0, 0, 400, 400)
-  {
-    point.setRadius(2);
-    point.setOrigin({point.getRadius(), point.getRadius()});
-    background.setFillColor(sf::Color(30, 30, 30));
-  }
-  
-public:
   std::vector<Blob> blobs;
   Ask::Physics::Tile bounds;
   float basically_zero = 0.005f;
   float friction_c = 0.2f, drag_c = 0.05f;
   sf::CircleShape point;
-  sf::RectangleShape background;
+  sf::RectangleShape background, overlay;
+
+public:
+  World():bounds(0, 0, 400, 400)
+  {
+    point.setRadius(2);
+    point.setOrigin({point.getRadius(), point.getRadius()});
+    background.setTexture(&files.tiles);
+    background.setTextureRect({0, 0, 1600, 1600});
+    overlay.setTexture(&files.concrete);
+    overlay.setTextureRect({0, 0, 2000, 2000});
+  }
   
 public:
   // flow
@@ -134,8 +137,8 @@ public:
   
   void render()
   {
-    window.draw(fit_to_bounds(files.tiles_sprite, bounds));
-//    window.draw(fit_to_bounds(background, bounds));
+    window.draw(fit_to_bounds(background, bounds));
+    window.draw(fit_to_bounds(overlay, bounds));
     for (Blob &blob : blobs)
       blob.render();
 //    window.draw(point);

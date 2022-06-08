@@ -15,11 +15,12 @@
 class Files
 {
 public:
-  sf::Sprite simple_blob, tiles_sprite;
+  sf::Sprite simple_blob;
+  sf::Texture error, blob, concrete, tiles;
+
 private:
   std::vector<std::string> first_names, last_names;
   sf::Image error_ram, blob_ram, concrete_ram, tiles_ram;
-  sf::Texture error, blob, concrete, tiles;
   
   /*
    * sf::Image: RAM - muligheter for å redigere
@@ -41,6 +42,7 @@ public:
       blob = error;
     }
     blob.loadFromImage(blob_ram);
+    add_color(blob_ram, {10, 10, 10}, blob);
     simple_blob.setTexture(blob);
     simple_blob.setScale({0.2f, 0.2f});
     simple_blob.setOrigin({64, 64});
@@ -51,6 +53,8 @@ public:
       concrete = error;
     }
     concrete.loadFromImage(concrete_ram);
+    concrete.setRepeated(true);
+    sub_color(concrete_ram, concrete, 0, 0, 0, 160);
     
     if (!tiles_ram.loadFromFile("res/tiles.png"))
     {
@@ -59,8 +63,7 @@ public:
     }
     tiles.loadFromImage(tiles_ram);
     tiles.setRepeated(true);
-    tiles_sprite.setTexture(tiles);
-//    tiles_sprite.setTextureRect({-400, -400, 400, 400});
+    sub_color(tiles_ram, tiles, 84, 88, 80);
     
     // tekst
     ifstream file("res/names.txt");
@@ -94,6 +97,36 @@ public:
         first_names[(int)Ask::random(-0.49, first_names.size() - 0.01)] +
         " " +
         first_names[(int)Ask::random(-0.49, first_names.size() - 0.01)];
+  }
+  
+  static void add_color(sf::Image &image, sf::Color color, sf::Texture &texture)
+  {
+//    throw std::runtime_error("files::add_color: funksjon ikke skrevet enda\n");
+    for (int x = 0; x < image.getSize().x; x++)
+      for (int y = 0; y < image.getSize().y; y++)
+      {
+        auto temp_color = image.getPixel(x, y);
+        temp_color.r = 255 - color.r < temp_color.r ? 255 : temp_color.r + color.r;
+        temp_color.g = 255 - color.g < temp_color.g ? 255 : temp_color.g + color.g;
+        temp_color.b = 255 - color.b < temp_color.b ? 255 : temp_color.b + color.b;
+        image.setPixel(x, y, temp_color);
+      }
+    texture.update(image);
+  }
+  
+  static void sub_color(sf::Image &image, sf::Texture &texture, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b, sf::Uint8 a = 0)
+  {
+    for (int x = 0; x < image.getSize().x; x++)
+      for (int y = 0; y < image.getSize().y; y++)
+      {
+        auto temp_color = image.getPixel(x, y);
+        temp_color.r = (temp_color.r - r) * (r <= temp_color.r);
+        temp_color.g = (temp_color.g - g) * (g <= temp_color.g);
+        temp_color.b = (temp_color.b - b) * (b <= temp_color.b);
+        temp_color.a = (temp_color.a - a) * (a <= temp_color.a);
+        image.setPixel(x, y, temp_color);
+      }
+    texture.update(image);
   }
 };
 
