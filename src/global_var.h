@@ -25,6 +25,7 @@ bool hovered = false;
 // imgui
 int blob_brush_amount = 0;
 bool hitbox_blob = false;
+bool hitbox_static_objects = false;
 bool hitbox_mouse = false;
 bool pls_add = false;
 sf::Color hitbox_hit(100, 200, 100, 100);

@@ -69,23 +69,17 @@ public:
       vel_len -= vel_len * friction_c;
       
       // collision ================================
-      bool crash = false;
       for (auto &blob2: blobs)
       {
         if (&blob2 == &blob)
           continue;
         
         // kollisjon sirkel sirkel
-        auto a = blob.graphics.bounds;
-        auto b = blob2.graphics.bounds;
-        int x1 = b.center.x - a.center.x;
-        int y1 = b.center.y - a.center.y;
-  
         auto collision = intersection_c(blob.graphics.bounds, blob2.graphics.bounds);
+        blob.logic.intersected = collision.intersects; // for å vise hitboxes
+        
         if (collision.intersects)
         {
-          crash = true;
-
           // correct
           float a_len = collision.distance_inside / 2;
           x -= a_len * collision.ab_unit.x;
@@ -98,14 +92,6 @@ public:
           vel_angle += normal_angle;
           blob2.logic.v_angle -= normal_angle;
         }
-      }
-  
-      if (hitbox_blob)
-      {
-        if (crash)
-          blob.graphics.bounds_gfx.setFillColor(hitbox_hit);
-        else
-          blob.graphics.bounds_gfx.setFillColor(hitbox_unhit);
       }
       
       float vel_x = vel_len * cos(vel_angle);
@@ -144,24 +130,21 @@ public:
   
   void render()
   {
-    static sf::RectangleShape bounds_rect;
-    static sf::
+    // bakgrunn
     window.draw(fit_to_bounds(background, bounds));
     window.draw(fit_to_bounds(overlay, bounds));
+    
+    // folk
     for (Blob &blob : blobs)
       blob.render();
     
     for (auto &i : obstacles)
-    {
       i->render();
-      if (hitbox_blob)
-        window.draw(fit_to_bounds(bounds_gfx, bounds));
-    }
 //    window.draw(point);
   }
   
   // setup
-  enum item_id {BLOB, CIRCLE};
+  enum item_id {BLOB, MELON};
   void add(item_id item_type, int x, int y, int count = 1)
   {
     switch(item_type)
@@ -182,9 +165,9 @@ public:
           b.logic.y = Ask::random(y - spread, y + spread);
         }
       } break;
-      case CIRCLE:
+      case MELON:
       {
-        obstacles.push_back(new Circle(x, y, 20));
+        obstacles.push_back(new Melon(x, y, 20));
       } break;
       
     }

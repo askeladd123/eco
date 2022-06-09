@@ -51,7 +51,7 @@ int main() {
   fps fps;
   bool play = true;
   World world;
-  world.add(World::CIRCLE, 200, 200);
+  world.add(World::MELON, 200, 200);
   
   world.add(World::BLOB, 100, 100);
   
@@ -268,6 +268,7 @@ int main() {
         if (ImGui::CollapsingHeader("hitboxes"))
         {
           ImGui::Checkbox("blobs", &hitbox_blob);
+          ImGui::Checkbox("obstacles", &hitbox_static_objects);
 //          ImGui::Checkbox("quadtree", nullptr);
           ImGui::Checkbox("mouse", &hitbox_mouse);
 //          ImGui::SameLine();

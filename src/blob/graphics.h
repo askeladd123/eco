@@ -58,13 +58,14 @@ class Graphics_image : public Graphics
 {
 public:
   Ask::Physics::Circle bounds;
-  sf::CircleShape bounds_gfx;
 
 public:
   Graphics_image():bounds(0, 0, 10){}
   
   void render(Logic &blob_data) override
   {
+    static sf::CircleShape bounds_gfx;
+    
     files.simple_blob.setPosition({blob_data.x, blob_data.y});
     files.simple_blob.setRotation(Ask::degrees(blob_data.v_angle + M_PI / 2));
 
@@ -74,7 +75,10 @@ public:
     window.draw(files.simple_blob);
     
     if (hitbox_blob)
+    {
+      bounds_gfx.setFillColor(blob_data.intersected? hitbox_hit : hitbox_unhit);
       window.draw(fit_to_bounds(bounds_gfx, bounds));
+    }
   }
 };
 

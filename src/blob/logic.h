@@ -13,6 +13,7 @@ class Logic
 public:
   float x, y, v_len = 5.f, a_len;
   float v_angle = 0.4, a_angle;  ///< i radianer
+  bool intersected = false;
   
 public:
   /// Gir hjernen informasjon: husk at verdiene skal være 1, 0, eller mellom
