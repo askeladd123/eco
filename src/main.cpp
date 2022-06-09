@@ -50,6 +50,7 @@ int main() {
   fps fps;
   bool play = true;
   World world;
+  world.add(World::CIRCLE, 200, 200);
   
   world.add(World::BLOB, 100, 100);
   
@@ -341,7 +342,7 @@ int main() {
     if (hitbox_mouse)
     {
       Ask::Physics::Circle bounds(mouse.x, mouse.y, 20);
-      sf::CircleShape mouse_gfx;
+      static sf::CircleShape mouse_gfx;
     
       if (!Ask::Physics::intersects({bounds.center.x, bounds.center.y}, world.bounds))
       {

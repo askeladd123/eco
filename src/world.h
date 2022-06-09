@@ -8,6 +8,7 @@
 #include "ask/physics.h"
 #include "global_var.h"
 #include "blob/blob.h"
+#include "world_objects.h"
 
 class World
 {
@@ -17,6 +18,9 @@ class World
   // TODO quad trees for collision
 public:
   std::vector<Blob> blobs;
+  std::vector<Static_object*> obstacles;
+  std::vector<Banana> bananas;
+  std::vector<Water> water;
   Ask::Physics::Tile bounds;
   float basically_zero = 0.005f;
   float friction_c = 0.2f, drag_c = 0.05f;
@@ -77,7 +81,7 @@ public:
         int x1 = b.center.x - a.center.x;
         int y1 = b.center.y - a.center.y;
   
-        auto collision = intersection(blob.graphics.bounds, blob2.graphics.bounds);
+        auto collision = intersection_c(blob.graphics.bounds, blob2.graphics.bounds);
         if (collision.intersects)
         {
           crash = true;
@@ -144,21 +148,25 @@ public:
     window.draw(fit_to_bounds(overlay, bounds));
     for (Blob &blob : blobs)
       blob.render();
+    
+    for (auto &i : obstacles)
+      i->render();
 //    window.draw(point);
   }
   
   // setup
-  enum item_id {BLOB};
+  enum item_id {BLOB, CIRCLE};
   void add(item_id item_type, int x, int y, int count = 1)
   {
     switch(item_type)
     {
       case BLOB:
+      {
         blobs.emplace_back();
         auto &a = blobs.back();
         a.logic.x = x;
         a.logic.y = y;
-        
+  
         for (int i = 1; i < count; i++)
         {
           blobs.emplace_back();
@@ -167,6 +175,12 @@ public:
           b.logic.x = Ask::random(x - spread, x + spread);
           b.logic.y = Ask::random(y - spread, y + spread);
         }
+      } break;
+      case CIRCLE:
+      {
+        obstacles.push_back(new Circle(x, y, 20));
+      } break;
+      
     }
   }
 };
