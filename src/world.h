@@ -82,10 +82,10 @@ public:
         {
           // correct
           float a_len = collision.distance_inside / 2;
-          x -= a_len * collision.ab_unit.x;
-          y -= a_len * collision.ab_unit.y;
-          blob2.logic.x += a_len * collision.ab_unit.x;
-          blob2.logic.y += a_len * collision.ab_unit.y;
+          x -= a_len * collision.normal_unit.x;
+          y -= a_len * collision.normal_unit.y;
+          blob2.logic.x += a_len * collision.normal_unit.x;
+          blob2.logic.y += a_len * collision.normal_unit.y;
 
           // reflekt
           float normal_angle = (blob2.logic.v_angle - vel_angle) / 2 + M_PI / 2;
@@ -93,9 +93,25 @@ public:
           blob2.logic.v_angle -= normal_angle;
         }
       }
-      
+  
       float vel_x = vel_len * cos(vel_angle);
       float vel_y = vel_len * sin(vel_angle);
+      
+      for (auto &obj: obstacles)
+      {
+        auto collision = intersection_c(blob.graphics.bounds, obj->getBounds());
+        blob.logic.intersected |= collision.intersects;
+  
+        if (collision.intersects)
+        {
+          // correct
+          x -= collision.distance_inside * collision.normal_unit.x;
+          y -= collision.distance_inside * collision.normal_unit.y;
+
+          vel_x -= vel_len * collision.normal_unit.x;
+          vel_y -= vel_len * collision.normal_unit.y;
+        }
+      }
       
       // collision world bounds
       if (x < bounds.center.x - bounds.r_x)
@@ -144,8 +160,8 @@ public:
   }
   
   // setup
-  enum item_id {BLOB, MELON};
-  void add(item_id item_type, int x, int y, int count = 1)
+  enum item_id {NONE, BLOB, MELON};
+  void add(int item_type, int x, int y, int count = 1)
   {
     switch(item_type)
     {
@@ -169,7 +185,8 @@ public:
       {
         obstacles.push_back(new Melon(x, y, 20));
       } break;
-      
+  
+      default: throw std::logic_error("World::add: object type not implemented");
     }
   }
 };

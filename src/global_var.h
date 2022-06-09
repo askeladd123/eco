@@ -23,12 +23,13 @@ int last_pos_y;
 bool hovered = false;
 
 // imgui
-int blob_brush_amount = 0;
+int object_drop_amount = 0;
 bool hitbox_blob = false;
 bool hitbox_static_objects = false;
 bool hitbox_mouse = false;
 bool pls_add = false;
 sf::Color hitbox_hit(100, 200, 100, 100);
 sf::Color hitbox_unhit(200, 100, 100, 100);
+int object_dropped;
 
 #endif //ECO_GLOBAL_VAR_H

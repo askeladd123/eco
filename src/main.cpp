@@ -19,6 +19,8 @@
  * mus collision typer
  * adde statiske objekter
  * automatisk skygger
+ * rar feil hvor de krasjer og forvinner til verdens ende
+ * collision response er definitivt feil, les litt mer
  */
 
 // standard lib
@@ -88,7 +90,7 @@ int main() {
           
         case sf::Event::MouseButtonReleased:
           mouse_down = false;
-          if (blob_brush_amount)
+          if (object_dropped != World::NONE)
             pls_add = true;
           break;
           
@@ -179,7 +181,8 @@ int main() {
     ImGui::Button(" 1 blob ");
     if (ImGui::BeginDragDropSource())
     {
-      blob_brush_amount = 1;
+      object_drop_amount = 1;
+      object_dropped = World::BLOB;
       ImGui::BeginTooltip();
       ImGui::SetTooltip("1");
       ImGui::EndTooltip();
@@ -190,7 +193,8 @@ int main() {
     ImGui::Button(" 10 blobs ");
     if (ImGui::BeginDragDropSource())
     {
-      blob_brush_amount = 10;
+      object_drop_amount = 10;
+      object_dropped = World::BLOB;
       ImGui::BeginTooltip();
       ImGui::SetTooltip("10");
       ImGui::EndTooltip();
@@ -201,7 +205,8 @@ int main() {
     ImGui::Button(" 50 blobs ");
     if (ImGui::BeginDragDropSource())
     {
-      blob_brush_amount = 50;
+      object_drop_amount = 50;
+      object_dropped = World::BLOB;
       ImGui::BeginTooltip();
       ImGui::SetTooltip("50");
       ImGui::EndTooltip();
@@ -277,6 +282,20 @@ int main() {
 //          ImGui::MenuItem("square");
 //          ImGui::EndMenu();
         }
+        
+        if (ImGui::CollapsingHeader("add objects"))
+        {
+          ImGui::Button("melon");
+          if (ImGui::BeginDragDropSource())
+          {
+            object_dropped = World::MELON;
+            ImGui::BeginTooltip();
+            ImGui::SetTooltip("melon");
+            ImGui::EndTooltip();
+            ImGui::EndDragDropSource();
+          }
+        }
+        
         ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 1.f);
         ImGui::SliderFloat("friction", &world.friction_c, 0.f, 0.4f);
   
@@ -302,11 +321,12 @@ int main() {
     }
   
     // logikk
-    if (pls_add)
+    if (pls_add && object_dropped != World::NONE)
     {
+      world.add(object_dropped, mouse.x, mouse.y, object_drop_amount);
       pls_add = false;
-      world.add(World::BLOB, mouse.x, mouse.y, blob_brush_amount);
-      blob_brush_amount = 0;
+      object_dropped = World::NONE;
+      object_drop_amount = 1;
     }
     
     // flytte på View
