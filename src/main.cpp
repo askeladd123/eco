@@ -18,6 +18,7 @@
  * rydde opp i unødvedige globals
  * mus collision typer
  * adde statiske objekter
+ * automatisk skygger
  */
 
 // standard lib

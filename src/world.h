@@ -144,13 +144,19 @@ public:
   
   void render()
   {
+    static sf::RectangleShape bounds_rect;
+    static sf::
     window.draw(fit_to_bounds(background, bounds));
     window.draw(fit_to_bounds(overlay, bounds));
     for (Blob &blob : blobs)
       blob.render();
     
     for (auto &i : obstacles)
+    {
       i->render();
+      if (hitbox_blob)
+        window.draw(fit_to_bounds(bounds_gfx, bounds));
+    }
 //    window.draw(point);
   }
   
