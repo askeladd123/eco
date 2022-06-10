@@ -32,7 +32,7 @@ public:
   }
 
 private:
-  std::vector<float> reseptors;
+  std::vector<Ask::Physics::Ray> reseptors;
   genes_logic genes;
 };
 

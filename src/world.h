@@ -49,8 +49,6 @@ public:
     for (Blob &blob : blobs)
     {
       blob.think();
-      
-      
       // alias for variabler
       float &x = blob.logic.x;
       float &y = blob.logic.y;
@@ -160,7 +158,7 @@ public:
   }
   
   // setup
-  enum item_id {NONE, BLOB, MELON};
+  enum item_id {NONE, BLOB, MELON, STICK};
   void add(int item_type, int x, int y, int count = 1)
   {
     switch(item_type)
@@ -182,10 +180,13 @@ public:
         }
       } break;
       case MELON:
-      {
         obstacles.push_back(new Melon(x, y, 20));
-      } break;
-  
+        break;
+      
+      case STICK:
+        obstacles.push_back(new Stick(x, y, x + 100, y + 100));
+        break;
+        
       default: throw std::logic_error("World::add: object type not implemented");
     }
   }

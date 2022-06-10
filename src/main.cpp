@@ -17,10 +17,10 @@
  * README
  * rydde opp i unødvedige globals
  * mus collision typer
- * adde statiske objekter
  * automatisk skygger
  * rar feil hvor de krasjer og forvinner til verdens ende
  * collision response er definitivt feil, les litt mer
+ * thread pool
  */
 
 // standard lib
@@ -53,7 +53,6 @@ int main() {
   fps fps;
   bool play = true;
   World world;
-  world.add(World::MELON, 200, 200);
   
   world.add(World::BLOB, 100, 100);
   
@@ -276,28 +275,45 @@ int main() {
           ImGui::Checkbox("obstacles", &hitbox_static_objects);
 //          ImGui::Checkbox("quadtree", nullptr);
           ImGui::Checkbox("mouse", &hitbox_mouse);
-//          ImGui::SameLine();
-//          ImGui::BeginMenu("hitbox shape");
-//          ImGui::MenuItem("circle");
-//          ImGui::MenuItem("square");
-//          ImGui::EndMenu();
-        }
-        
-        if (ImGui::CollapsingHeader("add objects"))
-        {
-          ImGui::Button("melon");
-          if (ImGui::BeginDragDropSource())
+          ImGui::SameLine();
+          
+          static char *selected = " ";
+          if (ImGui::BeginCombo("hitbox shape", selected))
           {
-            object_dropped = World::MELON;
-            ImGui::BeginTooltip();
-            ImGui::SetTooltip("melon");
-            ImGui::EndTooltip();
-            ImGui::EndDragDropSource();
+            if (ImGui::Selectable("circle"))
+              selected = "circle";
+            
+            if (ImGui::Selectable("square"))
+              selected = "square";
+            
+            ImGui::EndCombo();
           }
         }
         
         ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 1.f);
         ImGui::SliderFloat("friction", &world.friction_c, 0.f, 0.4f);
+  
+        ImGui::Text("drag and drop:");
+        
+        ImGui::Button("melon");
+        if (ImGui::BeginDragDropSource())
+        {
+          object_dropped = World::MELON;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("melon");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
+        
+        ImGui::Button("stick");
+        if (ImGui::BeginDragDropSource())
+        {
+          object_dropped = World::STICK;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("stick");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
   
         ImGui::EndTabItem();
       }
@@ -360,7 +376,7 @@ int main() {
   
     world.render();
     ImGui::SFML::Render(window);
-  
+    
     if (hitbox_mouse)
     {
       Ask::Physics::Circle bounds(mouse.x, mouse.y, 20);
