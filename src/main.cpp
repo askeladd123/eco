@@ -167,8 +167,13 @@ int main() {
         state = 4;
         window.setFramerateLimit(fps.increased());
       }
-      
-      ImGui::Text("\tfps: %1.0f", ImGui::GetIO().Framerate);
+  
+      if (state == 1)
+      {
+        if (ImGui::Button("step"))
+          world.tick();
+      } else
+      { ImGui::Text("\tfps: %1.0f", ImGui::GetIO().Framerate); }
   
       ImGui::EndMenuBar();
     }
@@ -340,10 +345,7 @@ int main() {
     // ====================== A === imgui === A ====================== \\
     
     if (play)
-    {
-      ticks_since_startup++;
       world.tick();
-    }
   
     // logikk
     if (pls_add && object_dropped != World::NONE)

@@ -45,6 +45,8 @@ public:
   // flow
   void tick()
   {
+    ticks_since_startup++;
+  
     using namespace Ask::Physics;
   
     // TODO: unngå polar conversion
@@ -97,17 +99,17 @@ public:
         {
           // CORRECTION
 //          blob.pos -= blob.vel;
-          float margin = 0.5f;
-          blob.pos.x -= collision.collision_unit_normal.y * (collision.distance_inside + margin) / 2;
-          blob.pos.y -= -collision.collision_unit_normal.x * (collision.distance_inside + margin) / 2;
+          float margin = 4.f;
+          blob.pos.x -= collision.collision_unit_normal.x * (collision.distance_inside + margin) / 2;
+          blob.pos.y -= collision.collision_unit_normal.y * (collision.distance_inside + margin) / 2;
         
           // DEFLECTION
-          if (activate_deflection_at < blob.vel.x + blob.vel.y)
-          {
+//          if (activate_deflection_at < blob.vel.x + blob.vel.y)
+//          {
             Vector<float> proj = collision.collision_unit_normal * (collision.collision_unit_normal * blob.vel);//virker bare hvis CN er enhetsV
             blob.vel.x -= proj.x * 2;
             blob.vel.y -= proj.y * 2;
-          }
+//          }
         }
       }
     
