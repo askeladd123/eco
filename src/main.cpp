@@ -10,6 +10,7 @@
  * Har lyst å lage brain polymorphic så jeg kan bytte den ut lett, men crasher
  * quadtree
  * blob animasjon: tips, bruk ticks_since_startup og modulo
+ * animasjon generell: noe som varer gitt mengde frames: sender animasjon til animasjon objekt
  * select blob
  * grafikk: rediger farger
  * imgui graf, tabs, drag drop
@@ -260,9 +261,9 @@ int main() {
                 selected_blob = i;
         
               ImGui::TableNextColumn();
-              ImGui::Text("%i", (int) world.blobs[i].logic.x);
+              ImGui::Text("%i", (int) world.blobs[i].logic.pos.x);
               ImGui::TableNextColumn();
-              ImGui::Text("%i", (int) world.blobs[i].logic.y);
+              ImGui::Text("%i", (int) world.blobs[i].logic.pos.y);
             }
             ImGui::EndTable();
           }
@@ -297,7 +298,7 @@ int main() {
           }
         }
         
-        ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 1.f);
+        ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 0.01f);
         ImGui::SliderFloat("friction", &world.friction_c, 0.f, 0.4f);
   
         ImGui::Text("drag and drop:");
@@ -394,7 +395,7 @@ int main() {
         case CIRCLE:
         {
           Ask::Physics::Circle circle(mouse.x, mouse.y, 20);
-          if (!Ask::Physics::intersects(circle, world.bounds))
+          if (0)// !Ask::Physics::intersects(circle, world.bounds))
           {
             circle_gfx.setFillColor(hitbox_hit);
             window.draw(fit_to_bounds(circle_gfx, circle));

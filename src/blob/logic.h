@@ -11,8 +11,11 @@
 class Logic
 {
 public:
-  float x, y, v_len = 5.f, a_len;
-  float v_angle = 0.4, a_angle;  ///< i radianer
+  Ask::Physics::Vector<float> pos, vel;
+//  float x, y, vx = 0, vy = 0;
+  float a_len = 0;
+  float a_angle;///< i radianer
+  float mass = 1;
   bool intersected = false;
   
 public:

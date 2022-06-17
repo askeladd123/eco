@@ -26,10 +26,9 @@ public:
   
   void render(Logic &blob_data) override
   {
-    circle.setPosition(sf::Vector2f(blob_data.x, blob_data.y));
+    circle.setPosition({(float)blob_data.pos.x, (float)blob_data.pos.y});
     
-    bounds.center.x = blob_data.x;
-    bounds.center.y = blob_data.y;
+    bounds.center = blob_data.pos;
     
     window.draw(circle);
   }
@@ -66,11 +65,10 @@ public:
   {
     static sf::CircleShape bounds_gfx;
     
-    files.simple_blob.setPosition({blob_data.x, blob_data.y});
-    files.simple_blob.setRotation(Ask::degrees(blob_data.v_angle + M_PI / 2));
+    files.simple_blob.setPosition({(float)blob_data.pos.x, (float)blob_data.pos.y});
+    files.simple_blob.setRotation(Ask::degrees(atan2(blob_data.vel.y, blob_data.vel.x) - M_PI / 2));
 
-    bounds.center.x = blob_data.x;
-    bounds.center.y = blob_data.y;
+    bounds.center = blob_data.pos;
 
     window.draw(files.simple_blob);
     
