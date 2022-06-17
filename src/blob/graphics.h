@@ -66,7 +66,7 @@ public:
     static sf::CircleShape bounds_gfx;
     
     files.simple_blob.setPosition({(float)blob_data.pos.x, (float)blob_data.pos.y});
-    files.simple_blob.setRotation(Ask::degrees(atan2(blob_data.vel.y, blob_data.vel.x) - M_PI / 2));
+    files.simple_blob.setRotation(Ask::degrees(atan2(blob_data.vel.y, blob_data.vel.x) + M_PI / 2));
 
     bounds.center = blob_data.pos;
 

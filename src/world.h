@@ -23,7 +23,7 @@ public:
   std::vector<Banana> bananas;
   std::vector<Water> water;
   Ask::Physics::Tile bounds;
-  float basically_zero = 0.f;
+  float basically_zero = 0.f, activate_deflection_at = 1.f;
   float friction_c = 0.2f, drag_c = 0.05f;
   
   //graphics
@@ -57,7 +57,7 @@ public:
       Logic &blob = i.logic;
     
       // akselerasjon
-      i.think();
+//      i.think();
       blob.vel.x += blob.a_len * cos(blob.a_angle);
       blob.vel.y += blob.a_len * sin(blob.a_angle);
       
@@ -78,9 +78,13 @@ public:
     for (Blob &i: blobs)
     {
       Logic &blob = i.logic;
+      blob.intersected = false;
     
       for (const Blob &j: blobs)
       {
+        if (&i == &j) // ikke sjekk mot seg selv vettu
+          continue;
+        
         // bra navn
         const Logic &blob2 = j.logic; // const pga. thread safety
       
@@ -92,39 +96,45 @@ public:
           // - er jo knyttet til utseende
         {
           // CORRECTION
-          blob.pos -= blob.vel;
+//          blob.pos -= blob.vel;
+          float margin = 0.5f;
+          blob.pos.x -= collision.collision_unit_normal.y * (collision.distance_inside + margin) / 2;
+          blob.pos.y -= -collision.collision_unit_normal.x * (collision.distance_inside + margin) / 2;
         
           // DEFLECTION
-//          Vector<float> proj = collision.collision_unit_normal *
-//                               (collision.collision_unit_normal * blob.vel);//virker bare hvis CN er enhetsV
-//          blob.vel -= proj * 2;
+          if (activate_deflection_at < blob.vel.x + blob.vel.y)
+          {
+            Vector<float> proj = collision.collision_unit_normal * (collision.collision_unit_normal * blob.vel);//virker bare hvis CN er enhetsV
+            blob.vel.x -= proj.x * 2;
+            blob.vel.y -= proj.y * 2;
+          }
         }
       }
     
       // CORRECTION med world.bounds
-//      if (blob.pos.x < bounds.center.x - bounds.r_x)
-//      {
-//        blob.pos.x = bounds.center.x - bounds.r_x;
-//        blob.vel.x += 3;
-//      }
-//
-//      if (bounds.center.x + bounds.r_x < blob.pos.x)
-//      {
-//        blob.pos.x = bounds.center.x + bounds.r_x;
-//        blob.vel.x -= 3;
-//      }
-//
-//      if (blob.pos.y < bounds.center.y - bounds.r_y)
-//      {
-//        blob.pos.y = bounds.center.y - bounds.r_y;
-//        blob.vel.y += 3;
-//      }
-//
-//      if (bounds.center.y + bounds.r_y < blob.pos.y)
-//      {
-//        blob.pos.y = bounds.center.y + bounds.r_y;
-//        blob.vel.y -= 3;
-//      }
+      if (blob.pos.x < bounds.center.x - bounds.r_x)
+      {
+        blob.pos.x = bounds.center.x - bounds.r_x;
+        blob.vel.x = -blob.vel.x;
+      }
+
+      if (bounds.center.x + bounds.r_x < blob.pos.x)
+      {
+        blob.pos.x = bounds.center.x + bounds.r_x;
+        blob.vel.x = -blob.vel.x;
+      }
+
+      if (blob.pos.y < bounds.center.y - bounds.r_y)
+      {
+        blob.pos.y = bounds.center.y - bounds.r_y;
+        blob.vel.y = -blob.vel.y;
+      }
+
+      if (bounds.center.y + bounds.r_y < blob.pos.y)
+      {
+        blob.pos.y = bounds.center.y + bounds.r_y;
+        blob.vel.y = -blob.vel.y;
+      }
     }
   }
   // GAMMEL GAMMEL GAMMEL GAMMEL GAMMEL GAMMEL GAMMEL GAMMEL
@@ -257,11 +267,15 @@ public:
         auto &a = blobs.back();
         a.logic.pos.x = x;
         a.logic.pos.y = y;
+        a.logic.vel.x = Ask::random(0.1f, 10.f);
+        a.logic.vel.y = Ask::random(0.1f, 10.f);
   
         for (int i = 1; i < count; i++)
         {
           blobs.emplace_back();
           auto &b = blobs.back();
+          b.logic.vel.x = Ask::random(0.1f, 2.f);
+          b.logic.vel.y = Ask::random(0.1f, 2.f);
           int spread = count * 6;
           b.logic.pos.x = Ask::random(x - spread, x + spread);
           b.logic.pos.y = Ask::random(y - spread, y + spread);

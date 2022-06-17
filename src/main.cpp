@@ -300,6 +300,7 @@ int main() {
         
         ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 0.01f);
         ImGui::SliderFloat("friction", &world.friction_c, 0.f, 0.4f);
+        ImGui::SliderFloat("deflection threshold", &world.activate_deflection_at, 0.f, 10.f);
   
         ImGui::Text("drag and drop:");
         
