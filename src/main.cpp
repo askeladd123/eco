@@ -21,6 +21,7 @@
  * rar feil hvor de krasjer og forvinner til verdens ende
  * collision response er definitivt feil, les litt mer
  * thread pool
+ * stick collision
  */
 
 // standard lib
@@ -40,7 +41,11 @@
 #include "world.h"
 
 int main() {
-  window.create(sf::VideoMode(view_height * 2, view_height), "ImGui + SFML = <3");
+  {
+//    sf::ContextSettings settings;
+//    settings.antialiasingLevel = 8;
+    window.create(sf::VideoMode(view_height * 2, view_height), "ImGui + SFML = <3");//, sf::Style::Default, settings);
+  }
   view_resize();
   view.zoom(1.1);
   window.setFramerateLimit(60);
@@ -277,14 +282,16 @@ int main() {
           ImGui::Checkbox("mouse", &hitbox_mouse);
           ImGui::SameLine();
           
-          static char *selected = " ";
+          static char *selected;
+          if (mouse_hitbox_type == CIRCLE) selected = "circle";
+          if (mouse_hitbox_type == LINE) selected = "line";
           if (ImGui::BeginCombo("hitbox shape", selected))
           {
             if (ImGui::Selectable("circle"))
-              selected = "circle";
+              mouse_hitbox_type = CIRCLE;
             
-            if (ImGui::Selectable("square"))
-              selected = "square";
+            if (ImGui::Selectable("line"))
+              mouse_hitbox_type = LINE;
             
             ImGui::EndCombo();
           }
@@ -379,29 +386,54 @@ int main() {
     
     if (hitbox_mouse)
     {
-      Ask::Physics::Circle bounds(mouse.x, mouse.y, 20);
-      static sf::CircleShape mouse_gfx;
-    
-      if (!Ask::Physics::intersects({bounds.center.x, bounds.center.y}, world.bounds))
+      static sf::CircleShape circle_gfx;
+      static sf::Vertex line_gfx[2];
+      
+      switch (mouse_hitbox_type)
       {
-        mouse_gfx.setFillColor(hitbox_hit);
-        window.draw(fit_to_bounds(mouse_gfx, bounds));
-      }
-      else
-      {
-        for (auto &blob: world.blobs)
+        case CIRCLE:
         {
-          if (Ask::Physics::intersects(bounds, blob.graphics.bounds))
+          Ask::Physics::Circle circle(mouse.x, mouse.y, 20);
+          if (!Ask::Physics::intersects(circle, world.bounds))
           {
-            mouse_gfx.setFillColor(hitbox_hit);
-            break;
+            circle_gfx.setFillColor(hitbox_hit);
+            window.draw(fit_to_bounds(circle_gfx, circle));
           }
-          mouse_gfx.setFillColor(hitbox_unhit);
-        }
-        window.draw(fit_to_bounds(mouse_gfx, bounds));
+          else
+          {
+            for (auto &blob: world.blobs)
+            {
+              if (Ask::Physics::intersects(circle, blob.graphics.bounds))
+              {
+                circle_gfx.setFillColor(hitbox_hit);
+                break;
+              }
+              circle_gfx.setFillColor(hitbox_unhit);
+            }
+            window.draw(fit_to_bounds(circle_gfx, circle));
+          }
+        } break;
+        
+        case LINE:
+        {
+          std::cout << "line\n";
+          Ask::Physics::Line line(mouse.x, mouse.y, mouse.x - 100, mouse.y - 100);
+          line_gfx[0].color = sf::Color::White;
+          line_gfx[1].color = sf::Color::White;
+          window.draw(fit_to_bounds(line_gfx, line), 2, sf::Lines);
+          line_gfx[0].position.x = 0;
+          line_gfx[0].position.y = 0;
+          line_gfx[1].position.x = 200;
+          line_gfx[1].position.y = 200;
+
+
+//          circle_gfx.setFillColor(sf::Color::White);
+//          circle_gfx.setRadius(100);
+//          window.draw(circle_gfx);
+        } break;
       }
     }
-    
+    sf::RectangleShape rect;
     window.display();
   }
   

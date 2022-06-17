@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <vector>
+#include <string>
 
 #include "ask/physics.h"
 #include "global_var.h"
@@ -186,8 +187,8 @@ public:
       case STICK:
         obstacles.push_back(new Stick(x, y, x + 100, y + 100));
         break;
-        
-      default: throw std::logic_error("World::add: object type not implemented");
+
+      default: Ask::stop("World::add: object type not implemented");
     }
   }
 };

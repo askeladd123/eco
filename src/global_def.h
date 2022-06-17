@@ -10,6 +10,7 @@
 
 #include "ask/physics.h"
 #include "ask/praktisk.h"
+#include "ask/workflow.h"
 
 class fps
 {
@@ -85,6 +86,16 @@ sf::CircleShape &fit_to_bounds(sf::CircleShape &fit_this, const Ask::Physics::Ci
   fit_this.setRadius(to_this.r);
   fit_this.setOrigin({fit_this.getRadius(), fit_this.getRadius()});
   fit_this.setPosition({(float)to_this.center.x, (float)to_this.center.y});
+  return fit_this;
+}
+
+/// sørger for at sirkelen du tegner er hitboxen
+sf::Vertex *fit_to_bounds(sf::Vertex fit_this[], const Ask::Physics::Line &to_this)
+{
+  fit_this[0].position.x = to_this.a.x;
+  fit_this[0].position.y = to_this.a.y;
+  fit_this[1].position.x = to_this.a.x;
+  fit_this[1].position.y = to_this.a.y;
   return fit_this;
 }
 
