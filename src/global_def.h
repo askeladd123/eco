@@ -80,6 +80,15 @@ sf::RectangleShape &fit_to_bounds(sf::RectangleShape &fit_this, const Ask::Physi
   return fit_this;
 }
 
+sf::RectangleShape &fit_to_bounds(sf::RectangleShape &fit_this, const Ask::Physics::Ray &to_this)
+{
+  fit_this.setSize({6, to_this.dir.length()});
+  fit_this.setOrigin(fit_this.getSize().x / 2, 0);
+  fit_this.setPosition(to_this.center.x, to_this.center.y);
+  fit_this.setRotation(Ask::degrees(to_this.dir.angle()));
+  return fit_this;
+}
+
 /// sørger for at sirkelen du tegner er hitboxen
 sf::CircleShape &fit_to_bounds(sf::CircleShape &fit_this, const Ask::Physics::Circle &to_this)
 {
@@ -98,5 +107,17 @@ sf::Vertex *fit_to_bounds(sf::Vertex fit_this[], const Ask::Physics::Line &to_th
   fit_this[1].position.y = to_this.a.y;
   return fit_this;
 }
+
+/// sørger for at sirkelen du tegner er hitboxen
+sf::Vertex *fit_to_bounds(sf::Vertex fit_this[], const Ask::Physics::Ray &to_this)
+{
+  fit_this[0].position.x = to_this.center.x;
+  fit_this[0].position.y = to_this.center.y;
+  fit_this[1].position.x = to_this.center.x + to_this.dir.x;
+  fit_this[1].position.y = to_this.center.y + to_this.dir.y;
+  return fit_this;
+}
+
+
 
 #endif //ECO_GLOBAL_DEF_H

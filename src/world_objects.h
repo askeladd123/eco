@@ -57,6 +57,39 @@ private:
   sf::Vertex bounds_gfx[2];
 };
 
+class Ray : public Static_object
+{
+public:
+  Ask::Physics::Ray bounds;
+
+protected:
+  Ray(Ask::Physics::Ray ray) :
+  bounds(ray),
+  bounds_gfx{
+      {{(float)ray.center.x, (float)ray.center.y}},
+      {{(float)ray.center.x + ray.dir.x, (float)ray.center.y + ray.dir.y}}}{}
+
+public:
+  const Ask::Physics::Shape &getBounds() override { return bounds; }
+  
+  Ask::Physics::Point getCenter() override
+  {
+    return bounds.center;
+  }
+
+protected:
+  void hitbox() override
+  {
+    auto &color = intersected? hitbox_hit : hitbox_unhit;
+    bounds_gfx[0].color = color;
+    bounds_gfx[1].color = color;
+    window.draw(bounds_gfx, 2, sf::Lines);
+  }
+
+private:
+  sf::Vertex bounds_gfx[2];
+};
+
 class Circle : public Static_object
 {
 public:

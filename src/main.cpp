@@ -12,15 +12,12 @@
  * blob animasjon: tips, bruk ticks_since_startup og modulo
  * animasjon generell: noe som varer gitt mengde frames: sender animasjon til animasjon objekt
  * select blob
- * grafikk: rediger farger
- * imgui graf, tabs, drag drop
  * insekter kan interacte med spiller
  * README
  * rydde opp i unødvedige globals
  * mus collision typer
  * automatisk skygger
  * rar feil hvor de krasjer og forvinner til verdens ende
- * collision response er definitivt feil, les litt mer
  * thread pool
  * stick collision
  */
@@ -291,6 +288,7 @@ int main() {
           static char *selected;
           if (mouse_hitbox_type == CIRCLE) selected = "circle";
           if (mouse_hitbox_type == LINE) selected = "line";
+          if (mouse_hitbox_type == RAY) selected = "ray";
           if (ImGui::BeginCombo("hitbox shape", selected))
           {
             if (ImGui::Selectable("circle"))
@@ -298,6 +296,9 @@ int main() {
             
             if (ImGui::Selectable("line"))
               mouse_hitbox_type = LINE;
+            
+            if (ImGui::Selectable("ray"))
+              mouse_hitbox_type = RAY;
             
             ImGui::EndCombo();
           }
@@ -325,6 +326,16 @@ int main() {
           object_dropped = World::STICK;
           ImGui::BeginTooltip();
           ImGui::SetTooltip("stick");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
+        
+        ImGui::Button("ray");
+        if (ImGui::BeginDragDropSource())
+        {
+          object_dropped = World::RAY;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("ray");
           ImGui::EndTooltip();
           ImGui::EndDragDropSource();
         }
@@ -392,6 +403,7 @@ int main() {
     {
       static sf::CircleShape circle_gfx;
       static sf::Vertex line_gfx[2];
+      static sf::RectangleShape rline_gfx;
       
       switch (mouse_hitbox_type)
       {
@@ -435,6 +447,25 @@ int main() {
 //          circle_gfx.setRadius(100);
 //          window.draw(circle_gfx);
         } break;
+        
+        case RAY:
+        {
+          static Ask::Physics::Ray ray;
+          ray = {(int)mouse.x, (int)mouse.y, 100, 100};
+  
+          rline_gfx.setFillColor(hitbox_unhit);
+          
+          for (auto &blob: world.blobs)
+          {
+            if (Ask::Physics::intersects(ray, blob.graphics.bounds))
+            {
+              rline_gfx.setFillColor(hitbox_hit);
+              break;
+            }
+          }
+          
+          window.draw(fit_to_bounds(rline_gfx, ray));
+        }
       }
     }
     sf::RectangleShape rect;

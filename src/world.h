@@ -59,7 +59,7 @@ public:
       Logic &blob = i.logic;
     
       // akselerasjon
-//      i.think();
+      i.think();
       blob.vel.x += blob.a_len * cos(blob.a_angle);
       blob.vel.y += blob.a_len * sin(blob.a_angle);
       
@@ -106,9 +106,9 @@ public:
           // DEFLECTION
 //          if (activate_deflection_at < blob.vel.x + blob.vel.y)
 //          {
-            Vector<float> proj = collision.collision_unit_normal * (collision.collision_unit_normal * blob.vel);//virker bare hvis CN er enhetsV
-            blob.vel.x -= proj.x * 2;
-            blob.vel.y -= proj.y * 2;
+          Vector<float> proj = collision.collision_unit_normal * (collision.collision_unit_normal * blob.vel);//virker bare hvis CN er enhetsV
+          blob.vel.x -= proj.x * 2;
+          blob.vel.y -= proj.y * 2;
 //          }
         }
       }
@@ -258,7 +258,7 @@ public:
   }
   
   // setup
-  enum item_id {NONE, BLOB, MELON, STICK};
+  enum item_id {NONE, BLOB, MELON, STICK, RAY};
   void add(int item_type, int x, int y, int count = 1)
   {
     switch(item_type)
@@ -269,15 +269,11 @@ public:
         auto &a = blobs.back();
         a.logic.pos.x = x;
         a.logic.pos.y = y;
-        a.logic.vel.x = Ask::random(0.1f, 10.f);
-        a.logic.vel.y = Ask::random(0.1f, 10.f);
   
         for (int i = 1; i < count; i++)
         {
           blobs.emplace_back();
           auto &b = blobs.back();
-          b.logic.vel.x = Ask::random(0.1f, 2.f);
-          b.logic.vel.y = Ask::random(0.1f, 2.f);
           int spread = count * 6;
           b.logic.pos.x = Ask::random(x - spread, x + spread);
           b.logic.pos.y = Ask::random(y - spread, y + spread);
@@ -289,6 +285,10 @@ public:
       
       case STICK:
         obstacles.push_back(new Stick(x, y, x + 100, y + 100));
+        break;
+        
+      case RAY:
+//        obstacles.push_back(new Ray(x, y, 100, 100));
         break;
 
       default: Ask::stop("World::add: object type not implemented");
