@@ -7,7 +7,7 @@ if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     MESSAGE(WARNING "project not tested with your compiler, only MinGW")
 endif()
 
-set(DEPS_FIND ON)
+set(DEPS_FIND OFF)
 message(STATUS "building project dependencies")
 add_subdirectory(deps)
 message(STATUS "built project dependencies")

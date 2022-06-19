@@ -11,3 +11,6 @@
 	path = deps/SFML
 	url = https://github.com/SFML/SFML.git
 	branch = 2.5.x
+[submodule "deps/box2d"]
+	path = deps/box2d
+	url = https://github.com/erincatto/box2d.git

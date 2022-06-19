@@ -24,14 +24,15 @@
 
 // standard lib
 #include <iostream>
+#include <numeric>
 
 // extern lib
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <imgui-SFML.h>
-#include <imgui.h>
-#include <numeric>
+#include "SFML/Graphics.hpp"
+#include "SFML/System.hpp"
+#include "SFML/Window.hpp"
+#include "imgui-SFML.h"
+#include "imgui.h"
+#include <box2d/box2d.h>
 
 // mine includes
 #include "global_var.h"
@@ -40,9 +41,9 @@
 
 int main() {
   {
-//    sf::ContextSettings settings;
-//    settings.antialiasingLevel = 8;
-    window.create(sf::VideoMode(view_height * 2, view_height), "ImGui + SFML = <3");//, sf::Style::Default, settings);
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    window.create(sf::VideoMode(view_height * 2, view_height), "insekter og kult", sf::Style::Default, settings);
   }
   view_resize();
   view.zoom(1.1);

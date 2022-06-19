@@ -1,5 +1,9 @@
+# se i bunn av filen: dep_includes og dep_targets
 
 option(DEPS_FIND "Search system for dependencies before pulling from Git." ON)
+
+set(targets)
+set(includes)
 
 find_package(Git QUIET)
 if(NOT GIT_FOUND)
@@ -46,6 +50,8 @@ if (NOT DEPS_FIND OR NOT SFML_FOUND)
     set(SFML_USE_STATIC_STD_LIBS FALSE)# "TRUE to statically link to the standard libraries, FALSE to use them as DLLs")
     add_subdirectory(SFML)
     message(STATUS "built SFML")
+
+    list(APPEND includes deps/SFML/include)
 endif()
 
 # imgui og imgui_sfml
@@ -81,6 +87,9 @@ endif()
 set(IMGUI_SFML_IMGUI_DEMO ON)
 add_subdirectory(imgui-sfml)
 message(STATUS "built imgui-sfml")
+#set(targets ImGui-SFML PARENT_SCOPE)
+list(APPEND targets ImGui-SFML)
+list(APPEND includes deps/imgui-sfml deps/imgui)
 
 # ask libs
 if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ask_libs/.git" )
@@ -93,10 +102,35 @@ if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ask_libs/.git" )
     endif()
     message(STATUS "pulled ask_libs from github")
 endif()
+list(APPEND includes deps/ask_libs/include)
 
-set(dep_targets ImGui-SFML PARENT_SCOPE)
-set(dep_includes deps/imgui-sfml deps/imgui deps/ask_libs/include PARENT_SCOPE)#dette funker ikke hvis du flytter på mappen
-if (NOT SFML_FOUND)
-    list(APPEND dep_includes deps/SFML/include)
+#if (NOT SFML_FOUND)
+#    list(APPEND dep_includes deps/SFML/include)
+#endif()
+
+# box2d
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/box2d/.git" )
+    message(STATUS "pulling box2d from github")
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive box2d
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            RESULT_VARIABLE GIT_box2d_RESULT)
+    if (NOT GIT_box2d_RESULT EQUAL "0")
+        message(FATAL_ERROR "failed to pull box2d from Github.")
+    endif()
+    message(STATUS "pulled box2d from github")
 endif()
 
+message(STATUS "building box2d")
+set(BOX2D_BUILD_UNIT_TESTS OFF)#"Build the Box2D unit tests"
+set(BOX2D_BUILD_TESTBED OFF)#"Build the Box2D testbed"
+set(BOX2D_BUILD_DOCS OFF)#"Build the Box2D documentation"
+set(BOX2D_USER_SETTINGS OFF)#"Override Box2D settings with b2UserSettings.h"
+set(BUILD_SHARED_LIBS OFF)#"Build Box2D as a shared library"
+add_subdirectory(box2d)
+message(STATUS "built box2d")
+
+list(APPEND includes deps/box2d/include)
+list(APPEND targets box2d)
+
+set(dep_includes ${includes} PARENT_SCOPE)
+set(dep_targets ${targets} PARENT_SCOPE)
