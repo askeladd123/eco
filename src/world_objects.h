@@ -57,7 +57,7 @@ private:
   sf::Vertex bounds_gfx[2];
 };
 
-class Ray : public Static_object
+class Gay : public Static_object
 {
 public:
 //  Ask::Physics::Ray bounds;

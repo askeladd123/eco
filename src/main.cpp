@@ -40,6 +40,7 @@
 #include "game_engine.h"
 
 int main() {
+  assert(CHAR_BIT * sizeof (float) == 32);// box2d trenger float32
   {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;

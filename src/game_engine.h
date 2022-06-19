@@ -129,7 +129,7 @@ public:
         for (int i = 1; i < count; i++)
         {
           
-          int spread = count * 6;
+          int spread = pow(count, 0.5) + count * 1.8;
           
           int xx = Ask::random(x - spread, x + spread);
           int yy = Ask::random(y - spread, y + spread);
