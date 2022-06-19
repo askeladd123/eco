@@ -63,10 +63,15 @@ public:
     static sf::CircleShape circle;
     
     auto pos = data.body->GetPosition();
-    files.simple_blob.setPosition({pos.x, pos.y});
-    files.simple_blob.setRotation(Ask::degrees(data.body->GetAngle()) + 90);
+//    files.simple_blob.setPosition({(float)pixels(pos.x), (float)pixels(pos.y)});
+//    files.simple_blob.setRotation(Ask::degrees(data.body->GetAngle()) + 90);
 
-    window.draw(files.simple_blob);
+//    window.draw(files.simple_blob);
+
+    circle.setRadius(data.r);
+    circle.setOrigin(data.r, data.r);
+    circle.setPosition(pixels(pos.x), pixels(pos.y));
+    window.draw(circle);
     
     if (hitbox_blob)
     {

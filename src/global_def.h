@@ -118,6 +118,16 @@ void view_resize()
 //  return fit_this;
 //}
 
+float meters(int pixels)
+{
+  return (float)pixels / PPM;
+}
+
+float pixels(float meters)
+{
+  return meters * PPM;
+}
+
 
 
 #endif //ECO_GLOBAL_DEF_H

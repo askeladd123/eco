@@ -14,6 +14,7 @@ class Logic
 {
 public:
   b2Body *body;
+  int r = 8;
   
 //public:
 //  Ask::Physics::Vector<float> pos, vel;
@@ -29,11 +30,11 @@ public:
     // box2d
     b2BodyDef b;
     b.type = b2_dynamicBody;
-    b.position.Set(x, y);
+    b.position.Set(meters(x), meters(y));
     body = world.CreateBody(&b);
     
     b2CircleShape circle;
-    circle.m_radius = 10.f;
+    circle.m_radius = meters(r);
     b2FixtureDef fixture;
     fixture.shape = &circle;
     fixture.density = 1.f;
@@ -52,9 +53,9 @@ public:
   /// Tar imot kommandoer fra hjernen: husk at instruksjons-verdiene er 1, 0, eller mellom
   void push(instructions instructions)
   {
-    body->ApplyTorque(instructions.force_angle * 100000, true);
+    body->ApplyTorque(instructions.force_angle/100, true);
     
-    float strength = instructions.force_len * genes.max_accel * 100000;
+    float strength = instructions.force_len * genes.max_accel;
     body->ApplyForceToCenter({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength}, true);
   }
 

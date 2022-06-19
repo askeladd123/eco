@@ -18,15 +18,20 @@
 class Game_engine
 {
 public:
-  // NYTT NYTT NYTT
-  b2Body *ground;
-  b2Body *test;
+  b2Body *wall_right;
+  b2Body *wall_left;
+  b2Body *wall_up;
+  b2Body *wall_down;
   
   float timeStep = 1.0f / 60.0f;
   int32 velocityIterations = 6;
   int32 positionIterations = 2;
   
-  // GAMMELT GAMMELT GAMMELT
+  int edge_right = world_width / 2;
+  int edge_left = -world_width / 2;
+  int edge_top = edge_left;
+  int edge_bottom = edge_right;
+  
 //public:
   std::vector<Blob> blobs;
 //  std::vector<Static_object*> obstacles;
@@ -46,12 +51,23 @@ public:
     // graphics
     background.setTexture(&files.tiles);
     background.setTextureRect({0, 0, 1600, 1600});
-    background.setPosition(-400.f, -400.f);
-    background.setSize({800.f, 800.f});
+    background.setPosition((float)edge_left, (float)edge_top);
+    background.setSize({(float)world_width, (float)world_width});
     overlay.setTexture(&files.concrete);
     overlay.setTextureRect({0, 0, 2000, 2000});
     overlay.setPosition(background.getPosition());
     overlay.setSize(background.getSize());
+    
+    // world bounds
+    float r = 10;
+    b2BodyDef center;
+    b2PolygonShape rect;
+    
+    center.position.Set(edge_right + r, 0);
+    rect.SetAsBox(r, edge_top);
+    
+    wall_right = world.CreateBody(&center);
+    wall_right->CreateFixture(&rect, 0);
   }
   
 public:

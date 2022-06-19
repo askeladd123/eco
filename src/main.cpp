@@ -227,130 +227,130 @@ int main() {
     
     ImGui::Separator();
     
-//    if (ImGui::BeginTabBar("select mode"))
-//    {
-//      if (ImGui::BeginTabItem("individuals"))
-//      {
-//        ImGui::Text("population: %i", game_engine.blobs.size());
-//        ImGui::Text("mouse x:\t%i\n\t  y:\t%i", (int)mouse.x, (int)mouse.y);
-//        if (ImGui::IsItemHovered())
-//        {
-//          ImGui::BeginTooltip();
-//          ImGui::Text("help");
-//          ImGui::EndTooltip();
-//        }
-//
-//        if (ImGui::CollapsingHeader("list"))
-//        {
-//          if (ImGui::BeginTable("select blob", 3))
-//          {
-//            static int selected_blob = -1;
-//            static bool selected = {false};
-//
-//            ImGui::TableNextColumn();
-//            ImGui::Text("name");
-//            ImGui::TableNextColumn();
-//            ImGui::Text("x");
-//            ImGui::TableNextColumn();
-//            ImGui::Text("y");
-//
-//            for (int i = 0; i < game_engine.blobs.size(); i++)
-//            {
-//              char label[32];
-//              sprintf(label, "%s", game_engine.blobs[i].name.c_str());
-//              ImGui::TableNextRow();
-//              ImGui::TableNextColumn();
-//              if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
-//                selected_blob = i;
-//
-//              ImGui::TableNextColumn();
-//              ImGui::Text("%i", (int) game_engine.blobs[i].logic.pos.x);
-//              ImGui::TableNextColumn();
-//              ImGui::Text("%i", (int) game_engine.blobs[i].logic.pos.y);
-//            }
-//            ImGui::EndTable();
-//          }
-//        }
-//        ImGui::EndTabItem();
-//      }
-//
-//      if (ImGui::BeginTabItem("physics"))
-//      {
-//        ImGui::Text("approximate collision checks per frame: %i", (int)pow(game_engine.blobs.size(), 2));
-//
-//        if (ImGui::CollapsingHeader("hitboxes"))
-//        {
-//          ImGui::Checkbox("blobs", &hitbox_blob);
-//          ImGui::Checkbox("obstacles", &hitbox_static_objects);
-////          ImGui::Checkbox("quadtree", nullptr);
-//          ImGui::Checkbox("mouse", &hitbox_mouse);
-//          ImGui::SameLine();
-//
-//          static char *selected;
-//          if (mouse_hitbox_type == CIRCLE) selected = "circle";
-//          if (mouse_hitbox_type == LINE) selected = "line";
-//          if (mouse_hitbox_type == RAY) selected = "ray";
-//          if (ImGui::BeginCombo("hitbox shape", selected))
-//          {
-//            if (ImGui::Selectable("circle"))
-//              mouse_hitbox_type = CIRCLE;
-//
-//            if (ImGui::Selectable("line"))
-//              mouse_hitbox_type = LINE;
-//
-//            if (ImGui::Selectable("ray"))
-//              mouse_hitbox_type = RAY;
-//
-//            ImGui::EndCombo();
-//          }
-//        }
-//
+    if (ImGui::BeginTabBar("select mode"))
+    {
+      if (ImGui::BeginTabItem("individuals"))
+      {
+        ImGui::Text("population: %i", game_engine.blobs.size());
+        ImGui::Text("mouse x:\t%i\n\t  y:\t%i", (int)mouse.x, (int)mouse.y);
+        if (ImGui::IsItemHovered())
+        {
+          ImGui::BeginTooltip();
+          ImGui::Text("help");
+          ImGui::EndTooltip();
+        }
+
+        if (ImGui::CollapsingHeader("list"))
+        {
+          if (ImGui::BeginTable("select blob", 3))
+          {
+            static int selected_blob = -1;
+            static bool selected = {false};
+
+            ImGui::TableNextColumn();
+            ImGui::Text("name");
+            ImGui::TableNextColumn();
+            ImGui::Text("x");
+            ImGui::TableNextColumn();
+            ImGui::Text("y");
+
+            for (int i = 0; i < game_engine.blobs.size(); i++)
+            {
+              char label[32];
+              sprintf(label, "%s", game_engine.blobs[i].name.c_str());
+              ImGui::TableNextRow();
+              ImGui::TableNextColumn();
+              if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
+                selected_blob = i;
+
+              ImGui::TableNextColumn();
+              ImGui::Text("%i", (int) game_engine.blobs[i].logic.body->GetPosition().x);
+              ImGui::TableNextColumn();
+              ImGui::Text("%i", (int) game_engine.blobs[i].logic.body->GetPosition().y);
+            }
+            ImGui::EndTable();
+          }
+        }
+        ImGui::EndTabItem();
+      }
+
+      if (ImGui::BeginTabItem("physics"))
+      {
+        ImGui::Text("approximate collision checks per frame: %i", (int)pow(game_engine.blobs.size(), 2));
+
+        if (ImGui::CollapsingHeader("hitboxes"))
+        {
+          ImGui::Checkbox("blobs", &hitbox_blob);
+          ImGui::Checkbox("obstacles", &hitbox_static_objects);
+//          ImGui::Checkbox("quadtree", nullptr);
+          ImGui::Checkbox("mouse", &hitbox_mouse);
+          ImGui::SameLine();
+
+          static char *selected;
+          if (mouse_hitbox_type == CIRCLE) selected = "circle";
+          if (mouse_hitbox_type == LINE) selected = "line";
+          if (mouse_hitbox_type == RAY) selected = "ray";
+          if (ImGui::BeginCombo("hitbox shape", selected))
+          {
+            if (ImGui::Selectable("circle"))
+              mouse_hitbox_type = CIRCLE;
+
+            if (ImGui::Selectable("line"))
+              mouse_hitbox_type = LINE;
+
+            if (ImGui::Selectable("ray"))
+              mouse_hitbox_type = RAY;
+
+            ImGui::EndCombo();
+          }
+        }
+
 //        ImGui::SliderFloat("stopping threshold", &game_engine.basically_zero, 0.f, 0.01f);
 //        ImGui::SliderFloat("friction", &game_engine.friction_c, 0.f, 0.4f);
 //        ImGui::SliderFloat("deflection threshold", &game_engine.activate_deflection_at, 0.f, 10.f);
-//
-//        ImGui::Text("drag and drop:");
-//
-//        ImGui::Button("melon");
-//        if (ImGui::BeginDragDropSource())
-//        {
-//          object_dropped = Game_engine::MELON;
-//          ImGui::BeginTooltip();
-//          ImGui::SetTooltip("melon");
-//          ImGui::EndTooltip();
-//          ImGui::EndDragDropSource();
-//        }
-//
-//        ImGui::Button("stick");
-//        if (ImGui::BeginDragDropSource())
-//        {
-//          object_dropped = Game_engine::STICK;
-//          ImGui::BeginTooltip();
-//          ImGui::SetTooltip("stick");
-//          ImGui::EndTooltip();
-//          ImGui::EndDragDropSource();
-//        }
-//
-//        ImGui::Button("ray");
-//        if (ImGui::BeginDragDropSource())
-//        {
-//          object_dropped = Game_engine::RAY;
-//          ImGui::BeginTooltip();
-//          ImGui::SetTooltip("ray");
-//          ImGui::EndTooltip();
-//          ImGui::EndDragDropSource();
-//        }
-//
-//        ImGui::EndTabItem();
-//      }
-//
-//      if (ImGui::BeginTabItem("graphics"))
-//      {
-//
-//        ImGui::EndTabItem();
-//      }
-//      ImGui::EndTabBar();
-//    }
+
+        ImGui::Text("drag and drop:");
+
+        ImGui::Button("melon");
+        if (ImGui::BeginDragDropSource())
+        {
+          object_dropped = Game_engine::MELON;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("melon");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
+
+        ImGui::Button("stick");
+        if (ImGui::BeginDragDropSource())
+        {
+          object_dropped = Game_engine::STICK;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("stick");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
+
+        ImGui::Button("ray");
+        if (ImGui::BeginDragDropSource())
+        {
+          object_dropped = Game_engine::RAY;
+          ImGui::BeginTooltip();
+          ImGui::SetTooltip("ray");
+          ImGui::EndTooltip();
+          ImGui::EndDragDropSource();
+        }
+
+        ImGui::EndTabItem();
+      }
+
+      if (ImGui::BeginTabItem("graphics"))
+      {
+
+        ImGui::EndTabItem();
+      }
+      ImGui::EndTabBar();
+    }
     
     ImGui::End();
     
