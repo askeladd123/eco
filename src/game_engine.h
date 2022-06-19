@@ -20,8 +20,8 @@ class Game_engine
 public:
   b2Body *wall_right;
   b2Body *wall_left;
-  b2Body *wall_up;
-  b2Body *wall_down;
+  b2Body *wall_top;
+  b2Body *wall_bottom;
   
   float timeStep = 1.0f / 60.0f;
   int32 velocityIterations = 6;
@@ -59,15 +59,29 @@ public:
     overlay.setSize(background.getSize());
     
     // world bounds
-    float r = 10;
+    float r = 100;
     b2BodyDef center;
     b2PolygonShape rect;
     
-    center.position.Set(edge_right + r, 0);
-    rect.SetAsBox(r, edge_top);
-    
+    center.position.Set(meters(edge_right + r), 0);
+    rect.SetAsBox(meters(r), meters(edge_bottom + r * 2));
     wall_right = world.CreateBody(&center);
     wall_right->CreateFixture(&rect, 0);
+  
+    center.position.Set(meters(edge_left - r), 0);
+    rect.SetAsBox(meters(r), meters(edge_bottom + r * 2));
+    wall_left = world.CreateBody(&center);
+    wall_left->CreateFixture(&rect, 0);
+  
+    center.position.Set(0, meters(edge_top - r));
+    rect.SetAsBox(meters(edge_right + r * 2), meters(r));
+    wall_top = world.CreateBody(&center);
+    wall_top->CreateFixture(&rect, 0);
+  
+    center.position.Set(0, meters(edge_bottom + r));
+    rect.SetAsBox(meters(edge_right + r * 2), meters(r));
+    wall_top = world.CreateBody(&center);
+    wall_top->CreateFixture(&rect, 0);
   }
   
 public:
@@ -106,11 +120,26 @@ public:
     {
       case BLOB:
       {
+        x = x < edge_left? edge_left : x;
+        x = x > edge_right? edge_right : x;
+        y = y < edge_top? edge_top : y;
+        y = y > edge_bottom? edge_bottom : y;
+        
         blobs.emplace_back(x, y);
         for (int i = 1; i < count; i++)
         {
+          
           int spread = count * 6;
-          blobs.emplace_back(Ask::random(x - spread, x + spread), Ask::random(y - spread, y + spread));
+          
+          int xx = Ask::random(x - spread, x + spread);
+          int yy = Ask::random(y - spread, y + spread);
+  
+          xx = xx < edge_left? edge_left : xx;
+          xx = xx > edge_right? edge_right : xx;
+          yy = yy < edge_top? edge_top : yy;
+          yy = yy > edge_bottom? edge_bottom : yy;
+          
+          blobs.emplace_back(xx, yy);
         }
       } break;
 //      case MELON:

@@ -33,7 +33,6 @@ bool pls_add = false;
 float world_width_meters = 40;
 int world_width = 800;
 int PPM = 32;
-// VIKTIG: et lite insekt er satt til ca. 1 m brei i box2d
 
 int object_dropped;
 b2World world({0, 0});
