@@ -13,6 +13,8 @@
 sf::View view;
 sf::RenderWindow window;
 sf::Clock time_since_startup;
+sf::Color hitbox_hit(100, 200, 100, 100);
+sf::Color hitbox_unhit(200, 100, 100, 100);
 Files files;
 unsigned long long ticks_since_startup = 0;
 int view_offset_x = -350, view_offset_y = 0;
@@ -23,15 +25,13 @@ int last_pos_y;
 bool hovered = false;
 int mouse_hitbox_type = 0;
 enum {CIRCLE, LINE, RAY};
-
-// imgui
 int object_drop_amount = 0;
 bool hitbox_blob = false;
 bool hitbox_static_objects = false;
 bool hitbox_mouse = false;
 bool pls_add = false;
-sf::Color hitbox_hit(100, 200, 100, 100);
-sf::Color hitbox_unhit(200, 100, 100, 100);
+
 int object_dropped;
+b2World world({0, 0});
 
 #endif //ECO_GLOBAL_VAR_H

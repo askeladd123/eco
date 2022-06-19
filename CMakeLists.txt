@@ -17,7 +17,7 @@ add_executable(eco
         src/blob/logic.h
         src/blob/brain.h
         src/blob/graphics.h
-        src/world.h
+        src/game_engine.h
         src/blob/blob.h
         deps/ask_libs/include/ask/physics.h
         src/global_var.h

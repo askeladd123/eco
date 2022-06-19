@@ -37,7 +37,7 @@
 // mine includes
 #include "global_var.h"
 #include "global_def.h"
-#include "world.h"
+#include "game_engine.h"
 
 int main() {
   {
@@ -56,9 +56,9 @@ int main() {
   
   fps fps;
   bool play = true;
-  World world;
   
-  world.add(World::BLOB, 100, 100);
+  Game_engine game_engine;
+  game_engine.add(Game_engine::BLOB, 100, 100);
   
   sf::Clock deltaClock;
   while (window.isOpen())
@@ -93,7 +93,7 @@ int main() {
           
         case sf::Event::MouseButtonReleased:
           mouse_down = false;
-          if (object_dropped != World::NONE)
+          if (object_dropped != Game_engine::NONE)
             pls_add = true;
           break;
           
@@ -169,7 +169,7 @@ int main() {
       if (state == 1)
       {
         if (ImGui::Button("step"))
-          world.tick();
+          game_engine.tick();
       } else
       { ImGui::Text("\tfps: %1.0f", ImGui::GetIO().Framerate); }
   
@@ -190,7 +190,7 @@ int main() {
     if (ImGui::BeginDragDropSource())
     {
       object_drop_amount = 1;
-      object_dropped = World::BLOB;
+      object_dropped = Game_engine::BLOB;
       ImGui::BeginTooltip();
       ImGui::SetTooltip("1");
       ImGui::EndTooltip();
@@ -202,7 +202,7 @@ int main() {
     if (ImGui::BeginDragDropSource())
     {
       object_drop_amount = 10;
-      object_dropped = World::BLOB;
+      object_dropped = Game_engine::BLOB;
       ImGui::BeginTooltip();
       ImGui::SetTooltip("10");
       ImGui::EndTooltip();
@@ -214,7 +214,7 @@ int main() {
     if (ImGui::BeginDragDropSource())
     {
       object_drop_amount = 50;
-      object_dropped = World::BLOB;
+      object_dropped = Game_engine::BLOB;
       ImGui::BeginTooltip();
       ImGui::SetTooltip("50");
       ImGui::EndTooltip();
@@ -227,144 +227,144 @@ int main() {
     
     ImGui::Separator();
     
-    if (ImGui::BeginTabBar("select mode"))
-    {
-      if (ImGui::BeginTabItem("individuals"))
-      {
-        ImGui::Text("population: %i", world.blobs.size());
-        ImGui::Text("mouse x:\t%i\n\t  y:\t%i", (int)mouse.x, (int)mouse.y);
-        if (ImGui::IsItemHovered())
-        {
-          ImGui::BeginTooltip();
-          ImGui::Text("help");
-          ImGui::EndTooltip();
-        }
-  
-        if (ImGui::CollapsingHeader("list"))
-        {
-          if (ImGui::BeginTable("select blob", 3))
-          {
-            static int selected_blob = -1;
-            static bool selected = {false};
-      
-            ImGui::TableNextColumn();
-            ImGui::Text("name");
-            ImGui::TableNextColumn();
-            ImGui::Text("x");
-            ImGui::TableNextColumn();
-            ImGui::Text("y");
-      
-            for (int i = 0; i < world.blobs.size(); i++)
-            {
-              char label[32];
-              sprintf(label, "%s", world.blobs[i].name.c_str());
-              ImGui::TableNextRow();
-              ImGui::TableNextColumn();
-              if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
-                selected_blob = i;
-        
-              ImGui::TableNextColumn();
-              ImGui::Text("%i", (int) world.blobs[i].logic.pos.x);
-              ImGui::TableNextColumn();
-              ImGui::Text("%i", (int) world.blobs[i].logic.pos.y);
-            }
-            ImGui::EndTable();
-          }
-        }
-        ImGui::EndTabItem();
-      }
-  
-      if (ImGui::BeginTabItem("physics"))
-      {
-        ImGui::Text("approximate collision checks per frame: %i", (int)pow(world.blobs.size(), 2));
-        
-        if (ImGui::CollapsingHeader("hitboxes"))
-        {
-          ImGui::Checkbox("blobs", &hitbox_blob);
-          ImGui::Checkbox("obstacles", &hitbox_static_objects);
-//          ImGui::Checkbox("quadtree", nullptr);
-          ImGui::Checkbox("mouse", &hitbox_mouse);
-          ImGui::SameLine();
-          
-          static char *selected;
-          if (mouse_hitbox_type == CIRCLE) selected = "circle";
-          if (mouse_hitbox_type == LINE) selected = "line";
-          if (mouse_hitbox_type == RAY) selected = "ray";
-          if (ImGui::BeginCombo("hitbox shape", selected))
-          {
-            if (ImGui::Selectable("circle"))
-              mouse_hitbox_type = CIRCLE;
-            
-            if (ImGui::Selectable("line"))
-              mouse_hitbox_type = LINE;
-            
-            if (ImGui::Selectable("ray"))
-              mouse_hitbox_type = RAY;
-            
-            ImGui::EndCombo();
-          }
-        }
-        
-        ImGui::SliderFloat("stopping threshold", &world.basically_zero, 0.f, 0.01f);
-        ImGui::SliderFloat("friction", &world.friction_c, 0.f, 0.4f);
-        ImGui::SliderFloat("deflection threshold", &world.activate_deflection_at, 0.f, 10.f);
-  
-        ImGui::Text("drag and drop:");
-        
-        ImGui::Button("melon");
-        if (ImGui::BeginDragDropSource())
-        {
-          object_dropped = World::MELON;
-          ImGui::BeginTooltip();
-          ImGui::SetTooltip("melon");
-          ImGui::EndTooltip();
-          ImGui::EndDragDropSource();
-        }
-        
-        ImGui::Button("stick");
-        if (ImGui::BeginDragDropSource())
-        {
-          object_dropped = World::STICK;
-          ImGui::BeginTooltip();
-          ImGui::SetTooltip("stick");
-          ImGui::EndTooltip();
-          ImGui::EndDragDropSource();
-        }
-        
-        ImGui::Button("ray");
-        if (ImGui::BeginDragDropSource())
-        {
-          object_dropped = World::RAY;
-          ImGui::BeginTooltip();
-          ImGui::SetTooltip("ray");
-          ImGui::EndTooltip();
-          ImGui::EndDragDropSource();
-        }
-  
-        ImGui::EndTabItem();
-      }
-  
-      if (ImGui::BeginTabItem("graphics"))
-      {
-    
-        ImGui::EndTabItem();
-      }
-      ImGui::EndTabBar();
-    }
+//    if (ImGui::BeginTabBar("select mode"))
+//    {
+//      if (ImGui::BeginTabItem("individuals"))
+//      {
+//        ImGui::Text("population: %i", game_engine.blobs.size());
+//        ImGui::Text("mouse x:\t%i\n\t  y:\t%i", (int)mouse.x, (int)mouse.y);
+//        if (ImGui::IsItemHovered())
+//        {
+//          ImGui::BeginTooltip();
+//          ImGui::Text("help");
+//          ImGui::EndTooltip();
+//        }
+//
+//        if (ImGui::CollapsingHeader("list"))
+//        {
+//          if (ImGui::BeginTable("select blob", 3))
+//          {
+//            static int selected_blob = -1;
+//            static bool selected = {false};
+//
+//            ImGui::TableNextColumn();
+//            ImGui::Text("name");
+//            ImGui::TableNextColumn();
+//            ImGui::Text("x");
+//            ImGui::TableNextColumn();
+//            ImGui::Text("y");
+//
+//            for (int i = 0; i < game_engine.blobs.size(); i++)
+//            {
+//              char label[32];
+//              sprintf(label, "%s", game_engine.blobs[i].name.c_str());
+//              ImGui::TableNextRow();
+//              ImGui::TableNextColumn();
+//              if (ImGui::Selectable(label, selected_blob == i, ImGuiSelectableFlags_SpanAllColumns))
+//                selected_blob = i;
+//
+//              ImGui::TableNextColumn();
+//              ImGui::Text("%i", (int) game_engine.blobs[i].logic.pos.x);
+//              ImGui::TableNextColumn();
+//              ImGui::Text("%i", (int) game_engine.blobs[i].logic.pos.y);
+//            }
+//            ImGui::EndTable();
+//          }
+//        }
+//        ImGui::EndTabItem();
+//      }
+//
+//      if (ImGui::BeginTabItem("physics"))
+//      {
+//        ImGui::Text("approximate collision checks per frame: %i", (int)pow(game_engine.blobs.size(), 2));
+//
+//        if (ImGui::CollapsingHeader("hitboxes"))
+//        {
+//          ImGui::Checkbox("blobs", &hitbox_blob);
+//          ImGui::Checkbox("obstacles", &hitbox_static_objects);
+////          ImGui::Checkbox("quadtree", nullptr);
+//          ImGui::Checkbox("mouse", &hitbox_mouse);
+//          ImGui::SameLine();
+//
+//          static char *selected;
+//          if (mouse_hitbox_type == CIRCLE) selected = "circle";
+//          if (mouse_hitbox_type == LINE) selected = "line";
+//          if (mouse_hitbox_type == RAY) selected = "ray";
+//          if (ImGui::BeginCombo("hitbox shape", selected))
+//          {
+//            if (ImGui::Selectable("circle"))
+//              mouse_hitbox_type = CIRCLE;
+//
+//            if (ImGui::Selectable("line"))
+//              mouse_hitbox_type = LINE;
+//
+//            if (ImGui::Selectable("ray"))
+//              mouse_hitbox_type = RAY;
+//
+//            ImGui::EndCombo();
+//          }
+//        }
+//
+//        ImGui::SliderFloat("stopping threshold", &game_engine.basically_zero, 0.f, 0.01f);
+//        ImGui::SliderFloat("friction", &game_engine.friction_c, 0.f, 0.4f);
+//        ImGui::SliderFloat("deflection threshold", &game_engine.activate_deflection_at, 0.f, 10.f);
+//
+//        ImGui::Text("drag and drop:");
+//
+//        ImGui::Button("melon");
+//        if (ImGui::BeginDragDropSource())
+//        {
+//          object_dropped = Game_engine::MELON;
+//          ImGui::BeginTooltip();
+//          ImGui::SetTooltip("melon");
+//          ImGui::EndTooltip();
+//          ImGui::EndDragDropSource();
+//        }
+//
+//        ImGui::Button("stick");
+//        if (ImGui::BeginDragDropSource())
+//        {
+//          object_dropped = Game_engine::STICK;
+//          ImGui::BeginTooltip();
+//          ImGui::SetTooltip("stick");
+//          ImGui::EndTooltip();
+//          ImGui::EndDragDropSource();
+//        }
+//
+//        ImGui::Button("ray");
+//        if (ImGui::BeginDragDropSource())
+//        {
+//          object_dropped = Game_engine::RAY;
+//          ImGui::BeginTooltip();
+//          ImGui::SetTooltip("ray");
+//          ImGui::EndTooltip();
+//          ImGui::EndDragDropSource();
+//        }
+//
+//        ImGui::EndTabItem();
+//      }
+//
+//      if (ImGui::BeginTabItem("graphics"))
+//      {
+//
+//        ImGui::EndTabItem();
+//      }
+//      ImGui::EndTabBar();
+//    }
     
     ImGui::End();
     
     // ====================== A === imgui === A ====================== \\
     
     if (play)
-      world.tick();
+      game_engine.tick();
   
     // logikk
-    if (pls_add && object_dropped != World::NONE)
+    if (pls_add && object_dropped != Game_engine::NONE)
     {
-      world.add(object_dropped, mouse.x, mouse.y, object_drop_amount);
+      game_engine.add(object_dropped, mouse.x, mouse.y, object_drop_amount);
       pls_add = false;
-      object_dropped = World::NONE;
+      object_dropped = Game_engine::NONE;
       object_drop_amount = 1;
     }
     
@@ -397,79 +397,79 @@ int main() {
     // grafikk
     window.clear();
   
-    world.render();
+    game_engine.render();
+    
     ImGui::SFML::Render(window);
     
-    if (hitbox_mouse)
-    {
-      static sf::CircleShape circle_gfx;
-      static sf::Vertex line_gfx[2];
-      static sf::RectangleShape rline_gfx;
-      
-      switch (mouse_hitbox_type)
-      {
-        case CIRCLE:
-        {
-          Ask::Physics::Circle circle(mouse.x, mouse.y, 20);
-          if (0)// !Ask::Physics::intersects(circle, world.bounds))
-          {
-            circle_gfx.setFillColor(hitbox_hit);
-            window.draw(fit_to_bounds(circle_gfx, circle));
-          }
-          else
-          {
-            for (auto &blob: world.blobs)
-            {
-              if (Ask::Physics::intersects(circle, blob.graphics.bounds))
-              {
-                circle_gfx.setFillColor(hitbox_hit);
-                break;
-              }
-              circle_gfx.setFillColor(hitbox_unhit);
-            }
-            window.draw(fit_to_bounds(circle_gfx, circle));
-          }
-        } break;
-        
-        case LINE:
-        {
-          std::cout << "line\n";
-          Ask::Physics::Line line(mouse.x, mouse.y, mouse.x - 100, mouse.y - 100);
-          line_gfx[0].color = sf::Color::White;
-          line_gfx[1].color = sf::Color::White;
-          window.draw(fit_to_bounds(line_gfx, line), 2, sf::Lines);
-          line_gfx[0].position.x = 0;
-          line_gfx[0].position.y = 0;
-          line_gfx[1].position.x = 200;
-          line_gfx[1].position.y = 200;
-
-
+//    if (hitbox_mouse)
+//    {
+//      static sf::CircleShape circle_gfx;
+//      static sf::Vertex line_gfx[2];
+//      static sf::RectangleShape rline_gfx;
+//
+//      switch (mouse_hitbox_type)
+//      {
+//        case CIRCLE:
+//        {
+//          Ask::Physics::Circle circle(mouse.x, mouse.y, 20);
+//          if (0)// !Ask::Physics::intersects(circle, game_engine.bounds))
+//          {
+//            circle_gfx.setFillColor(hitbox_hit);
+//            window.draw(fit_to_bounds(circle_gfx, circle));
+//          }
+//          else
+//          {
+//            for (auto &blob: game_engine.blobs)
+//            {
+//              if (Ask::Physics::intersects(circle, blob.graphics.bounds))
+//              {
+//                circle_gfx.setFillColor(hitbox_hit);
+//                break;
+//              }
+//              circle_gfx.setFillColor(hitbox_unhit);
+//            }
+//            window.draw(fit_to_bounds(circle_gfx, circle));
+//          }
+//        } break;
+//
+//        case LINE:
+//        {
+//          std::cout << "line\n";
+//          Ask::Physics::Line line(mouse.x, mouse.y, mouse.x - 100, mouse.y - 100);
+//          line_gfx[0].color = sf::Color::White;
+//          line_gfx[1].color = sf::Color::White;
+//          window.draw(fit_to_bounds(line_gfx, line), 2, sf::Lines);
+//          line_gfx[0].position.x = 0;
+//          line_gfx[0].position.y = 0;
+//          line_gfx[1].position.x = 200;
+//          line_gfx[1].position.y = 200;
+//
+//
 //          circle_gfx.setFillColor(sf::Color::White);
 //          circle_gfx.setRadius(100);
 //          window.draw(circle_gfx);
-        } break;
-        
-        case RAY:
-        {
-          static Ask::Physics::Ray ray;
-          ray = {(int)mouse.x, (int)mouse.y, 100, 100};
-  
-          rline_gfx.setFillColor(hitbox_unhit);
-          
-          for (auto &blob: world.blobs)
-          {
-            if (Ask::Physics::intersects(ray, blob.graphics.bounds))
-            {
-              rline_gfx.setFillColor(hitbox_hit);
-              break;
-            }
-          }
-          
-          window.draw(fit_to_bounds(rline_gfx, ray));
-        }
-      }
-    }
-    sf::RectangleShape rect;
+//        } break;
+//
+//        case RAY:
+//        {
+//          static Ask::Physics::Ray ray;
+//          ray = {(int)mouse.x, (int)mouse.y, 100, 100};
+//
+//          rline_gfx.setFillColor(hitbox_unhit);
+//
+//          for (auto &blob: game_engine.blobs)
+//          {
+//            if (Ask::Physics::intersects(ray, blob.graphics.bounds))
+//            {
+//              rline_gfx.setFillColor(hitbox_hit);
+//              break;
+//            }
+//          }
+//
+//          window.draw(fit_to_bounds(rline_gfx, ray));
+//        }
+//      }
+//    }
     window.display();
   }
   
