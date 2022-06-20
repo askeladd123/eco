@@ -13,19 +13,22 @@
 class Ray : public b2RayCastCallback
 {
 public:
-  b2Vec2 source;
+  b2Vec2 source, test;
   float angle;
-  float length_result;
+  float result_length;
+  Entity::type result_id;
   
   #define float32 float
   float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction) override
   {
-    length_result *= fraction;
+    result_id = *(Entity::type*)fixture->GetBody()->GetUserData().pointer;
+    result_length *= fraction;
+    test = point;
     return 0;
   }
 };
 
-class Logic
+class Logic : public Entity
 {
 public:
   b2Body *body;
@@ -42,7 +45,7 @@ public:
 //  bool intersected = false;
   
 public:
-  Logic(int x, int y)
+  Logic(int x, int y) : Entity(Entity::BLOB)
   {
     rays.emplace_back();
     
@@ -60,6 +63,7 @@ public:
     fixture.friction = 0.3f;
     
     body->CreateFixture(&fixture);
+    body->GetUserData().pointer = (uintptr_t)&id;
   }
   /// Gir hjernen informasjon: husk at verdiene skal være 1, 0, eller mellom
   senses pull()
@@ -89,9 +93,10 @@ public:
 private:
   void align_rays()
   {
-    rays[0].length_result = ray_length;
+    rays[0].result_length = ray_length;
     rays[0].source = body->GetPosition();
     rays[0].angle = body->GetAngle();
+    rays[0].test = {ray_length * cos(rays[0].angle), ray_length * sin(rays[0].angle)};
   }
   
 private:

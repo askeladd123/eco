@@ -68,9 +68,33 @@ public:
 
 //    window.draw(files.simple_blob);
 
+    circle.setFillColor(sf::Color::White);
     circle.setRadius(data.r);
     circle.setOrigin(data.r, data.r);
     circle.setPosition(pixels(pos.x), pixels(pos.y));
+    window.draw(circle);
+    
+    Ray ray = data.rays[0];
+    static sf::RectangleShape rect;
+    
+    float r = 1;
+    
+//    rect.setSize({r * 2, pixels(ray.result_length)});
+//    rect.setOrigin({r, 0});
+//    rect.setRotation(Ask::degrees(ray.angle) - 90.f);
+//    rect.setPosition({pixels(ray.source.x), pixels(ray.source.y)});
+//    window.draw(rect);
+  
+    b2Vec2 vec = {ray.test.x - ray.source.x, ray.test.y - ray.source.y};
+    rect.setSize({r * 2, pixels(vec.Length())});
+    rect.setOrigin({r, 0});
+    rect.setRotation(Ask::degrees(atan2(vec.y, vec.x)) - 90.f);
+    rect.setPosition({pixels(ray.source.x), pixels(ray.source.y)});
+    window.draw(rect);
+    
+    circle.setFillColor(sf::Color::Red);
+    circle.setRadius(2);
+    circle.setPosition(pixels(ray.test.x), pixels(ray.test.y));
     window.draw(circle);
     
     if (hitbox_blob)

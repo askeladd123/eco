@@ -35,4 +35,12 @@ struct genes_logic
   
 };
 
+class Entity
+{
+public:
+  enum type {BLOB};
+  type id;
+  Entity(type id) : id(id){};
+};
+
 #endif //ECO_COMMON_H
