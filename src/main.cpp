@@ -79,16 +79,29 @@ int main() {
           view_resize();
           break;
       
+        static int mouse_down_x = 0;
+        static int mouse_down_y = 0;
+        static bool mouse_down = false;\
+        
         case sf::Event::MouseButtonPressed:
-          static int mouse_down_x = 0;
-          static int mouse_down_y = 0;
-          static bool mouse_down = false;
-    
-          if (!mouse_down && !hovered)
+          if (event.mouseButton.button == sf::Mouse::Left)
           {
-            mouse_down = true;
-            mouse_down_x = mouse.x;
-            mouse_down_y = mouse.y;
+  
+            if (!mouse_down && !hovered)
+            {
+              mouse_down = true;
+              mouse_down_x = mouse.x;
+              mouse_down_y = mouse.y;
+            }
+          }
+          
+          if (event.mouseButton.button == sf::Mouse::Right)
+          {
+            Entity *e = game_engine.get_entity(mouse.x, mouse.y);
+            if (e != nullptr)
+            {
+              selected_entity = e;
+            }
           }
           break;
           
@@ -272,6 +285,24 @@ int main() {
             ImGui::EndTable();
           }
         }
+        
+        if (selected_entity != nullptr)
+        {
+          ImGui::Text("selected item: ");
+          ImGui::SameLine();
+          if (selected_entity->id == Entity::BLOB)
+          {
+            ImGui::Text(((Blob*)selected_entity)->name.c_str());
+            if (ImGui::Button("take control"))
+            {
+              take_control = true;
+              ((Blob*)selected_entity)->mute = true;
+            };
+          }
+          
+          
+        }
+        
         ImGui::EndTabItem();
       }
 
@@ -394,6 +425,26 @@ int main() {
     
     view.setCenter({(float)view_offset_x, (float)view_offset_y});
     window.setView(view);
+  
+    if (selected_entity != nullptr && take_control)
+    {
+      Blob *selected_blob;
+      if (selected_entity->id == Entity::BLOB)
+        selected_blob = (Blob *) selected_entity;
+  
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(-3)}, true);
+  
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(3)}, true);
+  
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(-3), 0}, true);
+  
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(3), 0}, true);
+  
+    }
     
     // grafikk
     window.clear();

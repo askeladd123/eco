@@ -85,16 +85,23 @@ public:
 //    rect.setPosition({pixels(ray.source.x), pixels(ray.source.y)});
 //    window.draw(rect);
   
-    b2Vec2 vec = {ray.test.x - ray.source.x, ray.test.y - ray.source.y};
+    b2Vec2 vec = {ray.end.x - ray.start.x, ray.end.y - ray.start.y};
     rect.setSize({r * 2, pixels(vec.Length())});
     rect.setOrigin({r, 0});
     rect.setRotation(Ask::degrees(atan2(vec.y, vec.x)) - 90.f);
-    rect.setPosition({pixels(ray.source.x), pixels(ray.source.y)});
+    rect.setPosition({pixels(ray.start.x), pixels(ray.start.y)});
     window.draw(rect);
     
+//    circle.setFillColor(sf::Color::Red);
+//    circle.setRadius(2);
+//    circle.setPosition(pixels(ray.end.x), pixels(ray.end.y));
+//    window.draw(circle);
+  
+    b2Vec2 lol = data.body->GetWorldVector({0, 0});
+//    lol += data.body->GetPosition();
     circle.setFillColor(sf::Color::Red);
     circle.setRadius(2);
-    circle.setPosition(pixels(ray.test.x), pixels(ray.test.y));
+    circle.setPosition(pixels(lol.x), pixels(lol.y));
     window.draw(circle);
     
     if (hitbox_blob)

@@ -18,6 +18,7 @@ public:
   Stupid_brain brain;
   Graphics_image graphics;
   std::string name;
+  bool mute = false;
   
 public:
   Blob(int x, int y) : logic(x, y), name(files.random_name()){}
@@ -25,6 +26,9 @@ public:
   /// justerer akselerasjon: må fortsatt legge til på fart og posisjon
   void think()
   {
+    if (mute)
+      return;
+      
     auto senses = logic.pull();
     
     auto instructions = brain.think(senses);

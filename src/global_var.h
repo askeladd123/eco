@@ -8,6 +8,7 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <list>
+#include "global_def.h"
 #include "files.h"
 
 sf::View view;
@@ -33,6 +34,9 @@ bool pls_add = false;
 float world_width_meters = 40;
 int world_width = 800;
 int PPM = 32;
+bool selecting = false;
+Entity *selected_entity = nullptr;
+bool take_control = false;
 
 int object_dropped;
 b2World world({0, 0});

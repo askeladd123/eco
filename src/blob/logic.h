@@ -8,12 +8,13 @@
 #include "box2d/box2d.h"
 
 #include "global_var.h"
+#include "global_func.h"
 #include "common.h"
 
 class Ray : public b2RayCastCallback
 {
 public:
-  b2Vec2 source, test;
+  b2Vec2 start, end;
   float angle;
   float result_length;
   Entity::type result_id;
@@ -23,7 +24,7 @@ public:
   {
     result_id = *(Entity::type*)fixture->GetBody()->GetUserData().pointer;
     result_length *= fraction;
-    test = point;
+    end = point;
     return 0;
   }
 };
@@ -63,7 +64,7 @@ public:
     fixture.friction = 0.3f;
     
     body->CreateFixture(&fixture);
-    body->GetUserData().pointer = (uintptr_t)&id;
+    body->GetUserData().pointer = (uintptr_t)this;
   }
   /// Gir hjernen informasjon: husk at verdiene skal være 1, 0, eller mellom
   senses pull()
@@ -75,7 +76,7 @@ public:
 //    }
       align_rays();
       Ray &ray = rays[0];
-      world.RayCast(&ray, ray.source, {ray_length * cos(ray.angle), ray_length * sin(ray.angle)});
+      world.RayCast(&ray, ray.start, ray.end);
 
     s.pulse = 0.5f + cos(ticks_since_startup * genes.pulse_speed) / 2.f;
     return s;
@@ -94,9 +95,9 @@ private:
   void align_rays()
   {
     rays[0].result_length = ray_length;
-    rays[0].source = body->GetPosition();
+    rays[0].start = body->GetPosition();
     rays[0].angle = body->GetAngle();
-    rays[0].test = {ray_length * cos(rays[0].angle), ray_length * sin(rays[0].angle)};
+    rays[0].end = {ray_length * cos(rays[0].angle), ray_length * sin(rays[0].angle)};
   }
   
 private:

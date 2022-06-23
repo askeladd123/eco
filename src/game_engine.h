@@ -157,6 +157,39 @@ public:
 //      default: Ask::stop("Game_engine::add: object type not implemented");
     }
   }
+  
+  struct query_response : public b2QueryCallback
+  {
+    Entity *entity;
+    bool collision = false;
+    bool 	ReportFixture (b2Fixture *fixture) override
+    {
+      collision = true;
+      entity = (Entity*)fixture->GetBody()->GetUserData().pointer;
+      return false;
+    }
+  };
+  
+  /**
+   * @return true: is entity at x, y - "result" changed
+   * @return false: isn't entity at x, y - "result" unchanged
+   */
+  Entity *get_entity(int x, int y)
+  {
+    b2AABB m;
+    float r = 0.1;
+    m.lowerBound = {meters(mouse.x - r), meters(mouse.y - r)};
+    m.upperBound = {meters(mouse.x + r), meters(mouse.y + r)};
+    
+    query_response qr;
+    qr.entity = nullptr;
+    world.QueryAABB(&qr, m);
+    world.Step(timeStep, velocityIterations, positionIterations);
+    return qr.entity;
+  }
+  
+  struct entities{};
+  entities get_entities_in(){}
 };
 
 #endif
