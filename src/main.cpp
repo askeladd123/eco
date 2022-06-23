@@ -293,11 +293,22 @@ int main() {
           if (selected_entity->id == Entity::BLOB)
           {
             ImGui::Text(((Blob*)selected_entity)->name.c_str());
-            if (ImGui::Button("take control"))
+            
+            if (!take_control)
             {
-              take_control = true;
-              ((Blob*)selected_entity)->mute = true;
-            };
+              if (ImGui::Button("take control"))
+              {
+                take_control = true;
+                ((Blob *) selected_entity)->mute = true;
+              }
+            } else
+            {
+              if (ImGui::Button("stop"))
+              {
+                take_control = false;
+                ((Blob *) selected_entity)->mute = false;
+              };
+            }
           }
           
           
