@@ -26,10 +26,11 @@ public:
   /// justerer akselerasjon: må fortsatt legge til på fart og posisjon
   void think()
   {
+    
+    auto senses = logic.pull();
+    
     if (mute)
       return;
-      
-    auto senses = logic.pull();
     
     auto instructions = brain.think(senses);
     

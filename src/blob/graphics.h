@@ -74,23 +74,26 @@ public:
     circle.setPosition(pixels(pos.x), pixels(pos.y));
     window.draw(circle);
     
-    Ray ray = data.rays[0];
-    static sf::RectangleShape rect;
     
-    float r = 1;
-    
-//    rect.setSize({r * 2, pixels(ray.result_length)});
+//    rect.setSize({r * 2, pixels(ray.length)});
 //    rect.setOrigin({r, 0});
 //    rect.setRotation(Ask::degrees(ray.angle) - 90.f);
 //    rect.setPosition({pixels(ray.source.x), pixels(ray.source.y)});
 //    window.draw(rect);
-  
-    b2Vec2 vec = {ray.end.x - ray.start.x, ray.end.y - ray.start.y};
-    rect.setSize({r * 2, pixels(vec.Length())});
-    rect.setOrigin({r, 0});
-    rect.setRotation(Ask::degrees(atan2(vec.y, vec.x)) - 90.f);
-    rect.setPosition({pixels(ray.start.x), pixels(ray.start.y)});
-    window.draw(rect);
+
+//    b2Vec2 vec = {ray.end.x - ray.start.x, ray.end.y - ray.start.y};
+//    vec *= ray.intersection_fraction;
+
+    for (Ray &ray: data.rays)
+    {
+      static sf::RectangleShape rect;
+      float r = 1;
+      rect.setSize({r * 2, pixels(ray.length * ray.intersection_fraction)});
+      rect.setOrigin({r, 0});
+      rect.setRotation(Ask::degrees(ray.angle) - 90);
+      rect.setPosition({pixels(ray.start.x), pixels(ray.start.y)});
+      window.draw(rect);
+    }
     
 //    circle.setFillColor(sf::Color::Red);
 //    circle.setRadius(2);

@@ -14,17 +14,28 @@
 class Ray : public b2RayCastCallback
 {
 public:
-  b2Vec2 start, end;
-  float angle;
-  float result_length;
-  Entity::type result_id;
+  b2Vec2 start = {0, 0}, /*intersection = {5, 5},*/ end = {10, 10};
+  float angle = 0;
+  float max_length = 4;
+  float length = max_length;
+  float intersection_fraction = 1;
+  Entity *entitiy_hit;
+//  bool intersected = false;
+  
+  void reset()
+  {
+//    intersected = false;
+    length = max_length;
+    intersection_fraction = 1;
+  }
   
   #define float32 float
   float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction) override
   {
-    result_id = *(Entity::type*)fixture->GetBody()->GetUserData().pointer;
-    result_length *= fraction;
-    end = point;
+//    intersected = false;
+    entitiy_hit = (Entity*)fixture->GetBody()->GetUserData().pointer;
+//    intersection = point;
+    intersection_fraction = fraction;
     return 0;
   }
 };
@@ -35,7 +46,9 @@ public:
   b2Body *body;
   int r = 8;
   std::vector<Ray> rays;
-  float ray_length = 10;
+  float rays_count = 16;
+  float rays_length = 10;
+  float rays_arc = M_PI;
   
 //public:
 //  Ask::Physics::Vector<float> pos, vel;
@@ -48,7 +61,8 @@ public:
 public:
   Logic(int x, int y) : Entity(Entity::BLOB)
   {
-    rays.emplace_back();
+    for (int i = 0; i < rays_count; i++)
+      rays.emplace_back();
     
     // box2d
     b2BodyDef b;
@@ -70,14 +84,13 @@ public:
   senses pull()
   {
     senses s;
-//    for (Ray ray : rays)
-//    {
-//      world.RayCast(&ray, body->GetPosition(), {0, 10});
-//    }
-      align_rays();
-      Ray &ray = rays[0];
+  
+    update_rays();
+    for (Ray &ray : rays)
+    {
       world.RayCast(&ray, ray.start, ray.end);
-
+    }
+    
     s.pulse = 0.5f + cos(ticks_since_startup * genes.pulse_speed) / 2.f;
     return s;
   }
@@ -92,12 +105,25 @@ public:
   }
 
 private:
-  void align_rays()
+  void update_rays()
   {
-    rays[0].result_length = ray_length;
-    rays[0].start = body->GetPosition();
-    rays[0].angle = body->GetAngle();
-    rays[0].end = {ray_length * cos(rays[0].angle), ray_length * sin(rays[0].angle)};
+    b2Vec2 center = body->GetPosition();
+    
+    for (int i = 0; i < rays.size(); i++)
+    {
+      Ray &ray = rays[i];
+      
+      ray.reset();
+      
+      ray.angle = body->GetAngle() + i * rays_arc / rays.size();
+      b2Vec2 u = {cos(ray.angle), sin(ray.angle)};
+      
+      float d = meters(r);
+      ray.start = {center.x + u.x * d, center.y + u.y * d};
+  
+      ray.end.x = ray.start.x + u.x * ray.length,
+      ray.end.y = ray.start.y + u.y * ray.length;
+    }
   }
   
 private:

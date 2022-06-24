@@ -329,11 +329,11 @@ int main() {
           ImGui::Checkbox("mouse", &hitbox_mouse);
           ImGui::SameLine();
 
-          static char *selected;
+          static std::string selected;
           if (mouse_hitbox_type == CIRCLE) selected = "circle";
           if (mouse_hitbox_type == LINE) selected = "line";
           if (mouse_hitbox_type == RAY) selected = "ray";
-          if (ImGui::BeginCombo("hitbox shape", selected))
+          if (ImGui::BeginCombo("hitbox shape", selected.c_str()))
           {
             if (ImGui::Selectable("circle"))
               mouse_hitbox_type = CIRCLE;
@@ -444,16 +444,16 @@ int main() {
         selected_blob = (Blob *) selected_entity;
   
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(-3)}, true);
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(-1)}, true);
   
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(3)}, true);
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(1)}, true);
   
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(-3), 0}, true);
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(-1), 0}, true);
   
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(3), 0}, true);
+        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(1), 0}, true);
   
     }
     
