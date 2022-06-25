@@ -128,7 +128,6 @@ public:
         blobs.emplace_back(x, y);
         for (int i = 1; i < count; i++)
         {
-          
           int spread = pow(count, 0.5) + count * 1.8;
           
           int xx = Ask::random(x - spread, x + spread);
@@ -190,6 +189,6 @@ public:
   
   struct entities{};
   entities get_entities_in(){}
-};
+} game_engine;
 
 #endif

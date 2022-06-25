@@ -15,7 +15,7 @@ class Blob
 {
 public:
   Logic logic;
-  Stupid_brain brain;
+  Smart_brain brain;
   Graphics_image graphics;
   std::string name;
   bool mute = false;
@@ -27,12 +27,12 @@ public:
   void think()
   {
     
-    auto senses = logic.pull();
+    const Senses &s = logic.pull();
     
     if (mute)
       return;
     
-    auto instructions = brain.think(senses);
+    auto instructions = brain.think(s);
     
     logic.push(instructions);
   }

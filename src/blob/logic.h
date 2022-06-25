@@ -49,7 +49,8 @@ public:
   float rays_count = 16;
   float rays_length = 10;
   float rays_arc = M_PI;
-  
+  Senses senses;
+
 //public:
 //  Ask::Physics::Vector<float> pos, vel;
 //  float x, y, vx = 0, vy = 0;
@@ -59,7 +60,7 @@ public:
 //  bool intersected = false;
   
 public:
-  Logic(int x, int y) : Entity(Entity::BLOB)
+  Logic(int x, int y) : Entity(Entity::BLOB), senses(rays_count)
   {
     for (int i = 0; i < rays_count; i++)
       rays.emplace_back();
@@ -81,26 +82,29 @@ public:
     body->GetUserData().pointer = (uintptr_t)this;
   }
   /// Gir hjernen informasjon: husk at verdiene skal være 1, 0, eller mellom
-  senses pull()
+  const Senses &pull()
   {
-    senses s;
-  
+    assert(rays.size() == senses.reseptors.size());
+    
+    for (int i = 0; i < rays.size(); i++)
+      senses.reseptors[i] = rays[i].intersection_fraction;
+    
     update_rays();
     for (Ray &ray : rays)
     {
-      world.RayCast(&ray, ray.start, ray.end);
+      world.RayCast(&ray, ray.start, ray.end); // raycasten skjer ikke her, men i step
     }
     
-    s.pulse = 0.5f + cos(ticks_since_startup * genes.pulse_speed) / 2.f;
-    return s;
+    senses.pulse = 0.5f + cos(ticks_since_startup * genes.pulse_speed) / 2.f;
+    return senses;
   }
   
   /// Tar imot kommandoer fra hjernen: husk at instruksjons-verdiene er 1, 0, eller mellom
   void push(instructions instructions)
   {
-    body->ApplyTorque(instructions.force_angle/100, true);
+    body->ApplyTorque(instructions.torque / 100, true);
     
-    float strength = instructions.force_len * genes.max_accel;
+    float strength = instructions.speed * genes.max_accel;
     body->ApplyForceToCenter({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength}, true);
   }
 
@@ -123,6 +127,8 @@ private:
   
       ray.end.x = ray.start.x + u.x * ray.length,
       ray.end.y = ray.start.y + u.y * ray.length;
+      
+      // FIXME: rays går litt utenfor mappet på en rar måte
     }
   }
   

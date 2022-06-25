@@ -10,16 +10,23 @@
 /// Alle verdier skal være 0, 1 eller mellom
 struct instructions
 {
-  float force_angle = 0.f;
-  float force_len = 0.f;
+  float torque = 0.f;
+  float speed = 0.f;
 };
 
 /// Alle verdier skal være 0, 1 eller mellom
-struct senses
+struct Senses
 {
-  std::vector<float>* reseptors;
+  std::vector<float> reseptors;
   float pulse;
   float angle;
+  
+  Senses(int reseptor_count)
+  {
+//    reseptors.reserve(reseptor_count);
+    reseptors.resize(reseptor_count);
+    reseptors.shrink_to_fit();
+  }
 };
 
 /// Alle verdier skal være 0, 1 eller mellom

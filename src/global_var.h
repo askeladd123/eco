@@ -23,7 +23,6 @@ int view_height = 800;
 int view_movement_speed = 6;
 float view_zoom_amount = 0.01;
 int last_pos_y;
-bool hovered = false;
 int mouse_hitbox_type = 0;
 enum {CIRCLE, LINE, RAY};
 int object_drop_amount = 0;
@@ -37,8 +36,12 @@ int PPM = 32;
 bool selecting = false;
 Entity *selected_entity = nullptr;
 bool take_control = false;
+bool play = true;
 
 int object_dropped;
 b2World world({0, 0});
+class Game_engine;
+extern Game_engine game_engine;
+fps fps;
 
 #endif //ECO_GLOBAL_VAR_H
