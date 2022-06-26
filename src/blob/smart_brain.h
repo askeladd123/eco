@@ -20,7 +20,7 @@ struct Connection
 class Neuron
 {
 public:
-  float value = 0.5; /// mellom 0.0 og 1.0
+  float value = 0; /// mellom 0.0 og 1.0
 
 private:
   void connect(Neuron *with_this)
@@ -87,9 +87,9 @@ public:
     {
       i->fire();
     }
-  
-    for (auto &i : output)
-      i->value = Ask::squeeze(i->value);
+    
+//    for (auto &i : output)
+//      i->value = Ask::squeeze(i->value);
     
   }
   
@@ -113,7 +113,10 @@ public:
       for (int j = 0; j < input[i]->outputs.size(); j++)
       {
         sf::Vector2f b = {vec_out.x, vec_out.y * (j + 1)};
-        texture.draw(line(a, b, 0.5, {255, 240, 240, (sf::Uint8) (255 * input[i]->outputs[j].strength)}));
+        texture.draw(line
+        (a, b,
+         input[i]->outputs[j].strength * 4,
+         {255, 240, 240, (sf::Uint8) (255 * input[i]->outputs[j].strength * input[i]->value)}));
       }
       c.setPosition(a);
       c.setFillColor({255, 255, 255, (sf::Uint8)(255 * input[i]->value)});
@@ -124,7 +127,7 @@ public:
     {
       sf::Vector2f pos = {vec_out.x, vec_out.y * (i + 1)};
       c.setPosition(pos);
-      c.setFillColor({255, 255, 255, (sf::Uint8)(255 * input[i]->value)});
+      c.setFillColor({255, 255, 255, (sf::Uint8)(255 * output[i]->value)});
       texture.draw(c);
     }
     
@@ -150,8 +153,9 @@ public:
     neural_network.input[reseptors]->value = senses.pulse;
     
     neural_network.calculate_output();
-    a.torque = neural_network.output[0]->value;
-    a.speed = neural_network.output[1]->value;
+    a.speed = neural_network.output[0]->value;
+    a.right_torque = neural_network.output[0]->value;
+    a.left_torque = neural_network.output[2]->value;
     
     return a;
   }
@@ -160,7 +164,7 @@ public:
   sf::RenderTexture *neurons_graphic; // TODO vent med å lage texture til det er nødvendig
 
 public:
-  Smart_brain() : neural_network(4, 2)
+  Smart_brain() : neural_network(4, 3)
   {
     // network
     

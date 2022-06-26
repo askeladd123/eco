@@ -12,6 +12,7 @@
  *  README
  *  rydde opp i unødvedige globals
  *  automatisk skygger
+ *  neural net grafikk må virke med take control
  */
 
 // standard lib

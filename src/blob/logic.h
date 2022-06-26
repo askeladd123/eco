@@ -75,8 +75,8 @@ public:
     circle.m_radius = meters(r);
     b2FixtureDef fixture;
     fixture.shape = &circle;
-    fixture.density = 1.f;
-    fixture.friction = 0.3f;
+    fixture.density = 10.f;
+    fixture.friction = 1.f;
     
     body->CreateFixture(&fixture);
     body->GetUserData().pointer = (uintptr_t)this;
@@ -88,7 +88,10 @@ public:
     
     for (int i = 0; i < rays.size(); i++)
       senses.reseptors[i] = 1.f - rays[i].intersection_fraction;
-    
+  
+//    for (int i = 0; i < rays.size(); i++)
+//      senses.reseptors[i] = 0.f;
+
     update_rays();
     for (Ray &ray : rays)
     {
@@ -96,16 +99,20 @@ public:
     }
     
     senses.pulse = 0.5f + cos(ticks_since_startup * genes.pulse_speed) / 2.f;
+//    senses.pulse = 0.f;
     return senses;
   }
   
   /// Tar imot kommandoer fra hjernen: husk at instruksjons-verdiene er 1, 0, eller mellom
-  void push(Instructions instructions)
+  void push(Instructions &instructions)
   {
-    body->ApplyTorque(instructions.torque / 100, true);
+    body->SetAngularVelocity(
+        instructions.right_torque * genes.max_torque - instructions.left_torque * genes.max_torque);
     
     float strength = instructions.speed * genes.max_accel;
-    body->ApplyForceToCenter({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength}, true);
+    std::cout << instructions.speed << "\n";
+//    float strength = 0;
+    body->SetLinearVelocity({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength});
   }
 
 private:
