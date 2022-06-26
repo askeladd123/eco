@@ -46,7 +46,7 @@ public:
   b2Body *body;
   int r = 8;
   std::vector<Ray> rays;
-  float rays_count = 16;
+  float rays_count = 3;
   float rays_length = 10;
   float rays_arc = M_PI;
   Senses senses;
@@ -87,7 +87,7 @@ public:
     assert(rays.size() == senses.reseptors.size());
     
     for (int i = 0; i < rays.size(); i++)
-      senses.reseptors[i] = rays[i].intersection_fraction;
+      senses.reseptors[i] = 1.f - rays[i].intersection_fraction;
     
     update_rays();
     for (Ray &ray : rays)

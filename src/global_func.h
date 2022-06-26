@@ -89,4 +89,17 @@ float pixels(float meters)
   return meters * PPM;
 }
 
+sf::RectangleShape &line(sf::Vector2f a, sf::Vector2f b, float r = 2, sf::Color color = sf::Color::White)
+{
+  static sf::RectangleShape rect;
+  sf::Vector2f ab = b - a;
+  float ab_length = sqrt(ab.x * ab.x + ab.y * ab.y);
+  rect.setSize({r * 2, ab_length});
+  rect.setOrigin(r, 0);
+  rect.setPosition(a);
+  rect.setRotation(Ask::degrees(atan2(ab.y, ab.x)) - 90);
+  rect.setFillColor(color);
+  return rect;
+}
+
 #endif //ECO_GLOBAL_FUNC_H

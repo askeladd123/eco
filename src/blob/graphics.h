@@ -95,18 +95,6 @@ public:
       window.draw(rect);
     }
     
-//    circle.setFillColor(sf::Color::Red);
-//    circle.setRadius(2);
-//    circle.setPosition(pixels(ray.end.x), pixels(ray.end.y));
-//    window.draw(circle);
-  
-    b2Vec2 lol = data.body->GetWorldVector({0, 0});
-//    lol += data.body->GetPosition();
-    circle.setFillColor(sf::Color::Red);
-    circle.setRadius(2);
-    circle.setPosition(pixels(lol.x), pixels(lol.y));
-    window.draw(circle);
-    
     if (hitbox_blob)
     {
 //      bounds_gfx.setFillColor(data.intersected? hitbox_hit : hitbox_unhit);

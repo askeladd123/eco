@@ -67,10 +67,6 @@ public:
       input[i] = neurons + i;
     
     output.resize(output_layer_size);
-    for (int i = input_layer_size; i < input_layer_size + output_layer_size; i++)
-      output[i] = neurons + i;
-  
-    output.resize(output_layer_size);
     for (int i = 0; i < output_layer_size; i++)
       output[i] = neurons + i + input_layer_size;
     
@@ -88,9 +84,52 @@ public:
       i->value = 0;
     
     for (auto &i : input)
+    {
       i->fire();
+    }
+  
+    for (auto &i : output)
+      i->value = Ask::squeeze(i->value);
     
-    // husk sigmoid
+  }
+  
+  void render(sf::RenderTexture &texture)
+  {
+    texture.clear();
+    static float r = 8;
+    static sf::CircleShape c(r);
+    c.setOrigin(c.getRadius(), c.getRadius());
+    
+//    int x1 = (texture.getSize().y + 2 * r) / (input.size() + 1);
+//    int x2 = (texture.getSize().y + 2 * r) / (output.size() + 1);
+    
+    sf::Vector2f vec_in = {r * 2, (texture.getSize().y + 2 * r) / (input.size() + 1)};
+    sf::Vector2f vec_out = {texture.getSize().x - r * 2, (texture.getSize().y + 2 * r) / (output.size() + 1)};
+  
+    for (int i = 0; i < input.size(); i++)
+    {
+      sf::Vector2f a = {vec_in.x, vec_in.y * (i + 1)};
+      
+      for (int j = 0; j < input[i]->outputs.size(); j++)
+      {
+        sf::Vector2f b = {vec_out.x, vec_out.y * (j + 1)};
+        texture.draw(line(a, b, 0.5, {255, 240, 240, (sf::Uint8) (255 * input[i]->outputs[j].strength)}));
+      }
+      c.setPosition(a);
+      c.setFillColor({255, 255, 255, (sf::Uint8)(255 * input[i]->value)});
+      texture.draw(c);
+    }
+    
+    for (int i = 0; i < output.size(); i++)
+    {
+      sf::Vector2f pos = {vec_out.x, vec_out.y * (i + 1)};
+      c.setPosition(pos);
+      c.setFillColor({255, 255, 255, (sf::Uint8)(255 * input[i]->value)});
+      texture.draw(c);
+    }
+    
+    
+    texture.draw(c);
   }
   
 private:
@@ -104,7 +143,12 @@ public:
   {
     Instructions a;
     
-    neural_network.input[0]->value = senses.pulse;
+    int reseptors = senses.reseptors.size();
+    for (int i = 0; i < reseptors; i++)
+      neural_network.input[i]->value = senses.reseptors[i];
+    
+    neural_network.input[reseptors]->value = senses.pulse;
+    
     neural_network.calculate_output();
     a.torque = neural_network.output[0]->value;
     a.speed = neural_network.output[1]->value;
@@ -116,20 +160,22 @@ public:
   sf::RenderTexture *neurons_graphic; // TODO vent med å lage texture til det er nødvendig
 
 public:
-  Smart_brain() : neural_network(1, 2)
+  Smart_brain() : neural_network(4, 2)
   {
     // network
     
   
     // graphics
     neurons_graphic = new sf::RenderTexture(); // dynamic memory fordi std::vector klarer ikke å kopiere
-    neurons_graphic->create(128, 128);
-    neurons_graphic->clear();
-    sf::CircleShape c;
-    c.setRadius(4);
-    neurons_graphic->draw(c);
+    neurons_graphic->create(512, 512);
   }
   ~Smart_brain(){delete neurons_graphic;}
+  
+  const sf::RenderTexture &render()
+  {
+    neural_network.render(*neurons_graphic);
+    return *neurons_graphic;
+  }
   
 private:
   Neural_network neural_network;

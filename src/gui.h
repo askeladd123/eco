@@ -209,7 +209,7 @@ inline void gui()
           if (ImGui::BeginPopup("joa"))
           {
             ImGui::Text("neural network");
-            ImGui::Image(*game_engine.blobs[0].brain.neurons_graphic);
+            ImGui::Image(game_engine.blobs[0].brain.render());
             ImGui::EndPopup();
           }
         }
