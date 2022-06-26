@@ -8,7 +8,9 @@
 #include "common.h"
 #include "logic.h"
 #include "brain.h"
+#include "smart_brain.h"
 #include "graphics.h"
+
 
 /// binder alle komponentene i en blob sammen
 class Blob

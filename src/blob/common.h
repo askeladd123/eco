@@ -8,7 +8,7 @@
 #include "ask/praktisk.h"
 
 /// Alle verdier skal være 0, 1 eller mellom
-struct instructions
+struct Instructions
 {
   float torque = 0.f;
   float speed = 0.f;
@@ -30,9 +30,9 @@ struct Senses
 };
 
 /// Alle verdier skal være 0, 1 eller mellom
-struct genes_logic
+struct Genes_logic
 {
-  genes_logic()
+  Genes_logic()
   {
     pulse_speed = Ask::random(0.1f, 10.f);
     max_accel = Ask::random(0.1f, 6.f);

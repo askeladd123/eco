@@ -100,7 +100,7 @@ public:
   }
   
   /// Tar imot kommandoer fra hjernen: husk at instruksjons-verdiene er 1, 0, eller mellom
-  void push(instructions instructions)
+  void push(Instructions instructions)
   {
     body->ApplyTorque(instructions.torque / 100, true);
     
@@ -133,7 +133,7 @@ private:
   }
   
 private:
-  genes_logic genes;
+  Genes_logic genes;
 };
 
 #endif //ECO_LOGIC_H
