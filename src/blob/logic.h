@@ -110,7 +110,6 @@ public:
         instructions.right_torque * genes.max_torque - instructions.left_torque * genes.max_torque);
     
     float strength = instructions.speed * genes.max_accel;
-    std::cout << instructions.speed << "\n";
 //    float strength = 0;
     body->SetLinearVelocity({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength});
   }
