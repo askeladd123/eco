@@ -6,7 +6,7 @@
 #define ECO_GRAPHICS_H
 
 #include <SFML/System.hpp>
-//#include "ask/physics.h"
+#include "logic.h"
 
 class Graphics
 {
@@ -84,7 +84,7 @@ public:
 //    b2Vec2 vec = {ray.end.x - ray.start.x, ray.end.y - ray.start.y};
 //    vec *= ray.intersection_fraction;
 
-    for (Ray &ray: data.rays)
+    for (Logic::Ray &ray: data.rays)
     {
       static sf::RectangleShape rect;
       float r = 1;

@@ -181,38 +181,38 @@ inline void gui()
       {
         ImGui::Text("selected item: ");
         ImGui::SameLine();
-        if (selected_entity->id == Entity::BLOB)
-        {
-          ImGui::Text(((Blob*)selected_entity)->name.c_str());
-          
-          if (!take_control)
-          {
-            if (ImGui::Button("take control"))
-            {
-              take_control = true;
-              ((Blob *) selected_entity)->mute = true;
-            }
-          } else
-          {
-            if (ImGui::Button("stop"))
-            {
-              take_control = false;
-              ((Blob *) selected_entity)->mute = false;
-            };
-          }
-          
-          if (ImGui::Button("view neurons"))
-          {
-            ImGui::OpenPopup("joa");
-          }
-          
-          if (ImGui::BeginPopup("joa"))
-          {
-            ImGui::Text("neural network");
-            ImGui::Image(game_engine.blobs[0].brain.render());
-            ImGui::EndPopup();
-          }
-        }
+//        if (selected_entity->id == Entity::BLOB)
+//        {
+//          ImGui::Text(((Blob*)selected_entity)->name.c_str());
+//
+//          if (!take_control)
+//          {
+//            if (ImGui::Button("take control"))
+//            {
+//              take_control = true;
+//              ((Blob *) selected_entity)->mute = true;
+//            }
+//          } else
+//          {
+//            if (ImGui::Button("stop"))
+//            {
+//              take_control = false;
+//              ((Blob *) selected_entity)->mute = false;
+//            };
+//          }
+//
+//          if (ImGui::Button("view neurons"))
+//          {
+//            ImGui::OpenPopup("joa");
+//          }
+//
+//          if (ImGui::BeginPopup("joa"))
+//          {
+//            ImGui::Text("neural network");
+//            ImGui::Image(game_engine.blobs[0].brain.render());
+//            ImGui::EndPopup();
+//          }
+//        }
       }
       else
         ImGui::Text("right-click an item to select it");
@@ -222,8 +222,10 @@ inline void gui()
     
     if (ImGui::BeginTabItem("physics"))
     {
-      ImGui::Text("approximate collision checks per frame: %i", (int)pow(game_engine.blobs.size(), 2));
+      ImGui::Text("approximate collision checks per frame: %i[invalid]", (int)pow(game_engine.blobs.size(), 2));
+      // TODO approximate collision checks gjelder ikke lenger med box2d
       
+      //TODO hitboxes
       if (ImGui::CollapsingHeader("hitboxes"))
       {
         ImGui::Checkbox("blobs", &hitbox_blob);

@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include <memory>
 
 #include "ask/praktisk.h"
 #include "ask/workflow.h"
@@ -54,9 +55,16 @@ private:
 class Entity
 {
 public:
-  enum type {BLOB};
-  type id;
-  Entity(type id) : id(id){};
+  enum Type {BLOB};
+  struct MetaData
+  {
+    Type type;
+    unsigned int index = 0; /// std::vector: index kan endres automatisk, husk det!
+  };
+  std::shared_ptr<MetaData> data;
+  
+public:
+  Entity(Type id) : data(new MetaData){ data->type = id; };
 };
 
 #endif //ECO_GLOBAL_DEF_H

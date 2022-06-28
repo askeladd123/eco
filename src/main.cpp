@@ -86,10 +86,10 @@ int main() {
             }
           }
           
-          if (event.mouseButton.button == sf::Mouse::Right)
-          {
-            selected_entity = game_engine.get_entity(mouse.x, mouse.y);
-          }
+//          if (event.mouseButton.button == sf::Mouse::Right)
+//          {
+//            selected_entity = game_engine.get_entity(mouse.x, mouse.y);
+//          }
           break;
           
         case sf::Event::MouseButtonReleased:
@@ -162,25 +162,25 @@ int main() {
     view.setCenter({(float)view_offset_x, (float)view_offset_y});
     window.setView(view);
   
-    if (selected_entity != nullptr && take_control)
-    {
-      Blob *selected_blob;
-      if (selected_entity->id == Entity::BLOB)
-        selected_blob = (Blob *) selected_entity;
-  
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(-1)}, true);
-  
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(1)}, true);
-  
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(-1), 0}, true);
-  
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(1), 0}, true);
-  
-    }
+//    if (selected_entity != nullptr && take_control)
+//    {
+//      Blob *selected_blob;
+//      if (selected_entity->id == Entity::BLOB)
+//        selected_blob = (Blob *) selected_entity;
+//
+//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+//        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(-1)}, true);
+//
+//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+//        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(1)}, true);
+//
+//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+//        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(-1), 0}, true);
+//
+//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+//        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(1), 0}, true);
+//
+//    }
     
     // grafikk
     window.clear();

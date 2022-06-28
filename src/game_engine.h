@@ -115,6 +115,9 @@ public:
   // setup
   enum item_id {NONE, BLOB, MELON, STICK, RAY};
   void add(int item_type, int x, int y, int count = 1)
+  /*
+   * Har også ansvar for å oppdatere entity.data.index til å matche std::vector index
+   */
   {
     switch(item_type)
     {
@@ -157,38 +160,38 @@ public:
     }
   }
   
-  struct query_response : public b2QueryCallback
+  struct QueryResponse : public b2QueryCallback
   {
-    Entity *entity;
-    bool collision = false;
+    Entity::MetaData *data = nullptr;
     bool 	ReportFixture (b2Fixture *fixture) override
     {
-      collision = true;
-      entity = (Entity*)fixture->GetBody()->GetUserData().pointer;
+      data = (Entity::MetaData*) fixture->GetBody()->GetUserData().pointer;
       return false;
     }
   };
   
   /**
-   * @return true: is entity at x, y - "result" changed
-   * @return false: isn't entity at x, y - "result" unchanged
+   * @return index i vector blobs
+   * @return -1 hvis en blob ikke finnes der
    */
-  Entity *get_entity(int x, int y)
+  int get_blob_at(int x, int y)
   {
     b2AABB m;
     float r = 0.1;
     m.lowerBound = {meters(mouse.x - r), meters(mouse.y - r)};
     m.upperBound = {meters(mouse.x + r), meters(mouse.y + r)};
-    
-    query_response qr;
-    qr.entity = nullptr;
+
+    QueryResponse qr;
     world.QueryAABB(&qr, m);
     world.Step(timeStep, velocityIterations, positionIterations);
-    return qr.entity;
+
+    if (qr.data != nullptr && qr.data->type == Entity::BLOB)
+    {
+      return qr.data->index;
+    }
+    return -1;
   }
-  
-  struct entities{};
-  entities get_entities_in(){}
-} game_engine;
+} game_engine; // TODO flytt game_engine til global_var
+
 
 #endif

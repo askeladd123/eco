@@ -9,7 +9,7 @@
 #include "ask/praktisk.h"
 #include "brain.h"
 
-class Neural_network
+class Neural_net
 {
   typedef std::vector<std::vector<float>> matrix2d_float;
   typedef std::vector<std::vector<std::vector<float>>> matrix3d_float;
@@ -20,7 +20,7 @@ public:
   matrix3d_float weights;
 
 public:
-  Neural_network(int input_layer_size, int output_layer_size, int hidden_layers = 0, int hidden_layer_size = 10)
+  Neural_net(int input_layer_size, int output_layer_size, int hidden_layers = 0, int hidden_layer_size = 10)
 //  input_layer_size(input_layer_size),
 //  output_layer_size(output_layer_size),
 //  hidden_layers(hidden_layers),
@@ -161,15 +161,15 @@ public:
     std::vector<float> values(senses.reseptors);
 //    std::vector<float> values = {1.f, 1.f, 1.f};
     values.push_back(senses.pulse);
-    neural_network.set_input(values);
-    neural_network.calculate_output();
+    neural_net.set_input(values);
+    neural_net.calculate_output();
 //
-//    neural_network.input[reseptors]->value = senses.pulse;
+//    neural_net.input[reseptors]->value = senses.pulse;
 //
-//    neural_network.calculate_output();
-    a.speed = neural_network.values.back()[0];
-    a.right_torque = neural_network.values.back()[1];
-    a.left_torque = neural_network.values.back()[2];
+//    neural_net.calculate_output();
+    a.speed = neural_net.values.back()[0];
+    a.right_torque = neural_net.values.back()[1];
+    a.left_torque = neural_net.values.back()[2];
     
     return a;
   }
@@ -178,7 +178,7 @@ public:
   sf::RenderTexture *neurons_graphic; // TODO vent med å lage texture til det er nødvendig
 
 public:
-  Smart_brain() : neural_network(4, 3)
+  Smart_brain() : neural_net(4, 3)
   {
     // network
     
@@ -191,12 +191,12 @@ public:
   
   const sf::RenderTexture &render()
   {
-    neural_network.render(*neurons_graphic);
+    neural_net.render(*neurons_graphic);
     return *neurons_graphic;
   }
   
 private:
-  Neural_network neural_network;
+  Neural_net neural_net;
 };
 
 #endif //ECO_SMART_BRAIN_H
