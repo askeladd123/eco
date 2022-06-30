@@ -162,7 +162,7 @@ public:
   
   struct QueryResponse : public b2QueryCallback
   {
-    Entity::MetaData *data = nullptr;
+    Logic *data = nullptr;
     bool 	ReportFixture (b2Fixture *fixture) override
     {
       data = (Entity::MetaData*) fixture->GetBody()->GetUserData().pointer;

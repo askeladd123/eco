@@ -9,7 +9,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <fstream>
-#include "ask/praktisk.h"
+#include "ask/matte.h"
 
 /// laster alle filer, og er static, så alle har tilgang
 class Files

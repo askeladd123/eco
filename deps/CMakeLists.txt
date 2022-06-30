@@ -132,5 +132,8 @@ message(STATUS "built box2d")
 list(APPEND includes deps/box2d/include)
 list(APPEND targets box2d)
 
+# boost
+list(APPEND includes deps/boost_stable_vector)
+
 set(dep_includes ${includes} PARENT_SCOPE)
 set(dep_targets ${targets} PARENT_SCOPE)

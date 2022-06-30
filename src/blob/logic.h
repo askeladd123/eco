@@ -18,7 +18,8 @@ private:
   friend class Graphics_image;
   
 public:
-  b2Body *body;
+
+public:
   int r = 8;
   std::vector<Ray> rays;
   float rays_count = 3;
@@ -44,10 +45,19 @@ public:
     fixture.shape = &circle;
     fixture.density = 10.f;
     fixture.friction = 1.f;
-    
     body->CreateFixture(&fixture);
-    body->GetUserData().pointer = (uintptr_t*) ptr.;
+    body->GetUserData().pointer = (uintptr_t) new FindMe;
+    ((FindMe *) body->GetUserData().pointer)->type = this->type;
   }
+  ~Logic()
+  {
+    delete (FindMe*) body->GetUserData().pointer;
+    world.DestroyBody(body);
+  }
+  
+  void set_index(uint index) override {((FindMe *) body->GetUserData().pointer)->index = index; }
+  
+  uint get_index() override {return ((FindMe *) body->GetUserData().pointer)->index; }
   
   /// Gir hjernen informasjon: husk at verdiene skal være 1, 0, eller mellom
   const Senses &pull()
@@ -139,7 +149,7 @@ void Logic::Ray::reset()
 float32 Logic::Ray::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction)
 {
 //    intersected = false;
-  MetaData &data = (MetaData&)fixture->GetBody()->GetUserData().pointer;
+  FindMe &data = (FindMe&)fixture->GetBody()->GetUserData().pointer;
   entitiy_index = data.index;
 //    intersection = point;
   intersection_fraction = fraction;

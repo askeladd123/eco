@@ -9,7 +9,7 @@
 #include <fstream>
 #include <memory>
 
-#include "ask/praktisk.h"
+#include "ask/matte.h"
 #include "ask/workflow.h"
 
 class fps
@@ -52,19 +52,23 @@ private:
 
 #define mouse window.mapPixelToCoords(sf::Mouse::getPosition(window))
 
+typedef unsigned int uint;
+
 class Entity
 {
 public:
-  enum Type {BLOB};
-  struct MetaData
-  {
-    Type type;
-    unsigned int index = 0; /// std::vector: index kan endres automatisk, husk det!
-  };
-  std::shared_ptr<MetaData> data;
+  b2Body *body;
+  enum Type {BLOB} type;
+  struct FindMe{Type type; unsigned int index;};
+  
+  virtual void set_index(uint) = 0;
+  virtual FindMe get_index() = 0;
   
 public:
-  Entity(Type id) : data(new MetaData){ data->type = id; };
+  Entity(Type type) : type(type)
+  {
+  
+  };
 };
 
 #endif //ECO_GLOBAL_DEF_H

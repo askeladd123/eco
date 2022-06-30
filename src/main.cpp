@@ -13,6 +13,7 @@
  *  rydde opp i unødvedige globals
  *  automatisk skygger
  *  neural net grafikk må virke med take control
+ *  bygg boost: så du kan bruke stable_vector
  */
 
 // standard lib
@@ -32,6 +33,8 @@
 #include "global_def.h"
 #include "game_engine.h"
 #include "gui.h"
+
+#include "boost/container/stable_vector.hpp"
 
 int main() {
   assert(CHAR_BIT * sizeof (float) == 32);// box2d trenger float32

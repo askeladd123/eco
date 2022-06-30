@@ -5,7 +5,7 @@
 #ifndef ECO_COMMON_H
 #define ECO_COMMON_H
 
-#include "ask/praktisk.h"
+#include "ask/matte.h"
 
 /// Alle verdier skal være 0, 1 eller mellom
 struct Instructions
