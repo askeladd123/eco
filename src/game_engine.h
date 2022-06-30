@@ -10,6 +10,7 @@
 #include <string>
 
 #include "box2d/box2d.h"
+#include "boost/container/stable_vector.hpp"
 
 #include "global_var.h"
 #include "blob/blob.h"
@@ -33,7 +34,7 @@ public:
   int edge_bottom = edge_right;
   
 //public:
-  std::vector<Blob> blobs;
+  boost::container::stable_vector<Blob> blobs;
 //  std::vector<Static_object*> obstacles;
 //  std::vector<Banana> bananas;
 //  std::vector<Water> water;
@@ -67,21 +68,26 @@ public:
     rect.SetAsBox(meters(r), meters(edge_bottom + r * 2));
     wall_right = world.CreateBody(&center);
     wall_right->CreateFixture(&rect, 0);
+    wall_right->GetUserData().pointer = (uintptr_t) nullptr;
   
     center.position.Set(meters(edge_left - r), 0);
     rect.SetAsBox(meters(r), meters(edge_bottom + r * 2));
     wall_left = world.CreateBody(&center);
     wall_left->CreateFixture(&rect, 0);
+    wall_left->GetUserData().pointer = (uintptr_t) nullptr;
   
     center.position.Set(0, meters(edge_top - r));
     rect.SetAsBox(meters(edge_right + r * 2), meters(r));
     wall_top = world.CreateBody(&center);
     wall_top->CreateFixture(&rect, 0);
+    wall_top->GetUserData().pointer = (uintptr_t) nullptr;
   
     center.position.Set(0, meters(edge_bottom + r));
     rect.SetAsBox(meters(edge_right + r * 2), meters(r));
-    wall_top = world.CreateBody(&center);
-    wall_top->CreateFixture(&rect, 0);
+    wall_bottom = world.CreateBody(&center);
+    wall_bottom->CreateFixture(&rect, 0);
+    wall_bottom->GetUserData().pointer = (uintptr_t) nullptr;
+    
   }
   
 public:
@@ -160,21 +166,23 @@ public:
     }
   }
   
+private:
   struct QueryResponse : public b2QueryCallback
   {
-    Logic *data = nullptr;
+    Entity *ptr = nullptr;
     bool 	ReportFixture (b2Fixture *fixture) override
     {
-      data = (Entity::MetaData*) fixture->GetBody()->GetUserData().pointer;
+      ptr = (Entity*) fixture->GetBody()->GetUserData().pointer;
       return false;
     }
   };
   
+public:
   /**
    * @return index i vector blobs
    * @return -1 hvis en blob ikke finnes der
    */
-  int get_blob_at(int x, int y)
+  Entity *get_entity_at(int x, int y)
   {
     b2AABB m;
     float r = 0.1;
@@ -182,14 +190,11 @@ public:
     m.upperBound = {meters(mouse.x + r), meters(mouse.y + r)};
 
     QueryResponse qr;
+    qr.ptr = nullptr;
     world.QueryAABB(&qr, m);
     world.Step(timeStep, velocityIterations, positionIterations);
-
-    if (qr.data != nullptr && qr.data->type == Entity::BLOB)
-    {
-      return qr.data->index;
-    }
-    return -1;
+    
+    return qr.ptr;
   }
 } game_engine; // TODO flytt game_engine til global_var
 

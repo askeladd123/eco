@@ -34,8 +34,6 @@
 #include "game_engine.h"
 #include "gui.h"
 
-#include "boost/container/stable_vector.hpp"
-
 int main() {
   assert(CHAR_BIT * sizeof (float) == 32);// box2d trenger float32
   {
@@ -75,7 +73,7 @@ int main() {
       
         static int mouse_down_x = 0;
         static int mouse_down_y = 0;
-        static bool mouse_down = false;\
+        static bool mouse_down = false;
         
         case sf::Event::MouseButtonPressed:
           if (event.mouseButton.button == sf::Mouse::Left)
@@ -89,10 +87,10 @@ int main() {
             }
           }
           
-//          if (event.mouseButton.button == sf::Mouse::Right)
-//          {
-//            selected_entity = game_engine.get_entity(mouse.x, mouse.y);
-//          }
+          if (event.mouseButton.button == sf::Mouse::Right)
+          {
+            selected_entity = game_engine.get_entity_at(mouse.x, mouse.y);
+          }
           break;
           
         case sf::Event::MouseButtonReleased:
@@ -165,25 +163,23 @@ int main() {
     view.setCenter({(float)view_offset_x, (float)view_offset_y});
     window.setView(view);
   
-//    if (selected_entity != nullptr && take_control)
-//    {
-//      Blob *selected_blob;
-//      if (selected_entity->id == Entity::BLOB)
-//        selected_blob = (Blob *) selected_entity;
-//
-//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-//        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(-1)}, true);
-//
-//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-//        selected_blob->logic.body->ApplyLinearImpulseToCenter({0, meters(1)}, true);
-//
-//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-//        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(-1), 0}, true);
-//
-//      if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-//        selected_blob->logic.body->ApplyLinearImpulseToCenter({meters(1), 0}, true);
-//
-//    }
+    if (take_control && blob_is_selected())
+    {
+      auto &blob = blob_get();
+      
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        blob.logic.body->ApplyLinearImpulseToCenter({0, meters(-1)}, true);
+
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        blob.logic.body->ApplyLinearImpulseToCenter({0, meters(1)}, true);
+
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        blob.logic.body->ApplyLinearImpulseToCenter({meters(-1), 0}, true);
+
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        blob.logic.body->ApplyLinearImpulseToCenter({meters(1), 0}, true);
+
+    }
     
     // grafikk
     window.clear();

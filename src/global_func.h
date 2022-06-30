@@ -102,4 +102,18 @@ sf::RectangleShape &line(sf::Vector2f a, sf::Vector2f b, float r = 2, sf::Color 
   return rect;
 }
 
+bool blob_is_selected()
+{
+  return selected_entity != nullptr && selected_entity->type == Entity::BLOB;
+}
+
+class Blob;
+Blob &blob_get()
+{
+  if (!blob_is_selected())
+    Ask::stop("selected item was not a Blob!!!");
+  
+  return *((Blob *)selected_entity);
+}
+
 #endif //ECO_GLOBAL_FUNC_H

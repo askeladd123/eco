@@ -52,23 +52,13 @@ private:
 
 #define mouse window.mapPixelToCoords(sf::Mouse::getPosition(window))
 
-typedef unsigned int uint;
-
 class Entity
 {
 public:
-  b2Body *body;
   enum Type {BLOB} type;
-  struct FindMe{Type type; unsigned int index;};
   
-  virtual void set_index(uint) = 0;
-  virtual FindMe get_index() = 0;
-  
-public:
-  Entity(Type type) : type(type)
-  {
-  
-  };
+protected:
+  Entity(Type type) : type(type){};
 };
 
 #endif //ECO_GLOBAL_DEF_H

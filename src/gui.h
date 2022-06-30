@@ -181,38 +181,40 @@ inline void gui()
       {
         ImGui::Text("selected item: ");
         ImGui::SameLine();
-//        if (selected_entity->id == Entity::BLOB)
-//        {
-//          ImGui::Text(((Blob*)selected_entity)->name.c_str());
-//
-//          if (!take_control)
-//          {
-//            if (ImGui::Button("take control"))
-//            {
-//              take_control = true;
-//              ((Blob *) selected_entity)->mute = true;
-//            }
-//          } else
-//          {
-//            if (ImGui::Button("stop"))
-//            {
-//              take_control = false;
-//              ((Blob *) selected_entity)->mute = false;
-//            };
-//          }
-//
-//          if (ImGui::Button("view neurons"))
-//          {
-//            ImGui::OpenPopup("joa");
-//          }
-//
-//          if (ImGui::BeginPopup("joa"))
-//          {
-//            ImGui::Text("neural network");
-//            ImGui::Image(game_engine.blobs[0].brain.render());
-//            ImGui::EndPopup();
-//          }
-//        }
+        if (blob_is_selected())
+        {
+          auto &blob = blob_get();
+          
+          ImGui::Text(blob.name.c_str());
+
+          if (!take_control)
+          {
+            if (ImGui::Button("take control"))
+            {
+              take_control = true;
+              blob.mute = true;
+            }
+          } else
+          {
+            if (ImGui::Button("stop"))
+            {
+              take_control = false;
+              blob.mute = false;
+            };
+          }
+
+          if (ImGui::Button("view neurons"))
+          {
+            ImGui::OpenPopup("joa");
+          }
+
+          if (ImGui::BeginPopup("joa"))
+          {
+            ImGui::Text("neural network");
+            ImGui::Image(blob.brain.render());
+            ImGui::EndPopup();
+          }
+        }
       }
       else
         ImGui::Text("right-click an item to select it");
