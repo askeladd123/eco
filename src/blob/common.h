@@ -34,8 +34,8 @@ struct Genes_logic
   
   Genes_logic()
   {
-    pulse_speed = Ask::random(0.1f, 1.f);
-    max_accel = Ask::random(0.1f, 6.f);
+    pulse_speed = Ask::random(0.f, 0.2f);
+    max_accel = Ask::random(0.1f, 2.5f);
     max_torque = Ask::random(0.1f, 0.6f);
   }
   

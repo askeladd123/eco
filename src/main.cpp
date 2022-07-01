@@ -12,8 +12,7 @@
  *  README
  *  rydde opp i unødvedige globals
  *  automatisk skygger
- *  neural net grafikk må virke med take control
- *  bygg boost: så du kan bruke stable_vector
+ *  neural net grafikk må virke med take control: bug (not responding)
  */
 
 // standard lib

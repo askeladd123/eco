@@ -31,10 +31,9 @@ public:
     
     const Senses &s = logic.pull();
     
-    if (mute)
-      return;
-    
     auto instructions = brain.think(s);
+  
+    if (mute) return;
     
     logic.push(instructions);
   }

@@ -73,12 +73,14 @@ public:
   /// Tar imot kommandoer fra hjernen: husk at instruksjons-verdiene er 1, 0, eller mellom
   void push(Instructions &instructions)
   {
-    body->SetAngularVelocity(
-        instructions.right_torque * genes.max_torque - instructions.left_torque * genes.max_torque);
+    float friction = 0.05f * body->GetAngularVelocity();
+    float right = instructions.right_torque * genes.max_torque;
+    float left = instructions.left_torque * genes.max_torque;
+    body->ApplyAngularImpulse(right - left - friction, true);
     
-    float strength = instructions.speed * genes.max_accel;
-//    float strength = 0;
-    body->SetLinearVelocity({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength});
+    friction = 1.f * body->GetLinearVelocity().Length();
+    float strength = instructions.speed * genes.max_accel - friction;
+    body->ApplyLinearImpulseToCenter({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength}, true);
   }
 
 private:
