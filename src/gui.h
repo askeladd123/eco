@@ -259,6 +259,11 @@ inline void gui()
 //        ImGui::SliderFloat("friction", &game_engine.friction_c, 0.f, 0.4f);
 //        ImGui::SliderFloat("deflection threshold", &game_engine.activate_deflection_at, 0.f, 10.f);
       
+      ImGui::SliderFloat("move friction", &friction_c, 0.f, 1.5f);
+      ImGui::SliderFloat("turn friction", &friction_c_r, 0.f, 1.5f);
+      
+      ImGui::Separator();
+      
       ImGui::Text("drag and drop:");
       
       ImGui::Button("melon");

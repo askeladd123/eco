@@ -37,6 +37,8 @@ bool selecting = false;
 Entity *selected_entity = nullptr;
 bool take_control = false;
 bool play = true;
+float friction_c = 0.5f;
+float friction_c_r = 0.5f;
 
 int object_dropped;
 b2World world({0, 0});
