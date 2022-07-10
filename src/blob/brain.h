@@ -5,7 +5,7 @@
 #ifndef ECO_BRAIN_H
 #define ECO_BRAIN_H
 
-#include "ask/matte.h"
+#include "ask/math.h"
 #include "common.h"
 
 class Brain

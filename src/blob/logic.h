@@ -55,30 +55,26 @@ public:
     
     for (int i = 0; i < rays.size(); i++)
       senses.reseptors[i] = 1.f - rays[i].intersection_fraction;
-  
-//    for (int i = 0; i < rays.size(); i++)
-//      senses.reseptors[i] = 0.f;
-
+    
     update_rays();
     for (Ray &ray : rays)
-    {
       world.RayCast(&ray, ray.start, ray.end); // raycasten skjer ikke her, men i step
-    }
     
     senses.pulse = 0.5f + cos(ticks_since_startup * genes.pulse_speed) / 2.f;
-//    senses.pulse = 0.f;
     return senses;
   }
   
   /// Tar imot kommandoer fra hjernen: husk at instruksjons-verdiene er 1, 0, eller mellom
   void push(Instructions &instructions)
   {
-    float friction = friction_c_r * body->GetAngularVelocity();
+    float vel = body->GetAngularVelocity();
+    float friction = 0.5 * friction_c_r * vel * vel;
     float right = instructions.right_torque * genes.max_torque;
     float left = instructions.left_torque * genes.max_torque;
     body->ApplyAngularImpulse(right - left - friction, true);
     
-    friction = friction_c * body->GetLinearVelocity().Length();
+    vel = body->GetLinearVelocity().Length();
+    friction = 0.5 * friction_c * vel * vel;
     float strength = instructions.speed * genes.max_accel - friction;
     body->ApplyLinearImpulseToCenter({cos(body->GetAngle()) * strength, sin(body->GetAngle()) * strength}, true);
   }
@@ -102,8 +98,6 @@ private:
   
       ray.end.x = ray.start.x + u.x * ray.length,
       ray.end.y = ray.start.y + u.y * ray.length;
-      
-      // FIXME: rays går litt utenfor mappet på en rar måte
     }
   }
   
@@ -115,30 +109,26 @@ private:
   {
   public:
     b2Vec2 start = {0, 0}, end = {10, 10};
+    Entity *entity_hit;
     float angle = 0;
     float max_length = 4;
     float length = max_length;
     float intersection_fraction = 1;
-    Entity *entity_hit;
     
-    void reset();
-    
-    #define float32 float
-    float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction) override;
+    typedef float float32;
+    float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction) override
+    {
+      entity_hit = (Entity *) fixture->GetUserData().pointer;
+      intersection_fraction = fraction;
+      return fraction;
+    }
+  
+    void reset()
+    {
+      length = max_length;
+      intersection_fraction = 1;
+    }
   };
 };
-
-void Logic::Ray::reset()
-{
-  length = max_length;
-  intersection_fraction = 1;
-}
-
-float32 Logic::Ray::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float32 fraction)
-{
-  entity_hit = (Entity *) fixture->GetUserData().pointer;
-  intersection_fraction = fraction;
-  return 0;
-}
 
 #endif //ECO_LOGIC_H

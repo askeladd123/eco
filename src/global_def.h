@@ -9,8 +9,8 @@
 #include <fstream>
 #include <memory>
 
-#include "ask/matte.h"
-#include "ask/workflow.h"
+#include "ask/math.h"
+#include "ask/errors.h"
 
 class fps
 {

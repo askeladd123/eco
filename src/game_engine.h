@@ -33,6 +33,8 @@ public:
   int edge_top = edge_left;
   int edge_bottom = edge_right;
   
+//  Instructions keyboard_instructions;
+  
 //public:
   boost::container::stable_vector<Blob> blobs;
 //  std::vector<Static_object*> obstacles;

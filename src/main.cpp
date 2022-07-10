@@ -5,14 +5,12 @@
 
 /*
  * TODO
- *  brain
  *  blob animasjon: tips, bruk ticks_since_startup og modulo
  *  animasjon generell: noe som varer gitt mengde frames: sender animasjon til animasjon objekt
  *  insekter kan interacte med spiller
  *  README
  *  rydde opp i unødvedige globals
  *  automatisk skygger
- *  neural net grafikk må virke med take control: bug (not responding)
  */
 
 // standard lib

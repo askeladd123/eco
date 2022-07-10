@@ -6,7 +6,7 @@
 #define ECO_SMART_BRAIN_H
 
 #include "SFML/Graphics.hpp"
-#include "ask/matte.h"
+#include "ask/math.h"
 #include "brain.h"
 #include "neural_net.h"
 

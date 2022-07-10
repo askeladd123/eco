@@ -9,8 +9,8 @@
 #include <fstream>
 
 //#include "ask/physics.h"
-#include "ask/matte.h"
-#include "ask/workflow.h"
+#include "ask/math.h"
+#include "ask/errors.h"
 #include "global_var.h"
 
 void view_resize()

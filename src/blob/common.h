@@ -5,7 +5,7 @@
 #ifndef ECO_COMMON_H
 #define ECO_COMMON_H
 
-#include "ask/matte.h"
+#include "ask/math.h"
 
 /// Alle verdier skal være 0, 1 eller mellom
 struct Instructions
@@ -36,7 +36,7 @@ struct Genes_logic
   {
     pulse_speed = Ask::random(0.f, 0.2f);
     max_accel = Ask::random(0.1f, 2.5f);
-    max_torque = Ask::random(0.1f, 0.6f);
+    max_torque = Ask::random(0.001f, 0.05f);
   }
   
 };
